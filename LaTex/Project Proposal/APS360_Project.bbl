@@ -1,4 +1,4 @@
-\begin{thebibliography}{3}
+\begin{thebibliography}{8}
 \providecommand{\natexlab}[1]{#1}
 \providecommand{\url}[1]{\texttt{#1}}
 \expandafter\ifx\csname urlstyle\endcsname\relax
@@ -10,15 +10,61 @@ Yoshua Bengio and Yann LeCun.
 \newblock Scaling learning algorithms towards {AI}.
 \newblock In \emph{Large Scale Kernel Machines}. MIT Press, 2007.
 
+\bibitem[Bhutta(2023)]{bhutta2023deep}
+Muhammad~Raheel Bhutta.
+\newblock {Deep CNN End-to-End Learning for Autonomous RC Cars}.
+\newblock \emph{Advances in Robotics and Mechanical Engineering}, 4:\penalty0
+  545--553, 2023.
+\newblock URL
+  \url{https://lupinepublishers.com/robotics-mechanical-engineering-journal/pdf/ARME.MS.ID.000181.pdf}.
+
+\bibitem[Bojarski et~al.(2016)Bojarski, Testa, Dworakowski, Firner, Flepp,
+  Goyal, Jackel, Monfort, Muller, Zhang, Zhang, Zhao, and
+  Zieba]{bojarski2016endendlearningselfdriving}
+Mariusz Bojarski, Davide~Del Testa, Daniel Dworakowski, Bernhard Firner, Beat
+  Flepp, Prasoon Goyal, Lawrence~D. Jackel, Mathew Monfort, Urs Muller, Jiakai
+  Zhang, Xin Zhang, Jake Zhao, and Karol Zieba.
+\newblock End to end learning for self-driving cars, 2016.
+\newblock URL \url{https://arxiv.org/abs/1604.07316}.
+
 \bibitem[Goodfellow et~al.(2016)Goodfellow, Bengio, Courville, and
   Bengio]{goodfellow2016deep}
 Ian Goodfellow, Yoshua Bengio, Aaron Courville, and Yoshua Bengio.
 \newblock \emph{Deep learning}, volume~1.
 \newblock MIT Press, 2016.
 
+\bibitem[Hamzah et~al.(2022)Hamzah, Fadillah, Maulana, Joni, Panatarani, and
+  Faizal]{9751873}
+Muhammad~Shafly Hamzah, Nurfauzi Fadillah, Dwindra~W. Maulana, I~Made Joni,
+  Camellia Panatarani, and Ferry Faizal.
+\newblock Development of single-board computer-based self-driving car model
+  using cnn-controlled rc car.
+\newblock In \emph{2022 International Conference on Electronics and Renewable
+  Systems (ICEARS)}, pp.\  1805--1812, 2022.
+\newblock \doi{10.1109/ICEARS53579.2022.9751873}.
+\newblock URL \url{https://ieeexplore.ieee.org/document/9751873}.
+
 \bibitem[Hinton et~al.(2006)Hinton, Osindero, and Teh]{Hinton06}
 Geoffrey~E. Hinton, Simon Osindero, and Yee~Whye Teh.
 \newblock A fast learning algorithm for deep belief nets.
 \newblock \emph{Neural Computation}, 18:\penalty0 1527--1554, 2006.
+
+\bibitem[Mallik(2023)]{Mallik2023}
+Zaid Mallik.
+\newblock \emph{Behind the Scenes of Our Self-Driving RC Car Project}.
+\newblock KaizenDev, 2023.
+\newblock URL
+  \url{https://www.kaizendev.tech/post/behind-the-scenes-of-our-self-driving-rc-car-project}.
+
+\bibitem[Mygapula et~al.(2021)Mygapula, Sasidharan, Variyar, and
+  Kp]{Mygapula2021}
+Prasad Mygapula, Adarsh Sasidharan, Sajith Variyar, and Soman Kp.
+\newblock Cnn based end to end learning steering angle prediction for
+  autonomous electric vehicle.
+\newblock In \emph{2021 Fourth International Conference on Electrical, Computer
+  and Communication Technologies (ICECCT)}, pp.\  2--7, 2021.
+\newblock \doi{10.1109/ICECCT52121.2021.9616875}.
+\newblock URL
+  \url{https://www.researchgate.net/publication/356627453_CNN_based_End_to_End_Learning_Steering_Angle_Prediction_for_Autonomous_Electric_Vehicle}.
 
 \end{thebibliography}

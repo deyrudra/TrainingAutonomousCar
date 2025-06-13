@@ -1,17 +1,17 @@
 # Fdb version 4
-["bibtex APS360_Project"] 1749853392.56749 "APS360_Project.aux" "APS360_Project.bbl" "APS360_Project" 1749853393.78103 0
-  "./APS360_ref.bib" 1749846690 652 874ad2cd193ec8e65abcd05eea606aaf ""
+["bibtex APS360_Project"] 1749858016.56337 "APS360_Project.aux" "APS360_Project.bbl" "APS360_Project" 1749858018.06404 0
+  "./APS360_ref.bib" 1749858013 2951 5b62a10b9637d15b692b8e309aef515a ""
   "./iclr2022_conference.bst" 1749846690 28413 aa1df73f8afb5963eb2fc74f4c7630c1 ""
-  "APS360_Project.aux" 1749853393 3661 284e4f17e7a63e6628554d2ff0fedc79 "pdflatex"
+  "APS360_Project.aux" 1749858017 4507 6ecd2f89d04045a8d1462a56c25d08d5 "pdflatex"
   (generated)
   "APS360_Project.bbl"
   "APS360_Project.blg"
   (rewritten before read)
-["pdflatex"] 1749853392.78088 "c:/Users/Pravin/OneDrive/Documents/GitHub/TrainingAutonomousCar/LaTex/Project Proposal/APS360_Project.tex" "APS360_Project.pdf" "APS360_Project" 1749853393.7815 0
-  "APS360_Project.aux" 1749853393 3661 284e4f17e7a63e6628554d2ff0fedc79 "pdflatex"
-  "APS360_Project.bbl" 1749853392 996 47bc0371fff8771b194310c73fbfdc7e "bibtex APS360_Project"
-  "APS360_Project.out" 1749853393 4034 309b0ea0e232787a46b1f9e0276e010d "pdflatex"
-  "APS360_Project.tex" 1749853391 18745 20896ca05244cba091bc0d09addae75d ""
+["pdflatex"] 1749858016.77158 "c:/Users/Pravin/OneDrive/Documents/GitHub/TrainingAutonomousCar/LaTex/Project Proposal/APS360_Project.tex" "APS360_Project.pdf" "APS360_Project" 1749858018.06455 0
+  "APS360_Project.aux" 1749858017 4507 6ecd2f89d04045a8d1462a56c25d08d5 "pdflatex"
+  "APS360_Project.bbl" 1749858016 3307 f0396ffa7f56abdb91776e4a76475622 "bibtex APS360_Project"
+  "APS360_Project.out" 1749858017 4474 7fa3a670b0984ab480ef2c3d22034f3d "pdflatex"
+  "APS360_Project.tex" 1749858013 18744 927f080ded8717f957c49d240690658f ""
   "C:/Users/Pravin/AppData/Local/MiKTeX/fonts/map/pdftex/pdftex.map" 1749847285 82507 a9eef8696c92627b87e9975edea03b2a ""
   "C:/Users/Pravin/AppData/Local/MiKTeX/miktex/data/le/pdftex/pdflatex.fmt" 1749847252 24225518 e8b45073067a3e445ad246c308a264b2 ""
   "C:/Users/Pravin/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/base/8r.enc" 1458473887 4993 80dc9bab7f31fb78a000ccfed0e27cab ""
@@ -142,7 +142,7 @@
   "C:/Users/Pravin/AppData/Local/Programs/MiKTeX/tex/latex/url/url.sty" 1388490452 12796 8edb7d69a20b857904dd0ea757c14ec9 ""
   "C:/Users/Pravin/AppData/Local/Programs/MiKTeX/tex/latex/xcolor/xcolor.sty" 1700127522 55487 80a65caedd3722f4c20a14a69e785d8f ""
   "Figs/td-deep-learning.jpg" 1749846690 140362 5ef948dada3053dca43233195918d41d ""
-  "c:/Users/Pravin/OneDrive/Documents/GitHub/TrainingAutonomousCar/LaTex/Project Proposal/APS360_Project.tex" 1749853391 18745 20896ca05244cba091bc0d09addae75d ""
+  "c:/Users/Pravin/OneDrive/Documents/GitHub/TrainingAutonomousCar/LaTex/Project Proposal/APS360_Project.tex" 1749858013 18744 927f080ded8717f957c49d240690658f ""
   "fancyhdr.sty" 1749846690 21006 e5d13d98d57bd53d4fed3aa61bd29c86 ""
   "iclr2022_conference.sty" 1749846690 9412 4f484121d9ee5c46ae7b712b095a6d14 ""
   "math_commands.tex" 1749846690 12792 a71653715108dc62b66e3a0bde0307d8 ""
