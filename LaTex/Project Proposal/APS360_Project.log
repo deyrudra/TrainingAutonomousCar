@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.25 (MiKTeX 24.1) (preloaded format=pdflatex 2025.6.13)  13 JUN 2025 16:44
+This is pdfTeX, Version 3.141592653-2.6-1.40.25 (MiKTeX 24.1) (preloaded format=pdflatex 2025.6.13)  13 JUN 2025 18:23
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -335,67 +335,74 @@ File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 LaTeX Font Info:    Trying to load font information for OT1+pcr on input line 59.
  (C:\Users\Pravin\AppData\Local\Programs\MiKTeX\tex/latex/psnfss\ot1pcr.fd
 File: ot1pcr.fd 2001/06/04 font definitions for OT1/pcr.
-) [1{C:/Users/Pravin/AppData/Local/MiKTeX/fonts/map/pdftex/pdftex.map}{C:/Users/Pravin/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/base/8r.enc}
+)
+Overfull \hbox (28.51505pt too wide) in paragraph at lines 59--59
+[][] []
+ []
+
+[1{C:/Users/Pravin/AppData/Local/MiKTeX/fonts/map/pdftex/pdftex.map}{C:/Users/Pravin/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/base/8r.enc}
 
 ] [2]
-<Figs/td-deep-learning.jpg, id=89, 1204.5pt x 903.375pt>
+<Figs/td-deep-learning.jpg, id=101, 1204.5pt x 903.375pt>
 File: Figs/td-deep-learning.jpg Graphic file (type jpg)
 <use Figs/td-deep-learning.jpg>
-Package pdftex.def Info: Figs/td-deep-learning.jpg  used on input line 187.
+Package pdftex.def Info: Figs/td-deep-learning.jpg  used on input line 221.
 (pdftex.def)             Requested size: 238.49341pt x 178.86604pt.
-LaTeX Font Info:    Trying to load font information for OT1+phv on input line 233.
+
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+[3]
+LaTeX Font Info:    Trying to load font information for OT1+phv on input line 267.
  (C:\Users\Pravin\AppData\Local\Programs\MiKTeX\tex/latex/psnfss\ot1phv.fd
 File: ot1phv.fd 2020/03/25 scalable font definitions for OT1/phv.
 )
 LaTeX Font Info:    Font shape `OT1/phv/bx/n' in size <10> not available
-(Font)              Font shape `OT1/phv/b/n' tried instead on input line 233.
+(Font)              Font shape `OT1/phv/b/n' tried instead on input line 267.
 LaTeX Font Info:    Font shape `OT1/phv/bx/n' in size <7> not available
-(Font)              Font shape `OT1/phv/b/n' tried instead on input line 233.
+(Font)              Font shape `OT1/phv/b/n' tried instead on input line 267.
 LaTeX Font Info:    Font shape `OT1/phv/bx/n' in size <5> not available
-(Font)              Font shape `OT1/phv/b/n' tried instead on input line 233.
+(Font)              Font shape `OT1/phv/b/n' tried instead on input line 267.
 
-Underfull \hbox (badness 10000) in paragraph at lines 229--247
+Underfull \hbox (badness 10000) in paragraph at lines 263--281
 [][]
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 229--247
+Underfull \hbox (badness 10000) in paragraph at lines 263--281
 
  []
 
 
+Underfull \vbox (badness 5802) has occurred while \output is active []
+
+ [4 <./Figs/td-deep-learning.jpg>]
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [3 <./Figs/td-deep-learning.jpg>]
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [4]
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [5] (APS360_Project.bbl) [6] (APS360_Project.aux)
+ [5] (APS360_Project.bbl [6]) [7] (APS360_Project.aux)
  ***********
 LaTeX2e <2023-11-01> patch level 1
 L3 programming layer <2024-01-04>
  ***********
 Package rerunfilecheck Info: File `APS360_Project.out' has not changed.
-(rerunfilecheck)             Checksum: 8E027B5D866234B19D088261C94EC1AC;2241.
+(rerunfilecheck)             Checksum: 309B0EA0E232787A46B1F9E0276E010D;4034.
  )
 (\end occurred inside a group at level 1)
 
-### simple group (level 1) entered at line 245 ({)
+### simple group (level 1) entered at line 279 ({)
 ### bottom level 
 Here is how much of TeX's memory you used:
- 11066 strings out of 474486
- 166004 string characters out of 5743283
+ 11075 strings out of 474486
+ 166170 string characters out of 5743283
  1944542 words of memory out of 5000000
- 33136 multiletter control sequences out of 15000+600000
+ 33140 multiletter control sequences out of 15000+600000
  594064 words of font info for 106 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 75i,17n,79p,421b,525s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 75i,17n,79p,692b,621s stack positions out of 10000i,1000n,20000p,200000b,200000s
 <C:/Users/Pravin/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmbx10.pfb><C:/Users/Pravin/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmex10.pfb><C:/Users/Pravin/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi10.pfb><C:/Users/Pravin/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi7.pfb><C:/Users/Pravin/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmib10.pfb><C:/Users/Pravin/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cmextra/cmmib7.pfb><C:/Users/Pravin/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr10.pfb><C:/Users/Pravin/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr7.pfb><C:/Users/Pravin/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy10.pfb><C:/Users/Pravin/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy7.pfb><C:/Users/Pravin/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/symbols/msbm10.pfb><C:/Users/Pravin/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/symbols/msbm7.pfb><C:/Users/Pravin/AppData/Local/Programs/MiKTeX/fonts/type1/urw/courier/ucrr8a.pfb><C:/Users/Pravin/AppData/Local/Programs/MiKTeX/fonts/type1/urw/helvetic/uhvb8a.pfb><C:/Users/Pravin/AppData/Local/Programs/MiKTeX/fonts/type1/urw/helvetic/uhvro8a.pfb><C:/Users/Pravin/AppData/Local/Programs/MiKTeX/fonts/type1/urw/times/utmb8a.pfb><C:/Users/Pravin/AppData/Local/Programs/MiKTeX/fonts/type1/urw/times/utmr8a.pfb><C:/Users/Pravin/AppData/Local/Programs/MiKTeX/fonts/type1/urw/times/utmri8a.pfb>
-Output written on APS360_Project.pdf (6 pages, 356933 bytes).
+Output written on APS360_Project.pdf (7 pages, 364207 bytes).
 PDF statistics:
- 212 PDF objects out of 1000 (max. 8388607)
- 31 named destinations out of 1000 (max. 500000)
- 118 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 234 PDF objects out of 1000 (max. 8388607)
+ 36 named destinations out of 1000 (max. 500000)
+ 150 words of extra memory for PDF output out of 10000 (max. 10000000)
 

@@ -9,7 +9,7 @@
 %\newcommand{\apsname}{Final Report}
 
 %######## APS360: Put your Group Number here
-\newcommand{\gpnumber}{7}
+\newcommand{\gpnumber}{4}
 
 \usepackage{hyperref}
 \usepackage{url}
@@ -26,12 +26,12 @@ Student\# 1005678901\\
 \texttt{authonhbvcnmmr1@mail.utoronto.ca} \\
 \And
 Pravin Kalaivannan  \\
-Student\# 1005678901 \\
-\texttt{ghfhdfghfgdh@mail.utoronto.ca} \\
+Student\# 1010141295 \\
+\texttt{pravin.kalaivannan@mail.utoronto.ca} \\
 \AND
 Aadavan Vasudevan  \\
 Student\# 1005678901 \\
-\texttt{pravindad@mail.utoronto.ca} \\
+\texttt{@mail.utoronto.ca} \\
 \And
 Abishan Baheerathan \\
 Student\# 1005678901 \\
@@ -117,24 +117,58 @@ regarding figures, tables, acknowledgments, and references.
 
 There will be a strict upper limit of 9 pages for the main text of the initial submission, with unlimited additional pages for citations. 
 
-\section{Headings: first level}
+\section{Background and Related Works}
 \label{headings}
 
-First level headings are in small caps,
-flush left and in point size 12. One line space before the first level
-heading and 1/2~line space after the first level heading.
+\subsection{Autonomous RC Car Related Projects}
 
-\subsection{Headings: second level}
+Through the use of deep learning, many autonomous car projects have been developed and tested, showing the potential of this technology in real-world applications. 
+The following is an overview of five works related to autonomous vehicles using deep learning.  
 
-Second level headings are in small caps,
-flush left and in point size 10. One line space before the second level
-heading and 1/2~line space after the second level heading.
 
-\subsubsection{Headings: third level}
+\subsubsection{Deep CNN End-to-End Learning for Autonomous RC Cars}
 
-Third level headings are in small caps,
-flush left and in point size 10. One line space before the third level
-heading and 1/2~line space after the third level heading.
+ 
+In this study, end-to-end learning using deep convolutional neural networks (CNNs) was used to autonomously control an RC car around a race track. 
+A front-facing camera is used to collect images of the car’s view, which is fed to the model. The CNN extracts features through convolutional and poling layers, 
+then applies the nonlinear ReLU activation function, which is then passed through 3 fully connected layers to generate the output of necessary steering angles 
+and speed the car needs to travel [Cite].
+
+\subsubsection{Autonomous RC Car Using Neural Networks}
+
+This project explores autonomous driving through a small RC car using a Raspberry Pi and a CNN based end-to-end steering angle prediction system. 
+To train the model, the team drove the car manually around a track and used the Raspberry Pi to track the analog inputs along with recording video frames 
+taken at 10-20 fps. The project highlights limited computing resources from the Pi’s onboard chips which may constrain CNN complexity along with data 
+diversity being an issue where overfitting to a single environment leads to issues in other environments. Additionally, the project highlights the 
+feasibility of deep learning for autonomous navigation and that it can be scaled up to larger robotic systems.
+
+\subsubsection{Development of Single-board Computer-based Self-Driving Car Model}
+
+In this paper, an RC car based on the DonkeyCar project, powered by a Nvidia Jetson Nano and controlled by a CNN was used to drive autonomously around a track. The
+CNN uses live photos of the car’s front view to predict the steering angle and speed required. The authors created varied training set sizes of 
+3000, 6000, 12000 and 24000 along with variations of network depth of between two and five layers of convolutional layers to find the best model [Cite]. 
+Their results showed that the model with 24000 images with three convolution layers performed the best with an absolute error at 0.18257 [CITE]. 
+Additionally, the results showed that having more data consistently reduced error, while adding layers above three had diminishing returns. 
+The authors mention future improvements through image pre-processing, adding additional sensors such as LiDAR and maximizing performance 
+by using more complex network architectures.
+
+\subsubsection{CNN based End to End Learning Steering Angle Prediction for Autonomous Electric Vehicles}
+
+This paper explores CNN based end-to-end learning for steering angle prediction in autonomous vehicles using images captured of the front 
+view of the car which is passed through to the model in a Jetson TX1. The team trained 3 different models based on different CNN architectures 
+with different numbers of layers and the results showed that the CNN model with 4 CNN layers and 4 connected layers performed the 
+best with 0.0354 test loss [CITE]. These results highlight the viability of CNNs in learning steering behaviours compared to typical 
+approaches in which systems are broken into multiple stages (such as road and object detection, and path planning)as it has fewer potential failure points.
+
+\subsubsection{End to End Learning for Self-Driving Cars}
+
+In this paper, the team trained a CNN to map raw pixels from a front-facing camera directly to steering commands for a car. 
+The network made up of nine layers, with one normalization layer, five convolutional layers and three fully connected layers 
+was trained to minimize the mean squared error between steering commands and the human driver’s inputs. Using only 
+72 hours of driving data, the team was able to successfully train the car to operate in diverse conditions showing 
+how a CNN can perform the entire task without manual decomposition into smaller systems. 
+
+
 
 \section{Citations, figures, tables, references}
 \label{others}
