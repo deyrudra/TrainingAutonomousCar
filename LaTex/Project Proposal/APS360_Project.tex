@@ -222,9 +222,118 @@ The dataset is split into:
 Since we are using data that comes from continuous streams, randomly shuffling data could have
 it so very similar frames of the stream can land in training, validation, and testing leading to 
 memorization of the data. Thus, we will split the data chronologically, first 80\% goes to 
-training, the next 10\% goes to validation, and the last 10\% goes to testing. 
+training, the next 10\% goes to validation, and the last 10\% goes to testing. This way the test set 
+includes unseen time segments from the drive. 
+
 
 \section{Architecture}
+
+The neural network architecutre is designed to take images of size 320x240x3 (height, width, RGB) of the
+front facing camera on the dash or hood of the car. With this the neural network outputs/predictions are the 
+continuous steering angle values for the car (regression task). Using multiple Conv2d layers, with 5x5 kernels, 
+and a stride of 1, and a ReLU activation to introduce non-linearity we aim to extraction spatial features, like 
+lane lines, edges, and road curvature. These feature maps are passed through a flatten layer and then into 
+a fully-connected layer which allows the model to learn high-level representations. The final output layer is a single neuron
+with a linear activation function capturing the steering angle of the car. This implies that the speed of the car
+is constant from the start, or could be controlled manually.
+
+\subsection{Normalization}
+To improve generalization we:
+\begin{itemize}
+  \item Batch normalization is applied after convolutional layers to normalize activations.
+  \item L2 Weight Decay is applied during optimization to penalize overly complex models which leads to overfitting.
+\end{itemize}
+
+\subsection{Training Method}
+This network is trained as a regression problem, where the goal is to minimize the error betwen predicted and actual
+steering angles. We will use the following to train our model:
+\begin{itemize}
+  \item Loss Function: Using Mean Squared Error (MSE) to calculate the loss, penalizing large changes in steering
+  predictions.
+  \item Optimizer: Using the Adam Optimizer we will update network eights during training with adaptivative learning rates.
+  \item Training Metrics: Root Mean Squared Error (RMSE) and Mean Absolute Error (MAE) are used to evaluate accuracy of steering predictions.
+\end{itemize}
+
+
+
+\section{Citations, figures, tables, references}
+\label{others}
+
+These instructions apply to everyone, regardless of the formatter being used.
+
+\subsection{Citations within the text}
+
+Citations within the text should be based on the \texttt{natbib} package
+and include the authors' last names and year (with the ``et~al.'' construct
+for more than two authors). When the authors or the publication are
+included in the sentence, the citation should not be in parenthesis using \verb|\citet{}| (as
+in ``See \citet{Hinton06} for more information.''). Otherwise, the citation
+should be in parenthesis using \verb|\citep{}| (as in ``Deep learning shows promise to make progress
+towards AI~\citep{Bengio+chapter2007}.'').
+
+The corresponding references are to be listed in alphabetical order of
+authors, in the \textsc{References} section. As to the format of the
+references themselves, any style is acceptable as long as it is used
+consistently.
+
+To cite a new paper, first, you need to add that paper's BibTeX information to \verb+APS360_ref.bib+ file and then you can use the \verb|\citep{}| command to cite that in your main document. 
+
+\subsection{Footnotes}
+
+Indicate footnotes with a number\footnote{Sample of the first footnote} in the
+text. Place the footnotes at the bottom of the page on which they appear.
+Precede the footnote with a horizontal rule of 2~inches
+(12~picas).\footnote{Sample of the second footnote}
+
+\subsection{Figures}
+
+All artwork must be neat, clean, and legible. Lines should be dark
+enough for purposes of reproduction; art work should not be
+hand-drawn. The figure number and caption always appear after the
+figure. Place one line space before the figure caption, and one line
+space after the figure. The figure caption is lower case (except for
+first word and proper nouns); figures are numbered consecutively.
+
+Make sure the figure caption does not get separated from the figure.
+Leave sufficient space to avoid splitting the figure and figure caption.
+
+You may use color figures.
+However, it is best for the
+figure captions and the paper body to make sense if the paper is printed
+either in black/white or in color.
+
+\begin{figure}[h]
+\begin{center}
+\includegraphics[width=0.6\textwidth]{Figs/td-deep-learning.jpg}
+\end{center}
+\caption{Sample figure caption. Image: ZDNet}
+\end{figure}
+
+\subsection{Tables}
+
+All tables must be centered, neat, clean and legible. Do not use hand-drawn
+tables. The table number and title always appear before the table. See
+Table~\ref{sample-table}.
+
+Place one line space before the table title, one line space after the table
+title, and one line space after the table. The table title must be lower case
+(except for first word and proper nouns); tables are numbered consecutively.
+
+\begin{table}[t]
+\caption{Sample table title}
+\label{sample-table}
+\begin{center}
+\begin{tabular}{ll}
+\multicolumn{1}{c}{\bf PART}  &\multicolumn{1}{c}{\bf DESCRIPTION}
+\\ \hline \\
+Dendrite         &Input terminal \\
+Axon             &Output terminal \\
+Soma             &Cell body (contains cell nucleus) \\
+\end{tabular}
+\end{center}
+\end{table}
+
+
 
 \section{Baseline Model}
 

@@ -34,8 +34,8 @@ def main():
 
     # --- Create RGB Camera Sensor ---
     camera_bp = blueprint_library.find('sensor.camera.rgb')
-    camera_bp.set_attribute('image_size_x', '640')
-    camera_bp.set_attribute('image_size_y', '480')
+    camera_bp.set_attribute('image_size_x', '320')
+    camera_bp.set_attribute('image_size_y', '240')
     camera_bp.set_attribute('fov', '110')  # Adjust FOV here (e.g. 90, 100, 110)
     camera_bp.set_attribute('sensor_tick', '0.05') # 1 Frame every .05 seconds
     # camera_bp.set_attribute('color_converter', 'Raw')
