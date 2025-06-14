@@ -1,4 +1,4 @@
-\begin{thebibliography}{8}
+\begin{thebibliography}{11}
 \providecommand{\natexlab}[1]{#1}
 \providecommand{\url}[1]{\texttt{#1}}
 \expandafter\ifx\csname urlstyle\endcsname\relax
@@ -33,6 +33,15 @@ David "davidad" Dalrymple, Joar Skalse, Yoshua Bengio, Stuart Russell, Max
 \newblock Towards guaranteed safe ai: A framework for ensuring robust and
   reliable ai systems, 2024.
 \newblock URL \url{https://arxiv.org/abs/2405.06624}.
+
+\bibitem[Dosovitskiy et~al.(2017)Dosovitskiy, Ros, Codevilla, Lopez, and
+  Koltun]{Dosovitskiy17}
+Alexey Dosovitskiy, German Ros, Felipe Codevilla, Antonio Lopez, and Vladlen
+  Koltun.
+\newblock {CARLA}: {An} open urban driving simulator.
+\newblock In \emph{Proceedings of the 1st Annual Conference on Robot Learning},
+  pp.\  1--16, 2017.
+\newblock URL \url{https://carla.org/}.
 
 \bibitem[Hamzah et~al.(2022)Hamzah, Fadillah, Maulana, Joni, Panatarani, and
   Faizal]{9751873}
@@ -82,5 +91,22 @@ Prasad Mygapula, Adarsh Sasidharan, Sajith Variyar, and Soman Kp.
 \newblock \doi{10.1109/ICECCT52121.2021.9616875}.
 \newblock URL
   \url{https://www.researchgate.net/publication/356627453_CNN_based_End_to_End_Learning_Steering_Angle_Prediction_for_Autonomous_Electric_Vehicle}.
+
+\bibitem[{Udacity}(2021)]{udacity_self_driving_car_2021}
+{Udacity}.
+\newblock Udacity self-driving car dataset, 2021.
+\newblock URL \url{https://github.com/udacity/self-driving-car}.
+\newblock Includes driving data, annotated datasets, and open source code.
+  Released under MIT and GPLv3 licenses.
+
+\bibitem[Yu et~al.(2018)Yu, Xian, Chen, Liu, Liao, Madhavan, and
+  Darrell]{bdd100k_2018}
+Fisher Yu, Wenqi Xian, Yingying Chen, Fangchen Liu, Mike Liao, Vashisht
+  Madhavan, and Trevor Darrell.
+\newblock Bdd100k: A large-scale diverse driving video database, 2018.
+\newblock URL \url{https://bdd-data.berkeley.edu}.
+\newblock Released by Berkeley DeepDrive and BAIR. Dataset includes 100K
+  driving videos with rich annotations such as object detection, drivable
+  areas, lane markings, and instance segmentation.
 
 \end{thebibliography}

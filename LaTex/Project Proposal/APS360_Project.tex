@@ -83,6 +83,17 @@ instructions for different situations based on our sensor (the camera), but this
 can not think of every possible situation. A training model can handle this problem in a generalized way 
 which is what we need to accomplish our goal. 
  
+\section{Illustration}
+\label{headings}
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.8\textwidth]{mif}
+    \caption{Illustration of self-driving car model}
+    \label{fig:my_label}
+\end{figure}
+
+
 
 
 
@@ -176,7 +187,7 @@ pixel values are normalized to seed up convergence during training.
 
 \subsubsection{Label Alignment and Verification}
 Control labels are synchronized with their corresponding images using timestamps. Outliers and inconsistent 
-data are flagged and removed. 
+data are flagged and removed. These control labels will be calculated with 
 
 \subsection{Dataset Splitting}
 The dataset is split into:
@@ -195,14 +206,7 @@ includes unseen time segments from the drive.
 
 \section{Architecture}
 
-The neural network architecture is designed to take images of size 320x240x3 (height, width, RGB) of the
-front-facing camera on the dash or hood of the car. With this, the neural network outputs/predictions are the 
-continuous steering angle values for the car (regression task). Using multiple Conv2d layers, with 5x5 kernels, 
-a stride of 1, and a ReLU activation to introduce non-linearity we aim to extract spatial features, like 
-lane lines, edges, and road curvature. These feature maps are passed through a flattened layer and then into 
-a fully connected layer which allows the model to learn high-level representations. The final output layer is a single neuron
-with a linear activation function capturing the steering angle of the car. This implies that the speed of the car
-is constant from the start, or could be controlled manually.
+The neural network architecture is designed to take images of size 320x240x3 (height, width, RGB) of the cameras on the dash, left, and right side of the car, additionally, it will take in the speed of the car. With this, the neural network outputs/predictions are the continuous steering angle values for the car (regression task). Using multiple Conv2d layers, with 5x5 kernels, a stride of 1, and a ReLU activation to introduce non-linearity we aim to extract spatial features, like lane lines, edges, and road curvature. Using MaxPooling we shrink the image to reduce cost and overfitting, but we retain the features like lane edges or object boundaries. These feature maps are passed through a flattened layer and then into a fully connected layer which allows the model to learn high-level representations. The final output layer consists of three neurons with a linear activation function capturing the steering angle of the car, throttle, and brake. This implies that the speed of the car is constant from the start, or could be controlled manually.
 
 \subsection{Normalization}
 To improve generalization we:
@@ -220,86 +224,6 @@ steering angles. We will use the following to train our model:
   \item Optimizer: Using the Adam Optimizer we will update network eights during training with adaptivative learning rates.
   \item Training Metrics: Root Mean Squared Error (RMSE) and Mean Absolute Error (MAE) are used to evaluate the accuracy of steering predictions.
 \end{itemize}
-
-
-
-\section{Citations, figures, tables, references}
-\label{others}
-
-These instructions apply to everyone, regardless of the format being used.
-
-\subsection{Citations within the text}
-
-Citations within the text should be based on the \texttt{natbib} package
-and include the authors' last names and years (with the ``et~al.'' construct
-for more than two authors). When the authors or the publication are
-included in the sentence, the citation should not be in parenthesis using \verb|\citet{}| (as
-in ``See \citet{Hinton06} for more information.''). Otherwise, the citation
-should be in parenthesis using \verb|\citep{}| (as in ``Deep learning shows promise to make progress
-towards AI~\citep{Bengio+chapter2007}.'').
-
-The corresponding references are to be listed in alphabetical order of
-authors, in the \textsc{References} section. As to the format of the
-references themselves, any style is acceptable as long as it is used
-consistently.
-
-To cite a new paper, first, you need to add that paper's BibTeX information to \verb+APS360_ref.bib+ file and then you can use the \verb|\citep{}| command to cite that in your main document. 
-
-\subsection{Footnotes}
-
-Indicate footnotes with a number\footnote{Sample of the first footnote} in the
-text. Place the footnotes at the bottom of the page on which they appear.
-Precede the footnote with a horizontal rule of 2~inches
-(12~picas).\footnote{Sample of the second footnote}
-
-\subsection{Figures}
-
-All artwork must be neat, clean, and legible. Lines should be dark
-enough for purposes of reproduction; art work should not be
-hand-drawn. The figure number and caption always appear after the
-figure. Place one line space before the figure caption, and one line
-space after the figure. The figure caption is lower case (except for
-first word and proper nouns); figures are numbered consecutively.
-
-Make sure the figure caption does not get separated from the figure.
-Leave sufficient space to avoid splitting the figure and figure caption.
-
-You may use color figures.
-However, it is best for the
-figure captions and the paper body to make sense if the paper is printed
-either in black/white or in color.
-
-\begin{figure}[h]
-\begin{center}
-\includegraphics[width=0.6\textwidth]{Figs/td-deep-learning.jpg}
-\end{center}
-\caption{Sample figure caption. Image: ZDNet}
-\end{figure}
-
-\subsection{Tables}
-
-All tables must be centered, neat, clean and legible. Do not use hand-drawn
-tables. The table number and title always appear before the table. See
-Table~\ref{sample-table}.
-
-Place one line space before the table title, one line space after the table
-title, and one line space after the table. The table title must be lower case
-(except for first word and proper nouns); tables are numbered consecutively.
-
-\begin{table}[t]
-\caption{Sample table title}
-\label{sample-table}
-\begin{center}
-\begin{tabular}{ll}
-\multicolumn{1}{c}{\bf PART}  &\multicolumn{1}{c}{\bf DESCRIPTION}
-\\ \hline \\
-Dendrite         &Input terminal \\
-Axon             &Output terminal \\
-Soma             &Cell body (contains cell nucleus) \\
-\end{tabular}
-\end{center}
-\end{table}
-
 
 
 \section{Baseline Model}
@@ -350,20 +274,21 @@ Absence Notification        & Must notify team 24 hours before the meeting if th
 \end{center}
 \end{table}
 
-\textbf{Communication Guidelines}
-\begin{itemize}
-  \item Group chat is active on weekdays and weekends (24/7)
-  \item Group chat is active on weekdays and weekends (24/7)
-  \item Members are required to frequently check discord messages (less than 2 hour response time)
-\end{itemize}
-
 \textbf{Collaboration Guidelines}
-\begin{itemize}
-  \item The team will be working together in a GitHub repository
-  \item Each member is required to give a daily update message on their progress
-  \item If conflicts arise, the team must discuss them together and decide on a solution that makes everyone happy
-  \item Ensure the code has informational comments that help the team understand it
-\end{itemize}
+\\• The team will be working together in a GitHub repository
+\\• Each member is required to give a daily update message on their progress
+\\• If conflicts arise, the team must discuss them together and decide on a solution that makes everyone happy
+\\• Ensure the code has informational comments that help the team understand it
+
+
+
+\textbf{Communication Guidelines}
+\\• Group chat is active on weekdays and weekends (24/7)
+\\• Group chat is active on weekdays and weekends (24/7)
+\\• Members are required to frequently check discord messages (less than 2 hour response time)
+
+
+
 
 \subsection{Project Timeline}
 \begin{table}[H]
@@ -416,6 +341,7 @@ If teammate misses an internal deadline & Likely & The team should hold everyone
 
 \section{GitHub Repository}
 \url{https://github.com/deyrudra/TrainingAutonomousCar}
+\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 
 \label{last_page}
 
