@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.25 (MiKTeX 24.1) (preloaded format=pdflatex 2025.6.13)  13 JUN 2025 20:28
+This is pdfTeX, Version 3.141592653-2.6-1.40.25 (MiKTeX 24.1) (preloaded format=pdflatex 2025.6.13)  13 JUN 2025 20:32
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -279,7 +279,11 @@ File: ot1ptm.fd 2001/06/04 font definitions for OT1/ptm.
 File: l3backend-pdftex.def 2024-01-04 L3 backend support: PDF output (pdfTeX)
 \l__color_backend_stack_int=\count286
 \l__pdf_internal_box=\box53
-) (APS360_Project.aux)
+) (APS360_Project.aux
+
+LaTeX Warning: Label `headings' multiply defined.
+
+)
 \openout1 = `APS360_Project.aux'.
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 55.
@@ -484,40 +488,44 @@ Package hyperref Warning: Token not allowed in a PDF string (Unicode):
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
 (hyperref)                removing `\new@ifnextchar' on input line 162.
 
-LaTeX Font Info:    Trying to load font information for TS1+ptm on input line 175.
+LaTeX Font Info:    Trying to load font information for TS1+ptm on input line 182.
 (C:\Users\deyru\AppData\Local\Programs\MiKTeX\tex/latex/psnfss\ts1ptm.fd
 File: ts1ptm.fd 2001/06/04 font definitions for TS1/ptm.
 ) [3]
-<Figs/td-deep-learning.jpg, id=180, 1204.5pt x 903.375pt>
+<Figs/td-deep-learning.jpg, id=184, 1204.5pt x 903.375pt>
 File: Figs/td-deep-learning.jpg Graphic file (type jpg)
 <use Figs/td-deep-learning.jpg>
-Package pdftex.def Info: Figs/td-deep-learning.jpg  used on input line 269.
+Package pdftex.def Info: Figs/td-deep-learning.jpg  used on input line 276.
 (pdftex.def)             Requested size: 238.49341pt x 178.86604pt.
- [4 <./Figs/td-deep-learning.jpg>] [5]
-LaTeX Font Info:    Trying to load font information for OT1+phv on input line 349.
+
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+
+Underfull \vbox (badness 1221) has occurred while \output is active []
+
+ [4] [5 <./Figs/td-deep-learning.jpg>]
+LaTeX Font Info:    Trying to load font information for OT1+phv on input line 356.
  (C:\Users\deyru\AppData\Local\Programs\MiKTeX\tex/latex/psnfss\ot1phv.fd
 File: ot1phv.fd 2020/03/25 scalable font definitions for OT1/phv.
 )
 LaTeX Font Info:    Font shape `OT1/phv/bx/n' in size <10> not available
-(Font)              Font shape `OT1/phv/b/n' tried instead on input line 349.
+(Font)              Font shape `OT1/phv/b/n' tried instead on input line 356.
 LaTeX Font Info:    Font shape `OT1/phv/bx/n' in size <7> not available
-(Font)              Font shape `OT1/phv/b/n' tried instead on input line 349.
+(Font)              Font shape `OT1/phv/b/n' tried instead on input line 356.
 LaTeX Font Info:    Font shape `OT1/phv/bx/n' in size <5> not available
-(Font)              Font shape `OT1/phv/b/n' tried instead on input line 349.
+(Font)              Font shape `OT1/phv/b/n' tried instead on input line 356.
 
-Underfull \hbox (badness 10000) in paragraph at lines 345--363
+Underfull \hbox (badness 10000) in paragraph at lines 352--370
 [][]
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 345--363
+Underfull \hbox (badness 10000) in paragraph at lines 352--370
 
  []
 
-
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [6]
+[6]
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
  [7] (APS360_Project.bbl
@@ -565,25 +573,29 @@ Underfull \hbox (badness 10000) in paragraph at lines 93--101
 LaTeX2e <2023-11-01> patch level 1
 L3 programming layer <2024-01-04>
  ***********
+
+
+LaTeX Warning: There were multiply-defined labels.
+
 Package rerunfilecheck Info: File `APS360_Project.out' has not changed.
-(rerunfilecheck)             Checksum: 75934E4372C138CC70C70F05E27511E5;6657.
+(rerunfilecheck)             Checksum: 7BC4C2DDE3D3D69ACCF64AA412C2A10C;6780.
  )
 (\end occurred inside a group at level 1)
 
-### simple group (level 1) entered at line 361 ({)
+### simple group (level 1) entered at line 368 ({)
 ### bottom level 
 Here is how much of TeX's memory you used:
- 11165 strings out of 474486
- 167589 string characters out of 5743755
+ 11167 strings out of 474486
+ 167611 string characters out of 5743755
  1945542 words of memory out of 5000000
- 33203 multiletter control sequences out of 15000+600000
+ 33204 multiletter control sequences out of 15000+600000
  594378 words of font info for 107 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  75i,17n,79p,736b,625s stack positions out of 10000i,1000n,20000p,200000b,200000s
 <C:/Users/deyru/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmbx10.pfb><C:/Users/deyru/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmex10.pfb><C:/Users/deyru/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi10.pfb><C:/Users/deyru/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi7.pfb><C:/Users/deyru/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmib10.pfb><C:/Users/deyru/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cmextra/cmmib7.pfb><C:/Users/deyru/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr10.pfb><C:/Users/deyru/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr7.pfb><C:/Users/deyru/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy10.pfb><C:/Users/deyru/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy7.pfb><C:/Users/deyru/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/symbols/msbm10.pfb><C:/Users/deyru/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/symbols/msbm7.pfb><C:/Users/deyru/AppData/Local/Programs/MiKTeX/fonts/type1/urw/courier/ucrr8a.pfb><C:/Users/deyru/AppData/Local/Programs/MiKTeX/fonts/type1/urw/helvetic/uhvb8a.pfb><C:/Users/deyru/AppData/Local/Programs/MiKTeX/fonts/type1/urw/helvetic/uhvro8a.pfb><C:/Users/deyru/AppData/Local/Programs/MiKTeX/fonts/type1/urw/times/utmb8a.pfb><C:/Users/deyru/AppData/Local/Programs/MiKTeX/fonts/type1/urw/times/utmr8a.pfb><C:/Users/deyru/AppData/Local/Programs/MiKTeX/fonts/type1/urw/times/utmri8a.pfb>
-Output written on APS360_Project.pdf (9 pages, 397039 bytes).
+Output written on APS360_Project.pdf (9 pages, 397783 bytes).
 PDF statistics:
- 353 PDF objects out of 1000 (max. 8388607)
- 59 named destinations out of 1000 (max. 500000)
- 254 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 357 PDF objects out of 1000 (max. 8388607)
+ 60 named destinations out of 1000 (max. 500000)
+ 262 words of extra memory for PDF output out of 10000 (max. 10000000)
 

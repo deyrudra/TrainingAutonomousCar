@@ -1,17 +1,17 @@
 # Fdb version 4
-["bibtex APS360_Project"] 1749860910.26852 "APS360_Project.aux" "APS360_Project.bbl" "APS360_Project" 1749860929.07023 0
+["bibtex APS360_Project"] 1749861145.3712 "APS360_Project.aux" "APS360_Project.bbl" "APS360_Project" 1749861148.58373 0
   "./APS360_ref.bib" 1749860617 6037 733fb618a3cc2890d1bfc962f008e821 ""
   "./iclr2022_conference.bst" 1749840906 26973 aa1df73f8afb5963eb2fc74f4c7630c1 ""
-  "APS360_Project.aux" 1749860926 7008 257fdfa37d9e069f51325b441144b65c "pdflatex"
+  "APS360_Project.aux" 1749861147 7181 7c18666d2b095ca9174cc9b014070d38 "pdflatex"
   (generated)
   "APS360_Project.bbl"
   "APS360_Project.blg"
   (rewritten before read)
-["pdflatex"] 1749860925.21323 "e:/GithubProjects/TrainingAutonomousCar/LaTex/Project Proposal/APS360_Project.tex" "APS360_Project.pdf" "APS360_Project" 1749860929.07199 0
-  "APS360_Project.aux" 1749860926 7008 257fdfa37d9e069f51325b441144b65c "pdflatex"
-  "APS360_Project.bbl" 1749860910 5092 d68abd5d55826edbb6d322358fa181e7 "bibtex APS360_Project"
-  "APS360_Project.out" 1749860926 6657 75934e4372c138cc70c70f05e27511e5 "pdflatex"
-  "APS360_Project.tex" 1749860923 23594 00da91db01bca8fbabfffa667531dde5 ""
+["pdflatex"] 1749861145.85853 "e:/GithubProjects/TrainingAutonomousCar/LaTex/Project Proposal/APS360_Project.tex" "APS360_Project.pdf" "APS360_Project" 1749861148.58686 0
+  "APS360_Project.aux" 1749861147 7181 7c18666d2b095ca9174cc9b014070d38 "pdflatex"
+  "APS360_Project.bbl" 1749861145 5092 d68abd5d55826edbb6d322358fa181e7 "bibtex APS360_Project"
+  "APS360_Project.out" 1749861147 6780 7bc4c2dde3d3d69accf64aa412c2a10c "pdflatex"
+  "APS360_Project.tex" 1749861139 23919 5cc0271dcf161ead9de0eea72dd2f606 ""
   "C:/Users/deyru/AppData/Local/MiKTeX/fonts/map/pdftex/pdftex.map" 1749843040 82507 a9eef8696c92627b87e9975edea03b2a ""
   "C:/Users/deyru/AppData/Local/MiKTeX/miktex/data/le/pdftex/pdflatex.fmt" 1749842967 24225046 95af8beaa7cf442a9dd0a2d9055eff1c ""
   "C:/Users/deyru/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/base/8r.enc" 1458473887 4993 80dc9bab7f31fb78a000ccfed0e27cab ""
@@ -145,7 +145,7 @@
   "C:/Users/deyru/AppData/Local/Programs/MiKTeX/tex/latex/url/url.sty" 1388490452 12796 8edb7d69a20b857904dd0ea757c14ec9 ""
   "C:/Users/deyru/AppData/Local/Programs/MiKTeX/tex/latex/xcolor/xcolor.sty" 1700127522 55487 80a65caedd3722f4c20a14a69e785d8f ""
   "Figs/td-deep-learning.jpg" 1749840906 140362 5ef948dada3053dca43233195918d41d ""
-  "e:/GithubProjects/TrainingAutonomousCar/LaTex/Project Proposal/APS360_Project.tex" 1749860923 23594 00da91db01bca8fbabfffa667531dde5 ""
+  "e:/GithubProjects/TrainingAutonomousCar/LaTex/Project Proposal/APS360_Project.tex" 1749861139 23919 5cc0271dcf161ead9de0eea72dd2f606 ""
   "fancyhdr.sty" 1749840906 20521 e5d13d98d57bd53d4fed3aa61bd29c86 ""
   "iclr2022_conference.sty" 1749840906 9167 4f484121d9ee5c46ae7b712b095a6d14 ""
   "math_commands.tex" 1749840906 12284 a71653715108dc62b66e3a0bde0307d8 ""
