@@ -167,7 +167,56 @@ was trained to minimize the mean squared error between steering commands and the
 72 hours of driving data, the team was able to successfully train the car to operate in diverse conditions showing 
 how a CNN can perform the entire task without manual decomposition into smaller systems. 
 
-/section{}
+
+\subsection{Data Collection}
+
+\subsubsection{Public Datasets}
+\begin{itemize}
+  \item Udacity Self-Driving Car Dataset
+  \item Berkeley DeepDrive (BDD100K)
+\end{itemize}
+
+\subsubsection{Custom Data Collection}
+\begin{itemize}
+  \item Simulated Data: Using CARLA Simulator to generate high-resolution images with corresponding control commands.
+  \item Real-World Data: Dash-mounted Camera on RC Cars.
+\end{itemize}
+
+
+\subsection{Data Cleaning and Preprocessing}
+
+This phase involves preparing the image data and labels to reduce maximize model accuracy. 
+This includes image normalization, label consistency checks.
+
+\subsubsection{Remove Corrupted or Blurry Frames}
+Removal of incomplete metadata, heavy blur, overexposure, and distorted images using automated filters.
+These filters include: Laplacian Variance for blur detection, Histogram Analysis for overexposure, 
+and Pixel Clipping Detection.
+
+
+\subsubsection{Image Resizing and Normalization}
+All images are resized to uniform size of 320x240 pixels to match input expectation for deep CNNs. Additionally, 
+pixel values are normalizedto seed up convergence during training.
+
+\subsubsection{Label Alignment and Verification}
+Control labels are synchronized with their corresponding images using timestamps. Outliers and inconsistent 
+data are flagged and removed. 
+
+\subsection{Dataset Splitting}
+The dataset is split into:
+\begin{itemize}
+  \item 80\% Testing 
+  \item 10\% Testing 
+  \item 10\% Testing 
+\end{itemize}
+
+Since we are using data that comes from continuous streams, randomly shuffling data could have
+it so very similar frames of the stream can land in training, validation, and testing leading to 
+memorization of the data. Thus, we will split the data chronologically, first 80\% goes to 
+training, the next 10\% goes to validation, and the last 10\% goes to testing. 
+
+
+
 
 \section{Citations, figures, tables, references}
 \label{others}

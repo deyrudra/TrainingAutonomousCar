@@ -1,17 +1,17 @@
 # Fdb version 4
-["bibtex APS360_Project"] 1749860621.73022 "APS360_Project.aux" "APS360_Project.bbl" "APS360_Project" 1749860624.90139 0
+["bibtex APS360_Project"] 1749860910.26852 "APS360_Project.aux" "APS360_Project.bbl" "APS360_Project" 1749860929.07023 0
   "./APS360_ref.bib" 1749860617 6037 733fb618a3cc2890d1bfc962f008e821 ""
   "./iclr2022_conference.bst" 1749840906 26973 aa1df73f8afb5963eb2fc74f4c7630c1 ""
-  "APS360_Project.aux" 1749860623 5905 7a2ca634d30806766bfa7c83cdef6fe9 "pdflatex"
+  "APS360_Project.aux" 1749860926 7008 257fdfa37d9e069f51325b441144b65c "pdflatex"
   (generated)
   "APS360_Project.bbl"
   "APS360_Project.blg"
   (rewritten before read)
-["pdflatex"] 1749860622.19837 "e:/GithubProjects/TrainingAutonomousCar/LaTex/Project Proposal/APS360_Project.tex" "APS360_Project.pdf" "APS360_Project" 1749860624.90362 0
-  "APS360_Project.aux" 1749860623 5905 7a2ca634d30806766bfa7c83cdef6fe9 "pdflatex"
-  "APS360_Project.bbl" 1749860622 5092 d68abd5d55826edbb6d322358fa181e7 "bibtex APS360_Project"
-  "APS360_Project.out" 1749860623 5104 ad6d5b32eefce45a197421b0944ef17b "pdflatex"
-  "APS360_Project.tex" 1749860617 21708 da8f84dfe5b464ee1602573d2294df13 ""
+["pdflatex"] 1749860925.21323 "e:/GithubProjects/TrainingAutonomousCar/LaTex/Project Proposal/APS360_Project.tex" "APS360_Project.pdf" "APS360_Project" 1749860929.07199 0
+  "APS360_Project.aux" 1749860926 7008 257fdfa37d9e069f51325b441144b65c "pdflatex"
+  "APS360_Project.bbl" 1749860910 5092 d68abd5d55826edbb6d322358fa181e7 "bibtex APS360_Project"
+  "APS360_Project.out" 1749860926 6657 75934e4372c138cc70c70f05e27511e5 "pdflatex"
+  "APS360_Project.tex" 1749860923 23594 00da91db01bca8fbabfffa667531dde5 ""
   "C:/Users/deyru/AppData/Local/MiKTeX/fonts/map/pdftex/pdftex.map" 1749843040 82507 a9eef8696c92627b87e9975edea03b2a ""
   "C:/Users/deyru/AppData/Local/MiKTeX/miktex/data/le/pdftex/pdflatex.fmt" 1749842967 24225046 95af8beaa7cf442a9dd0a2d9055eff1c ""
   "C:/Users/deyru/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/base/8r.enc" 1458473887 4993 80dc9bab7f31fb78a000ccfed0e27cab ""
@@ -25,6 +25,7 @@
   "C:/Users/deyru/AppData/Local/Programs/MiKTeX/fonts/tfm/adobe/times/ptmb7t.tfm" 1136790254 2172 fd0c924230362ff848a33632ed45dc23 ""
   "C:/Users/deyru/AppData/Local/Programs/MiKTeX/fonts/tfm/adobe/times/ptmb8r.tfm" 1136790254 4524 6bce29db5bc272ba5f332261583fee9c ""
   "C:/Users/deyru/AppData/Local/Programs/MiKTeX/fonts/tfm/adobe/times/ptmr7t.tfm" 1136790254 2124 2601a75482e9426d33db523edf23570a ""
+  "C:/Users/deyru/AppData/Local/Programs/MiKTeX/fonts/tfm/adobe/times/ptmr8c.tfm" 1136790254 1352 fa28a7e6d323c65ce7d13d5342ff6be2 ""
   "C:/Users/deyru/AppData/Local/Programs/MiKTeX/fonts/tfm/adobe/times/ptmr8r.tfm" 1136790254 4408 25b74d011a4c66b7f212c0cc3c90061b ""
   "C:/Users/deyru/AppData/Local/Programs/MiKTeX/fonts/tfm/adobe/times/ptmrc7t.tfm" 1136790254 2680 312a2d12b1f1df8ee0212e7ba1962402 ""
   "C:/Users/deyru/AppData/Local/Programs/MiKTeX/fonts/tfm/adobe/times/ptmri7t.tfm" 1136790254 2288 f478fc8fed18759effb59f3dad7f3084 ""
@@ -81,6 +82,7 @@
   "C:/Users/deyru/AppData/Local/Programs/MiKTeX/fonts/vf/adobe/helvetic/phvro7t.vf" 1136790254 1372 9948cedecdb0445a3b5cf1b8a8082ab8 ""
   "C:/Users/deyru/AppData/Local/Programs/MiKTeX/fonts/vf/adobe/times/ptmb7t.vf" 1136790254 1372 788387fea833ef5963f4c5bffe33eb89 ""
   "C:/Users/deyru/AppData/Local/Programs/MiKTeX/fonts/vf/adobe/times/ptmr7t.vf" 1136790254 1380 0ea3a3370054be6da6acd929ec569f06 ""
+  "C:/Users/deyru/AppData/Local/Programs/MiKTeX/fonts/vf/adobe/times/ptmr8c.vf" 1136790254 3556 8a9a6dcbcd146ef985683f677f4758a6 ""
   "C:/Users/deyru/AppData/Local/Programs/MiKTeX/fonts/vf/adobe/times/ptmrc7t.vf" 1136790254 1948 7330aeef3af211edff3b35fb2c12a0fd ""
   "C:/Users/deyru/AppData/Local/Programs/MiKTeX/fonts/vf/adobe/times/ptmri7t.vf" 1136790254 1384 a9d8adaf491ce34e5fba99dc7bbe5f39 ""
   "C:/Users/deyru/AppData/Local/Programs/MiKTeX/tex/context/base/mkii/supp-pdf.mkii" 1580390158 71627 94eb9990bed73c364d7f53f960cc8c5b ""
@@ -136,13 +138,14 @@
   "C:/Users/deyru/AppData/Local/Programs/MiKTeX/tex/latex/psnfss/ot1phv.fd" 1585253778 1736 51f99a09d5536398d3a0ad1d44df9625 ""
   "C:/Users/deyru/AppData/Local/Programs/MiKTeX/tex/latex/psnfss/ot1ptm.fd" 1585253778 1007 15056f4a61917ceed3a44e4ac11fcc52 ""
   "C:/Users/deyru/AppData/Local/Programs/MiKTeX/tex/latex/psnfss/times.sty" 1585926771 888 8e0e5c8cca7b18e0400f97f5a2b90a99 ""
+  "C:/Users/deyru/AppData/Local/Programs/MiKTeX/tex/latex/psnfss/ts1ptm.fd" 1585253778 653 96f56dc5d1ef1fe1121f1cfeec70ee0c ""
   "C:/Users/deyru/AppData/Local/Programs/MiKTeX/tex/latex/refcount/refcount.sty" 1576433952 9878 9e94e8fa600d95f9c7731bb21dfb67a4 ""
   "C:/Users/deyru/AppData/Local/Programs/MiKTeX/tex/latex/rerunfilecheck/rerunfilecheck.sty" 1657800696 9714 ba3194bd52c8499b3f1e3eb91d409670 ""
   "C:/Users/deyru/AppData/Local/Programs/MiKTeX/tex/latex/tools/bm.sty" 1700599895 13231 2c742011581e2bf297e33520567d9464 ""
   "C:/Users/deyru/AppData/Local/Programs/MiKTeX/tex/latex/url/url.sty" 1388490452 12796 8edb7d69a20b857904dd0ea757c14ec9 ""
   "C:/Users/deyru/AppData/Local/Programs/MiKTeX/tex/latex/xcolor/xcolor.sty" 1700127522 55487 80a65caedd3722f4c20a14a69e785d8f ""
   "Figs/td-deep-learning.jpg" 1749840906 140362 5ef948dada3053dca43233195918d41d ""
-  "e:/GithubProjects/TrainingAutonomousCar/LaTex/Project Proposal/APS360_Project.tex" 1749860617 21708 da8f84dfe5b464ee1602573d2294df13 ""
+  "e:/GithubProjects/TrainingAutonomousCar/LaTex/Project Proposal/APS360_Project.tex" 1749860923 23594 00da91db01bca8fbabfffa667531dde5 ""
   "fancyhdr.sty" 1749840906 20521 e5d13d98d57bd53d4fed3aa61bd29c86 ""
   "iclr2022_conference.sty" 1749840906 9167 4f484121d9ee5c46ae7b712b095a6d14 ""
   "math_commands.tex" 1749840906 12284 a71653715108dc62b66e3a0bde0307d8 ""
