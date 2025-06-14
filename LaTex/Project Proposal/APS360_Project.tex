@@ -55,7 +55,6 @@ Student\# 1010218756 \\
 %######## APS360: Document starts here
 \begin{document}
 
-
 \maketitle
 
 \begin{abstract}
@@ -76,8 +75,8 @@ Total Pages: \pageref{last_page}
 This project proposal will discuss our team’s plan to train an 
 autonomous car. The motivation behind this project comes from a shared interest in robotics and deep 
 learning among the team. Our team’s goal is to train the car to drive itself using cameras and control 
-input. This project will be using a CNN model, public datasets such as udacity self-driving car dataset, 
-and custom data that is collected through a mounted camera on a RC car. This is an interesting project 
+input. This project will be using a CNN model, public datasets such as the Udacity self-driving car dataset, 
+and custom data that is collected through a mounted camera on an RC car. This is an interesting project 
 because we get to explore the world of autonomous vehicles and the only sensor we plan on using is a camera. 
 This project needs deep learning to process data in a fast and reliable way. We need to code procedural 
 instructions for different situations based on our sensor (the camera), but this seems dangerous as humans 
@@ -100,7 +99,7 @@ The following is an overview of five works related to autonomous vehicles using 
 
  
 In this study, end-to-end learning using deep convolutional neural networks (CNNs) was used to autonomously control an RC car around a race track. 
-A front-facing camera is used to collect images of the car’s view, which is fed to the model. The CNN extracts features through convolutional and poling layers, 
+A front-facing camera is used to collect images of the car’s view, which is fed to the model. The CNN extracts features through convolutional and pooling layers, 
 then applies the nonlinear ReLU activation function, which is then passed through 3 fully connected layers to generate the output of necessary steering angles 
 and speed the car needs to travel \citep{bhutta2023deep}.
 
@@ -135,7 +134,7 @@ In this paper, the team trained a CNN to map raw pixels from a front-facing came
 The network made up of nine layers, with one normalization layer, five convolutional layers and three fully connected layers 
 was trained to minimize the mean squared error between steering commands and the human driver’s inputs. Using only 
 72 hours of driving data, the team was able to successfully train the car to operate in diverse conditions showing 
-how a CNN can perform the entire task without manual decomposition into smaller systems. 
+how a CNN can perform the entire task without manual decomposition into smaller systems \citep{bojarski2016endendlearningselfdriving}. 
 
 \section{Data Processing}
 \label{headings}
@@ -143,27 +142,27 @@ how a CNN can perform the entire task without manual decomposition into smaller 
 
 The Data Processing pipeline for the self-driving car project has three critical phases:
 Data Collection, Data Cleaning and Preprocessing, and Dataset Splitting. These phases are
-needed to ensure a proper and high quality training, validation, and testing of our model.
+needed to ensure proper and high-quality training, validation, and testing of our model.
 
 \subsection{Data Collection}
 
 \subsubsection{Public Datasets}
 \begin{itemize}
-  \item Udacity Self-Driving Car Dataset
-  \item Berkeley DeepDrive (BDD100K)
+  \item Udacity Self-Driving Car Dataset \citep{udacity_self_driving_car_2021}
+  \item Berkeley DeepDrive (BDD100K) \citep{bdd100k_2018}
 \end{itemize}
 
 \subsubsection{Custom Data Collection}
 \begin{itemize}
-  \item Simulated Data: Using CARLA Simulator to generate high-resolution images with corresponding control commands.
+  \item Simulated Data: Using CARLA Simulator to generate high-resolution images with corresponding control commands \citep{Dosovitskiy17}
   \item Real-World Data: Dash-mounted Camera on RC Cars.
 \end{itemize}
 
 
 \subsection{Data Cleaning and Preprocessing}
 
-This phase involves preparing the image data and labels to reduce maximize model accuracy. 
-This includes image normalization, label consistency checks.
+This phase involves preparing the image data and labels to maximize model accuracy. 
+This includes image normalization and label consistency checks.
 
 \subsubsection{Remove Corrupted or Blurry Frames}
 Removal of incomplete metadata, heavy blur, overexposure, and distorted images using automated filters.
@@ -172,8 +171,8 @@ and Pixel Clipping Detection.
 
 
 \subsubsection{Image Resizing and Normalization}
-All images are resized to uniform size of 320x240 pixels to match input expectation for deep CNNs. Additionally, 
-pixel values are normalizedto seed up convergence during training.
+All images are resized to a uniform size of 320x240 pixels to match input expectations for deep CNNs. Additionally, 
+pixel values are normalized to seed up convergence during training.
 
 \subsubsection{Label Alignment and Verification}
 Control labels are synchronized with their corresponding images using timestamps. Outliers and inconsistent 
@@ -196,12 +195,12 @@ includes unseen time segments from the drive.
 
 \section{Architecture}
 
-The neural network architecutre is designed to take images of size 320x240x3 (height, width, RGB) of the
-front facing camera on the dash or hood of the car. With this the neural network outputs/predictions are the 
+The neural network architecture is designed to take images of size 320x240x3 (height, width, RGB) of the
+front-facing camera on the dash or hood of the car. With this, the neural network outputs/predictions are the 
 continuous steering angle values for the car (regression task). Using multiple Conv2d layers, with 5x5 kernels, 
-and a stride of 1, and a ReLU activation to introduce non-linearity we aim to extraction spatial features, like 
-lane lines, edges, and road curvature. These feature maps are passed through a flatten layer and then into 
-a fully-connected layer which allows the model to learn high-level representations. The final output layer is a single neuron
+a stride of 1, and a ReLU activation to introduce non-linearity we aim to extract spatial features, like 
+lane lines, edges, and road curvature. These feature maps are passed through a flattened layer and then into 
+a fully connected layer which allows the model to learn high-level representations. The final output layer is a single neuron
 with a linear activation function capturing the steering angle of the car. This implies that the speed of the car
 is constant from the start, or could be controlled manually.
 
@@ -213,13 +212,13 @@ To improve generalization we:
 \end{itemize}
 
 \subsection{Training Method}
-This network is trained as a regression problem, where the goal is to minimize the error betwen predicted and actual
+This network is trained as a regression problem, where the goal is to minimize the error between predicted and actual
 steering angles. We will use the following to train our model:
 \begin{itemize}
   \item Loss Function: Using Mean Squared Error (MSE) to calculate the loss, penalizing large changes in steering
   predictions.
   \item Optimizer: Using the Adam Optimizer we will update network eights during training with adaptivative learning rates.
-  \item Training Metrics: Root Mean Squared Error (RMSE) and Mean Absolute Error (MAE) are used to evaluate accuracy of steering predictions.
+  \item Training Metrics: Root Mean Squared Error (RMSE) and Mean Absolute Error (MAE) are used to evaluate the accuracy of steering predictions.
 \end{itemize}
 
 
@@ -227,12 +226,12 @@ steering angles. We will use the following to train our model:
 \section{Citations, figures, tables, references}
 \label{others}
 
-These instructions apply to everyone, regardless of the formatter being used.
+These instructions apply to everyone, regardless of the format being used.
 
 \subsection{Citations within the text}
 
 Citations within the text should be based on the \texttt{natbib} package
-and include the authors' last names and year (with the ``et~al.'' construct
+and include the authors' last names and years (with the ``et~al.'' construct
 for more than two authors). When the authors or the publication are
 included in the sentence, the citation should not be in parenthesis using \verb|\citet{}| (as
 in ``See \citet{Hinton06} for more information.''). Otherwise, the citation
@@ -306,9 +305,9 @@ Soma             &Cell body (contains cell nucleus) \\
 \section{Baseline Model}
 
 A hand-coded rule-based controller serves as a reasonable baseline for evaluating the performance of the autonomous car. 
-This baseline model simulates traditional line-following logic, where decisions are made using simple heuristics based off of 
-pixel color thresholds and pre-defined turning logic \citep{LIKMETA2020103568}. The rule-based controller follows a deterministic flow, first, the incoming 
-video frame is converted to grayscale or HSV color space, and then a threshold is applied to detect the track line (usually a black line 
+This baseline model simulates traditional line-following logic, where decisions are made using simple heuristics based on 
+pixel colour thresholds and pre-defined turning logic \citep{LIKMETA2020103568}. The rule-based controller follows a deterministic flow, first, the incoming 
+video frame is converted to grayscale or HSV colour space, and then a threshold is applied to detect the track line (usually a black line 
 on a white surface or vice versa) \citep{LIKMETA2020103568}. The centroid of the detected line is computed, and based on its position relative to the image center, 
 turning decisions are made. For example, steering left if the line is on the left half of the image, right if on the right half, and forward if 
 centered \citep{bojarski2016endendlearningselfdriving}. This model does not involve learning or generalization; it is purely reactive and works well in constrained, consistent environments 
@@ -318,7 +317,7 @@ and interpretability.
 \section{Ethical Considerations}
 
 \subsection{Model Usage}
-Since this project involves physical hardware operating in real-time, safety is a primary concern. The model may make poor decisions in edge cases 
+Since this project involves physical hardware operating in real time, safety is a primary concern. The model may make poor decisions in edge cases 
 (obstacles, unfamiliar lighting conditions), which could lead to hardware damage or unintended collisions \citep{dalrymple2024guaranteedsafeaiframework}. If used as part of a demonstration 
 involving human interaction, ensuring safety measures (kill switches, limited speed) is essential. Another ethical concern is over-reliance on the 
 model's predictions. If used in future deployments (real vehicles or educational kits), assuming the trained model can handle all situations without 
@@ -327,7 +326,7 @@ proper validation may mislead users and cause harm or accidents \citep{laskey201
 
 \subsection{Data Collection}
 The data used for imitation learning is sourced from human demonstrations. A bias may arise if only a single driving style or track layout is captured.
-For instance, if the human driver consistently takes tight turns or drives aggressively, the model may learn to imitate that behavior, limiting 
+For instance, if the human driver consistently takes tight turns or drives aggressively, the model may learn to imitate that behaviour, limiting 
 generalization to new tracks or drivers. Additionally, reinforcement learning episodes are generated in a simulated or controlled environment 
 \citep{laskey2017comparinghumancentricrobotcentricsampling}. 
 This might restrict the model's robustness in diverse real-world settings. Ethical considerations also include ensuring no unnecessary wear is inflicted 
@@ -346,7 +345,7 @@ To ensure the seamless progression of the project and collaboration among team m
 \textbf{Meeting Guidelines} & \textbf{Details} \\ \hline
 In-person meeting           & Location and time decided by the team \\ \hline
 Online meetings             & Tuesdays (3-5 pm) and Saturdays (1-3 pm) \\ \hline
-Absence Notification        & Must notify team 24 hours before meeting if absence will occur \\ \hline
+Absence Notification        & Must notify team 24 hours before the meeting if they will be absent \\ \hline
 \end{tabular}
 \end{center}
 \end{table}
@@ -360,10 +359,10 @@ Absence Notification        & Must notify team 24 hours before meeting if absenc
 
 \textbf{Collaboration Guidelines}
 \begin{itemize}
-  \item The team will be working together in a Github repository
+  \item The team will be working together in a GitHub repository
   \item Each member is required to give a daily update message on their progress
   \item If conflicts arise, the team must discuss them together and decide on a solution that makes everyone happy
-  \item Ensure code has informational comments that help the team understand it
+  \item Ensure the code has informational comments that help the team understand it
 \end{itemize}
 
 \subsection{Project Timeline}
@@ -373,7 +372,7 @@ Absence Notification        & Must notify team 24 hours before meeting if absenc
 \section{Risk Register}
 The risk register contains some scenarios that could negatively impact our project. 
 These potential risks negatively affect deadlines, quality of work, and more. Our team has 
-discussed these scenarios and came up with solutions for each project risk. 
+discussed these scenarios and come up with solutions for each project risk. 
 
 \begin{table}[H]
 \caption{Project Risks}
@@ -383,9 +382,9 @@ discussed these scenarios and came up with solutions for each project risk.
 \textbf{Project Risk} & \textbf{Likelihood} & \textbf{Solution} \\ \hline
 A teammate drops the course & Unlikely & The team has to approach splitting up tasks differently as teammates will now have more responsibilities. We have to start tasks earlier and move internal deadlines to an earlier date because each member has more tasks to complete. \\ \hline
 Model training takes longer than expected & Likely & It’s common to procrastinate on less important or easier tasks, so this would be the time to complete them. The team should start working on tasks earlier, so if this does occur it doesn’t affect project deadlines. \\ \hline
-Experience hardware problems during testing & Likely & The team should keep extra hardware components in case they fail during testing stages. Also, try not to overuse the physical components, and use simulation software to test. \\ \hline
-Model works in simulation but not on physical RC car & Likely & We shouldn’t fully rely on simulations, and should test the model on the physical RC car frequently. The earlier the team faces these issues, the longer we have to fix them. Compare the results from simulation and physical RC car and that might help solve problems. \\ \hline
-A teammate misses an internal deadline & Likely & The team should hold everyone accountable as each member is responsible for their assigned tasks. The teammate should finish tasks as soon as possible after the missed deadline because this will hold back the team. \\ \hline
+Experience hardware problems during testing & Likely & The team should keep extra hardware components in case they fail the during testing stages. Also, try not to overuse the physical components, and use simulation software to test. \\ \hline
+The model works in simulation but not on a physical RC car & Likely & We shouldn’t fully rely on simulations and should test the model on the physical RC car frequently. The earlier the team faces these issues, the longer we have to fix them. Compare the results from simulation and physical RC car and that might help solve problems. \\ \hline
+If teammate misses an internal deadline & Likely & The team should hold everyone accountable as each member is responsible for their assigned tasks. The teammate should finish tasks as soon as possible after the missed deadline because this will hold back the team. \\ \hline
 \end{tabular}
 \end{table}
 
