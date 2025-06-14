@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.25 (MiKTeX 24.1) (preloaded format=pdflatex 2025.6.13)  13 JUN 2025 19:40
+This is pdfTeX, Version 3.141592653-2.6-1.40.25 (MiKTeX 24.1) (preloaded format=pdflatex 2025.6.13)  13 JUN 2025 20:22
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -336,8 +336,8 @@ LaTeX Font Info:    Trying to load font information for OT1+pcr on input line 59
  (C:\Users\Pravin\AppData\Local\Programs\MiKTeX\tex/latex/psnfss\ot1pcr.fd
 File: ot1pcr.fd 2001/06/04 font definitions for OT1/pcr.
 )
-Overfull \hbox (28.51505pt too wide) in paragraph at lines 59--59
-[][] []
+Overfull \hbox (46.51505pt too wide) in paragraph at lines 59--59
+[] []
  []
 
 [1{C:/Users/Pravin/AppData/Local/MiKTeX/fonts/map/pdftex/pdftex.map}{C:/Users/Pravin/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/base/8r.enc}
@@ -484,7 +484,7 @@ Package hyperref Warning: Token not allowed in a PDF string (Unicode):
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
 (hyperref)                removing `\new@ifnextchar' on input line 162.
 
-<Figs/td-deep-learning.jpg, id=123, 1204.5pt x 903.375pt>
+<Figs/td-deep-learning.jpg, id=143, 1204.5pt x 903.375pt>
 File: Figs/td-deep-learning.jpg Graphic file (type jpg)
 <use Figs/td-deep-learning.jpg>
 Package pdftex.def Info: Figs/td-deep-learning.jpg  used on input line 220.
@@ -492,34 +492,34 @@ Package pdftex.def Info: Figs/td-deep-learning.jpg  used on input line 220.
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
-[3]
-LaTeX Font Info:    Trying to load font information for OT1+phv on input line 266.
+[3] [4 <./Figs/td-deep-learning.jpg>]
+LaTeX Font Info:    Trying to load font information for OT1+phv on input line 300.
  (C:\Users\Pravin\AppData\Local\Programs\MiKTeX\tex/latex/psnfss\ot1phv.fd
 File: ot1phv.fd 2020/03/25 scalable font definitions for OT1/phv.
 )
 LaTeX Font Info:    Font shape `OT1/phv/bx/n' in size <10> not available
-(Font)              Font shape `OT1/phv/b/n' tried instead on input line 266.
+(Font)              Font shape `OT1/phv/b/n' tried instead on input line 300.
 LaTeX Font Info:    Font shape `OT1/phv/bx/n' in size <7> not available
-(Font)              Font shape `OT1/phv/b/n' tried instead on input line 266.
+(Font)              Font shape `OT1/phv/b/n' tried instead on input line 300.
 LaTeX Font Info:    Font shape `OT1/phv/bx/n' in size <5> not available
-(Font)              Font shape `OT1/phv/b/n' tried instead on input line 266.
+(Font)              Font shape `OT1/phv/b/n' tried instead on input line 300.
 
-Underfull \hbox (badness 10000) in paragraph at lines 262--280
+Underfull \hbox (badness 10000) in paragraph at lines 296--314
 [][]
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 262--280
+Underfull \hbox (badness 10000) in paragraph at lines 296--314
 
  []
 
 
-Underfull \vbox (badness 5802) has occurred while \output is active []
-
- [4 <./Figs/td-deep-learning.jpg>]
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [5] (APS360_Project.bbl
+ [5]
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [6] (APS360_Project.bbl
 Underfull \hbox (badness 1354) in paragraph at lines 14--20
 []\OT1/ptm/m/n/10 Muhammad Ra-heel Bhutta.  Deep CNN End-to-End Learn-ing for Au-tonomous RC Cars.
  []
@@ -534,45 +534,55 @@ Underfull \hbox (badness 10000) in paragraph at lines 14--20
 \OT1/pcr/m/n/10 / / lupinepublishers . com / robotics-[]mechanical-[]engineering-[]journal /
  []
 
-[6]
-Underfull \hbox (badness 10000) in paragraph at lines 53--58
+[7]
+Underfull \hbox (badness 1163) in paragraph at lines 74--83
+\OT1/ptm/m/n/10 and Danilo Ro-mano.  Com-bin-ing re-in-force-ment learn-ing with rule-based con-trollers for
+ []
+
+
+Underfull \hbox (badness 3168) in paragraph at lines 74--83
+\OT1/ptm/m/it/10 Sys-tems\OT1/ptm/m/n/10 , 131:103568, 2020.  ISSN 0921-8890.  doi: $https : / / doi . org / 10 . 1016 / j . robot .
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 85--90
 []\OT1/ptm/m/n/10 Zaid Mallik.  \OT1/ptm/m/it/10 Be-hind the Scenes of Our Self-Driving RC Car Project\OT1/ptm/m/n/10 .
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 53--58
+Underfull \hbox (badness 10000) in paragraph at lines 85--90
 \OT1/ptm/m/n/10 Kaizen-Dev, 2023.  URL []$\OT1/pcr/m/n/10 https : / / www . kaizendev . tech / post /
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 61--69
+Underfull \hbox (badness 10000) in paragraph at lines 93--101
 \OT1/pcr/m/n/10 publication / 356627453 _ CNN _ based _ End _ to _ End _ Learning _ Steering _
  []
 
-) [7] (APS360_Project.aux)
+) [8] (APS360_Project.aux)
  ***********
 LaTeX2e <2023-11-01> patch level 1
 L3 programming layer <2024-01-04>
  ***********
 Package rerunfilecheck Info: File `APS360_Project.out' has not changed.
-(rerunfilecheck)             Checksum: 7FA3A670B0984AB480EF2C3D22034F3D;4474.
+(rerunfilecheck)             Checksum: AD6D5B32EEFCE45A197421B0944EF17B;5104.
  )
 (\end occurred inside a group at level 1)
 
-### simple group (level 1) entered at line 278 ({)
+### simple group (level 1) entered at line 312 ({)
 ### bottom level 
 Here is how much of TeX's memory you used:
- 11097 strings out of 474486
- 166660 string characters out of 5743283
+ 11120 strings out of 474486
+ 167297 string characters out of 5743283
  1944542 words of memory out of 5000000
- 33157 multiletter control sequences out of 15000+600000
+ 33171 multiletter control sequences out of 15000+600000
  594064 words of font info for 106 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  75i,17n,79p,760b,617s stack positions out of 10000i,1000n,20000p,200000b,200000s
 <C:/Users/Pravin/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmbx10.pfb><C:/Users/Pravin/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmex10.pfb><C:/Users/Pravin/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi10.pfb><C:/Users/Pravin/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi7.pfb><C:/Users/Pravin/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmib10.pfb><C:/Users/Pravin/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cmextra/cmmib7.pfb><C:/Users/Pravin/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr10.pfb><C:/Users/Pravin/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr7.pfb><C:/Users/Pravin/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy10.pfb><C:/Users/Pravin/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy7.pfb><C:/Users/Pravin/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/symbols/msbm10.pfb><C:/Users/Pravin/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/symbols/msbm7.pfb><C:/Users/Pravin/AppData/Local/Programs/MiKTeX/fonts/type1/urw/courier/ucrr8a.pfb><C:/Users/Pravin/AppData/Local/Programs/MiKTeX/fonts/type1/urw/helvetic/uhvb8a.pfb><C:/Users/Pravin/AppData/Local/Programs/MiKTeX/fonts/type1/urw/helvetic/uhvro8a.pfb><C:/Users/Pravin/AppData/Local/Programs/MiKTeX/fonts/type1/urw/times/utmb8a.pfb><C:/Users/Pravin/AppData/Local/Programs/MiKTeX/fonts/type1/urw/times/utmr8a.pfb><C:/Users/Pravin/AppData/Local/Programs/MiKTeX/fonts/type1/urw/times/utmri8a.pfb>
-Output written on APS360_Project.pdf (7 pages, 380772 bytes).
+Output written on APS360_Project.pdf (8 pages, 391070 bytes).
 PDF statistics:
- 275 PDF objects out of 1000 (max. 8388607)
- 41 named destinations out of 1000 (max. 500000)
- 150 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 320 PDF objects out of 1000 (max. 8388607)
+ 50 named destinations out of 1000 (max. 500000)
+ 190 words of extra memory for PDF output out of 10000 (max. 10000000)
 

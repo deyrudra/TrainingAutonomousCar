@@ -22,20 +22,20 @@ based on ICLR Conference Format}
 
 %######## APS360: Put your names, student IDs and Emails here
 \author{Rudra Dey  \\
-Student\# 1005678901\\
-\texttt{authonhbvcnmmr1@mail.utoronto.ca} \\
+Student\# 1010124866\\
+\texttt{rudra.dey@mail.utoronto.ca } \\
 \And
 Pravin Kalaivannan  \\
 Student\# 1010141295 \\
 \texttt{pravin.kalaivannan@mail.utoronto.ca} \\
 \AND
 Aadavan Vasudevan  \\
-Student\# 1005678901 \\
-\texttt{@mail.utoronto.ca} \\
+Student\# 1010101514 \\
+\texttt{aadavan.vasudevan@mail.utoronto.ca} \\
 \And
 Abishan Baheerathan \\
-Student\# 1005678901 \\
-\texttt{author4@mtail.utoronto.ca} \\
+Student\# 1010218756 \\
+\texttt{abishan.baheerathan@mail.utoronto.ca} \\
 \AND
 }
 
@@ -167,7 +167,7 @@ was trained to minimize the mean squared error between steering commands and the
 72 hours of driving data, the team was able to successfully train the car to operate in diverse conditions showing 
 how a CNN can perform the entire task without manual decomposition into smaller systems. 
 
-
+/section{}
 
 \section{Citations, figures, tables, references}
 \label{others}
@@ -245,6 +245,40 @@ Soma             &Cell body (contains cell nucleus) \\
 \end{tabular}
 \end{center}
 \end{table}
+
+
+
+\section{Architecture}
+
+\section{Baseline Model}
+
+A hand-coded rule-based controller serves as a reasonable baseline for evaluating the performance of the autonomous RC car. 
+This baseline model simulates traditional line-following logic, where decisions are made using simple heuristics based off of 
+pixel color thresholds and pre-defined turning logic \citep{LIKMETA2020103568}. The rule-based controller follows a deterministic flow, first, the incoming 
+video frame is converted to grayscale or HSV color space, and then a threshold is applied to detect the track line (usually a black line 
+on a white surface or vice versa) \citep{LIKMETA2020103568}. The centroid of the detected line is computed, and based on its position relative to the image center, 
+turning decisions are made. For example, steering left if the line is on the left half of the image, right if on the right half, and forward if 
+centered \citep{bojarski2016endendlearningselfdriving}. This model does not involve learning or generalization; it is purely reactive and works well in constrained, consistent environments 
+with high-contrast tracks. While simplistic, this approach is widely used as a baseline in autonomous driving projects due to its reproducibility 
+and interpretability.
+
+\section{Ethical Considerations}
+
+\subsection{Model Usage}
+Since this project involves physical hardware operating in real-time, safety is a primary concern. The model may make poor decisions in edge cases 
+(obstacles, unfamiliar lighting conditions), which could lead to hardware damage or unintended collisions \citep{dalrymple2024guaranteedsafeaiframework}. If used as part of a demonstration 
+involving human interaction, ensuring safety measures (kill switches, limited speed) is essential. Another ethical concern is over-reliance on the 
+model's predictions. If used in future deployments (real vehicles or educational kits), assuming the trained model can handle all situations without 
+proper validation may mislead users and cause harm or accidents \citep{laskey2017comparinghumancentricrobotcentricsampling}. 
+
+
+\subsection{Data Collection}
+The data used for imitation learning is sourced from human demonstrations. A bias may arise if only a single driving style or track layout is captured.
+For instance, if the human driver consistently takes tight turns or drives aggressively, the model may learn to imitate that behavior, limiting 
+generalization to new tracks or drivers. Additionally, reinforcement learning episodes are generated in a simulated or controlled environment 
+\citep{laskey2017comparinghumancentricrobotcentricsampling}. 
+This might restrict the model's robustness in diverse real-world settings. Ethical considerations also include ensuring no unnecessary wear is inflicted 
+on hardware during data collection or that any modifications to the car setup are clearly documented and standardized.
 
 \section{Default Notation}
 
