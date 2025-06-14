@@ -18,8 +18,7 @@
 \restylefloat{table}
 
 %######## APS360: Put your project Title here
-\title{Formatting Instructions for APS360 Project  \\ 
-based on ICLR Conference Format}
+\title{Autonomous Car using Deep Learning Project Proposal\\}
 
 
 %######## APS360: Put your names, student IDs and Emails here
@@ -60,69 +59,38 @@ Student\# 1010218756 \\
 \maketitle
 
 \begin{abstract}
-This template should be used for all your project related reports in APS360 course. -- Write an abstract for your project here. Please review the \textbf{ First Course Tutorial} for a quick start
+This document presents our team's approach to developing an autonomous car system. This document contains research done on similar projects, data processing methods, 
+architecture details, and a baseline comparison model. Our team looked into ethical 
+concerns and potential major risks that could occur with this project. Further, the team came 
+together to form a detailed project plan. This plan contains important tasks, 
+who is responsible for each task, and project deadlines.\\
 %######## APS360: Do not change the next line. This shows your Main body page count.
-----Total Pages: \pageref{last_page}
+Total Pages: \pageref{last_page}
 \end{abstract}
 
 
 
-\section{Project Document Submission for APS360 Course}
+\section{Introduction}
 
 
-The format for the submissions is a variant of the ICLR 2022 format.
-Please read carefully the instructions below, and follow them
-faithfully. There is a \textbf{9 page} limit for the main text. References do not have any limitation. This is also ICLR's standard length for a paper submission. 
-If your main text goes to page 10, a $-20\%$ penalty would be applied. If your main text goes to page 11, you will not receive any grade for your submission. 
-
-\subsection{Style}
-
-Papers to be submitted to APS360 must be prepared according to the
-instructions presented here.
-
-Authors are required to use the APS360 \LaTeX{} style files obtainable at the
-APS360 website on Quercus. Tweaking the style is not permitted.
-
-\subsection{Retrieval of style files}
-
-The file \verb+APS360_Project.pdf+ contains these
-instructions and illustrates the various formatting requirements your APS360 paper must satisfy.
-Submissions must be made using \LaTeX{} and the style files
-\verb+iclr2022_conference.sty+ and \verb+iclr2022_conference.bst+ (to be used with \LaTeX{}2e). The file
-\verb+APS360_Project.tex+ may be used as a ``shell'' for writing your paper. All you have to do is replace the author, title, abstract, and text of the paper with
-your own.
-
-The formatting instructions contained in these style files are summarized in
-sections \ref{gen_inst}, \ref{headings}, and \ref{others} below.
-
-\section{General formatting instructions}
-\label{gen_inst}
-
-The text must be confined within a rectangle 5.5~inches (33~picas) wide and
-9~inches (54~picas) long. The left margin is 1.5~inch (9~picas).
-Use 10~point type with a vertical spacing of 11~points. Times New Roman is the
-preferred typeface throughout. Paragraphs are separated by 1/2~line space,
-with no indentation.
-
-Paper title is 17~point, in small caps and left-aligned.
-All pages should start at 1~inch (6~picas) from the top of the page.
-
-Authors' names are
-set in boldface, and each name is placed above its corresponding
-address. The lead author's name is to be listed first, and
-the co-authors' names are set to follow. Authors sharing the
-same address can be on the same line.
-
-Please pay special attention to the instructions in section \ref{others}
-regarding figures, tables, acknowledgments, and references.
+This project proposal will discuss our team’s plan to train an 
+autonomous car. The motivation behind this project comes from a shared interest in robotics and deep 
+learning among the team. Our team’s goal is to train the car to drive itself using cameras and control 
+input. This project will be using a CNN model, public datasets such as udacity self-driving car dataset, 
+and custom data that is collected through a mounted camera on a RC car. This is an interesting project 
+because we get to explore the world of autonomous vehicles and the only sensor we plan on using is a camera. 
+This project needs deep learning to process data in a fast and reliable way. We need to code procedural 
+instructions for different situations based on our sensor (the camera), but this seems dangerous as humans 
+can not think of every possible situation. A training model can handle this problem in a generalized way 
+which is what we need to accomplish our goal. 
+ 
 
 
-There will be a strict upper limit of 9 pages for the main text of the initial submission, with unlimited additional pages for citations. 
 
 \section{Background and Related Works}
 \label{headings}
 
-\subsection{Autonomous RC Car Related Projects}
+\subsection{Autonomous Car Related Projects}
 
 Through the use of deep learning, many autonomous car projects have been developed and tested, showing the potential of this technology in real-world applications. 
 The following is an overview of five works related to autonomous vehicles using deep learning.  
@@ -337,7 +305,7 @@ Soma             &Cell body (contains cell nucleus) \\
 
 \section{Baseline Model}
 
-A hand-coded rule-based controller serves as a reasonable baseline for evaluating the performance of the autonomous RC car. 
+A hand-coded rule-based controller serves as a reasonable baseline for evaluating the performance of the autonomous car. 
 This baseline model simulates traditional line-following logic, where decisions are made using simple heuristics based off of 
 pixel color thresholds and pre-defined turning logic \citep{LIKMETA2020103568}. The rule-based controller follows a deterministic flow, first, the incoming 
 video frame is converted to grayscale or HSV color space, and then a threshold is applied to detect the track line (usually a black line 
@@ -409,14 +377,15 @@ discussed these scenarios and came up with solutions for each project risk.
 
 \begin{table}[H]
 \caption{Project Risks}
-\begin{tabular}{|l|l|l|}
+\centering
+\begin{tabular}{|p{4cm}|p{2.5cm}|p{7cm}|}
 \hline
-\textbf{Project Risk}                                                                           & \textbf{Likelihood} & \textbf{Solution}                                                                                                                                                                                                                                                                                                               \\ \hline
-A teammate drops the course                                                                     & Unlikely            & \begin{tabular}[c]{@{}l@{}}The team has to approach splitting up tasks differently \\ as teammates will now have more responsibilities. \\ We have to start tasks earlier and move internal \\ deadlines to an earlier date because each member has \\ more tasks to complete\end{tabular}                                      \\ \hline
-\begin{tabular}[c]{@{}l@{}}Model training takes longer \\ than expected\end{tabular}            & Likely              & \begin{tabular}[c]{@{}l@{}}It’s common to procrastinate on less important or easier \\ tasks, so this would be the time to complete them. \\ The team should start working on tasks earlier, so \\ if this does occur it doesn’t affect project deadlines\end{tabular}                                                          \\ \hline
-\begin{tabular}[c]{@{}l@{}}Experience hardware problems \\ during testing\end{tabular}          & Likely              & \begin{tabular}[c]{@{}l@{}}The team should keep extra hardware components in \\ case they fail during testing stages. Also, try not to \\ overuse the physical components, and use simulation \\ software to test\end{tabular}                                                                                                  \\ \hline
-\begin{tabular}[c]{@{}l@{}}Model works in simulation \\ but not on physical RC car\end{tabular} & Likely              & \begin{tabular}[c]{@{}l@{}}We shouldn’t fully rely on simulations, and should \\ test the model on the physical RC car frequently. \\ The earlier the team faces these issues, the longer \\ we have to fix them. Compare the results from \\ simulation and physical RC car and that might \\ help solve problems\end{tabular} \\ \hline
-\begin{tabular}[c]{@{}l@{}}A teammate misses an internal \\ deadline\end{tabular}               & Likely              & \begin{tabular}[c]{@{}l@{}}The team should hold everyone accountable as each \\ member is responsible for their assigned tasks. \\ The teammate should finish tasks as soon as possible \\ after the missed deadline because this will \\ hold back the team\end{tabular}                                                       \\ \hline
+\textbf{Project Risk} & \textbf{Likelihood} & \textbf{Solution} \\ \hline
+A teammate drops the course & Unlikely & The team has to approach splitting up tasks differently as teammates will now have more responsibilities. We have to start tasks earlier and move internal deadlines to an earlier date because each member has more tasks to complete. \\ \hline
+Model training takes longer than expected & Likely & It’s common to procrastinate on less important or easier tasks, so this would be the time to complete them. The team should start working on tasks earlier, so if this does occur it doesn’t affect project deadlines. \\ \hline
+Experience hardware problems during testing & Likely & The team should keep extra hardware components in case they fail during testing stages. Also, try not to overuse the physical components, and use simulation software to test. \\ \hline
+Model works in simulation but not on physical RC car & Likely & We shouldn’t fully rely on simulations, and should test the model on the physical RC car frequently. The earlier the team faces these issues, the longer we have to fix them. Compare the results from simulation and physical RC car and that might help solve problems. \\ \hline
+A teammate misses an internal deadline & Likely & The team should hold everyone accountable as each member is responsible for their assigned tasks. The teammate should finish tasks as soon as possible after the missed deadline because this will hold back the team. \\ \hline
 \end{tabular}
 \end{table}
 
