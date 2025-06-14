@@ -14,6 +14,8 @@
 \usepackage{hyperref}
 \usepackage{url}
 \usepackage{graphicx}
+\usepackage{float}
+\restylefloat{table}
 
 %######## APS360: Put your project Title here
 \title{Formatting Instructions for APS360 Project  \\ 
@@ -222,88 +224,6 @@ it so very similar frames of the stream can land in training, validation, and te
 memorization of the data. Thus, we will split the data chronologically, first 80\% goes to 
 training, the next 10\% goes to validation, and the last 10\% goes to testing. 
 
-
-
-
-\section{Citations, figures, tables, references}
-\label{others}
-
-These instructions apply to everyone, regardless of the formatter being used.
-
-\subsection{Citations within the text}
-
-Citations within the text should be based on the \texttt{natbib} package
-and include the authors' last names and year (with the ``et~al.'' construct
-for more than two authors). When the authors or the publication are
-included in the sentence, the citation should not be in parenthesis using \verb|\citet{}| (as
-in ``See \citet{Hinton06} for more information.''). Otherwise, the citation
-should be in parenthesis using \verb|\citep{}| (as in ``Deep learning shows promise to make progress
-towards AI~\citep{Bengio+chapter2007}.'').
-
-The corresponding references are to be listed in alphabetical order of
-authors, in the \textsc{References} section. As to the format of the
-references themselves, any style is acceptable as long as it is used
-consistently.
-
-To cite a new paper, first, you need to add that paper's BibTeX information to \verb+APS360_ref.bib+ file and then you can use the \verb|\citep{}| command to cite that in your main document. 
-
-\subsection{Footnotes}
-
-Indicate footnotes with a number\footnote{Sample of the first footnote} in the
-text. Place the footnotes at the bottom of the page on which they appear.
-Precede the footnote with a horizontal rule of 2~inches
-(12~picas).\footnote{Sample of the second footnote}
-
-\subsection{Figures}
-
-All artwork must be neat, clean, and legible. Lines should be dark
-enough for purposes of reproduction; art work should not be
-hand-drawn. The figure number and caption always appear after the
-figure. Place one line space before the figure caption, and one line
-space after the figure. The figure caption is lower case (except for
-first word and proper nouns); figures are numbered consecutively.
-
-Make sure the figure caption does not get separated from the figure.
-Leave sufficient space to avoid splitting the figure and figure caption.
-
-You may use color figures.
-However, it is best for the
-figure captions and the paper body to make sense if the paper is printed
-either in black/white or in color.
-
-\begin{figure}[h]
-\begin{center}
-\includegraphics[width=0.6\textwidth]{Figs/td-deep-learning.jpg}
-\end{center}
-\caption{Sample figure caption. Image: ZDNet}
-\end{figure}
-
-\subsection{Tables}
-
-All tables must be centered, neat, clean and legible. Do not use hand-drawn
-tables. The table number and title always appear before the table. See
-Table~\ref{sample-table}.
-
-Place one line space before the table title, one line space after the table
-title, and one line space after the table. The table title must be lower case
-(except for first word and proper nouns); tables are numbered consecutively.
-
-\begin{table}[t]
-\caption{Sample table title}
-\label{sample-table}
-\begin{center}
-\begin{tabular}{ll}
-\multicolumn{1}{c}{\bf PART}  &\multicolumn{1}{c}{\bf DESCRIPTION}
-\\ \hline \\
-Dendrite         &Input terminal \\
-Axon             &Output terminal \\
-Soma             &Cell body (contains cell nucleus) \\
-\end{tabular}
-\end{center}
-\end{table}
-
-
-
 \section{Architecture}
 
 \section{Baseline Model}
@@ -336,128 +256,60 @@ generalization to new tracks or drivers. Additionally, reinforcement learning ep
 This might restrict the model's robustness in diverse real-world settings. Ethical considerations also include ensuring no unnecessary wear is inflicted 
 on hardware during data collection or that any modifications to the car setup are clearly documented and standardized.
 
-\section{Default Notation}
+\section{Project Plan}
+To ensure the seamless progression of the project and collaboration among team members, we have devised guidelines and a timeline as seen below.
 
-In an attempt to encourage standardized notation, we have included the
-notation file from the textbook, \textit{Deep Learning}
-\cite{goodfellow2016deep} available at
-\url{https://github.com/goodfeli/dlbook_notation/}.  Use of this style
-is not required and can be disabled by commenting out
-\texttt{math\_commands.tex}.
+\subsection{Team Guidelines}
 
-
-\centerline{\bf Numbers and Arrays}
-\bgroup
-\def\arraystretch{1.5}
-\begin{tabular}{p{1in}p{3.25in}}
-$\displaystyle a$ & A scalar (integer or real)\\
-$\displaystyle \va$ & A vector\\
-$\displaystyle \mA$ & A matrix\\
-$\displaystyle \tA$ & A tensor\\
-$\displaystyle \mI_n$ & Identity matrix with $n$ rows and $n$ columns\\
-$\displaystyle \mI$ & Identity matrix with dimensionality implied by context\\
-$\displaystyle \ve^{(i)}$ & Standard basis vector $[0,\dots,0,1,0,\dots,0]$ with a 1 at position $i$\\
-$\displaystyle \text{diag}(\va)$ & A square, diagonal matrix with diagonal entries given by $\va$\\
-$\displaystyle \ra$ & A scalar random variable\\
-$\displaystyle \rva$ & A vector-valued random variable\\
-$\displaystyle \rmA$ & A matrix-valued random variable\\
+\begin{table}[H]
+\caption{Meeting Specifications}
+\begin{center}
+\begin{tabular}{|l|l|}
+\hline
+\textbf{Meeting Guidelines} & \textbf{Details} \\ \hline
+In-person meeting           & Location and time decided by the team \\ \hline
+Online meetings             & Tuesdays (3-5 pm) and Saturdays (1-3 pm) \\ \hline
+Absence Notification        & Must notify team 24 hours before meeting if absence will occur \\ \hline
 \end{tabular}
-\egroup
-\vspace{0.25cm}
-\centerline{\bf Sets and Graphs}
-\bgroup
-\def\arraystretch{1.5}
+\end{center}
+\end{table}
 
-\begin{tabular}{p{1.25in}p{3.25in}}
-$\displaystyle \sA$ & A set\\
-$\displaystyle \R$ & The set of real numbers \\
-$\displaystyle \{0, 1\}$ & The set containing 0 and 1 \\
-$\displaystyle \{0, 1, \dots, n \}$ & The set of all integers between $0$ and $n$\\
-$\displaystyle [a, b]$ & The real interval including $a$ and $b$\\
-$\displaystyle (a, b]$ & The real interval excluding $a$ but including $b$\\
-$\displaystyle \sA \backslash \sB$ & Set subtraction, i.e., the set containing the elements of $\sA$ that are not in $\sB$\\
-$\displaystyle \gG$ & A graph\\
-$\displaystyle \parents_\gG(\ervx_i)$ & The parents of $\ervx_i$ in $\gG$
+\textbf{Communication Guidelines}
+\begin{itemize}
+  \item Group chat is active on weekdays and weekends (24/7)
+  \item Group chat is active on weekdays and weekends (24/7)
+  \item Members are required to frequently check discord messages (less than 2 hour response time)
+\end{itemize}
+
+\textbf{Collaboration Guidelines}
+\begin{itemize}
+  \item The team will be working together in a Github repository
+  \item Each member is required to give a daily update message on their progress
+  \item If conflicts arise, the team must discuss them together and decide on a solution that makes everyone happy
+  \item Ensure code has informational comments that help the team understand it
+\end{itemize}
+
+\subsection{Project Timeline}
+
+
+
+\section{Risk Register}
+The risk register contains some scenarios that could negatively impact our project. 
+These potential risks negatively affect deadlines, quality of work, and more. Our team has 
+discussed these scenarios and came up with solutions for each project risk. 
+
+\begin{table}[H]
+\caption{Project Risks}
+\begin{tabular}{|l|l|l|}
+\hline
+\textbf{Project Risk}                                                                           & \textbf{Likelihood} & \textbf{Solution}                                                                                                                                                                                                                                                                                                               \\ \hline
+A teammate drops the course                                                                     & Unlikely            & \begin{tabular}[c]{@{}l@{}}The team has to approach splitting up tasks differently \\ as teammates will now have more responsibilities. \\ We have to start tasks earlier and move internal \\ deadlines to an earlier date because each member has \\ more tasks to complete\end{tabular}                                      \\ \hline
+\begin{tabular}[c]{@{}l@{}}Model training takes longer \\ than expected\end{tabular}            & Likely              & \begin{tabular}[c]{@{}l@{}}It’s common to procrastinate on less important or easier \\ tasks, so this would be the time to complete them. \\ The team should start working on tasks earlier, so \\ if this does occur it doesn’t affect project deadlines\end{tabular}                                                          \\ \hline
+\begin{tabular}[c]{@{}l@{}}Experience hardware problems \\ during testing\end{tabular}          & Likely              & \begin{tabular}[c]{@{}l@{}}The team should keep extra hardware components in \\ case they fail during testing stages. Also, try not to \\ overuse the physical components, and use simulation \\ software to test\end{tabular}                                                                                                  \\ \hline
+\begin{tabular}[c]{@{}l@{}}Model works in simulation \\ but not on physical RC car\end{tabular} & Likely              & \begin{tabular}[c]{@{}l@{}}We shouldn’t fully rely on simulations, and should \\ test the model on the physical RC car frequently. \\ The earlier the team faces these issues, the longer \\ we have to fix them. Compare the results from \\ simulation and physical RC car and that might \\ help solve problems\end{tabular} \\ \hline
+\begin{tabular}[c]{@{}l@{}}A teammate misses an internal \\ deadline\end{tabular}               & Likely              & \begin{tabular}[c]{@{}l@{}}The team should hold everyone accountable as each \\ member is responsible for their assigned tasks. \\ The teammate should finish tasks as soon as possible \\ after the missed deadline because this will \\ hold back the team\end{tabular}                                                       \\ \hline
 \end{tabular}
-\vspace{0.25cm}
-
-
-\centerline{\bf Indexing}
-\bgroup
-\def\arraystretch{1.5}
-
-\begin{tabular}{p{1.25in}p{3.25in}}
-$\displaystyle \eva_i$ & Element $i$ of vector $\va$, with indexing starting at 1 \\
-$\displaystyle \eva_{-i}$ & All elements of vector $\va$ except for element $i$ \\
-$\displaystyle \emA_{i,j}$ & Element $i, j$ of matrix $\mA$ \\
-$\displaystyle \mA_{i, :}$ & Row $i$ of matrix $\mA$ \\
-$\displaystyle \mA_{:, i}$ & Column $i$ of matrix $\mA$ \\
-$\displaystyle \etA_{i, j, k}$ & Element $(i, j, k)$ of a 3-D tensor $\tA$\\
-$\displaystyle \tA_{:, :, i}$ & 2-D slice of a 3-D tensor\\
-$\displaystyle \erva_i$ & Element $i$ of the random vector $\rva$ \\
-\end{tabular}
-\egroup
-\vspace{0.25cm}
-
-
-\centerline{\bf Calculus}
-\bgroup
-\def\arraystretch{1.5}
-\begin{tabular}{p{1.25in}p{3.25in}}
-% NOTE: the [2ex] on the next line adds extra height to that row of the table.
-% Without that command, the fraction on the first line is too tall and collides
-% with the fraction on the second line.
-$\displaystyle\frac{d y} {d x}$ & Derivative of $y$ with respect to $x$\\ [2ex]
-$\displaystyle \frac{\partial y} {\partial x} $ & Partial derivative of $y$ with respect to $x$ \\
-$\displaystyle \nabla_\vx y $ & Gradient of $y$ with respect to $\vx$ \\
-$\displaystyle \nabla_\mX y $ & Matrix derivatives of $y$ with respect to $\mX$ \\
-$\displaystyle \nabla_\tX y $ & Tensor containing derivatives of $y$ with respect to $\tX$ \\
-$\displaystyle \frac{\partial f}{\partial \vx} $ & Jacobian matrix $\mJ \in \R^{m\times n}$ of $f: \R^n \rightarrow \R^m$\\
-$\displaystyle \nabla_\vx^2 f(\vx)\text{ or }\mH( f)(\vx)$ & The Hessian matrix of $f$ at input point $\vx$\\
-$\displaystyle \int f(\vx) d\vx $ & Definite integral over the entire domain of $\vx$ \\
-$\displaystyle \int_\sS f(\vx) d\vx$ & Definite integral with respect to $\vx$ over the set $\sS$ \\
-\end{tabular}
-\egroup
-\vspace{0.25cm}
-
-\centerline{\bf Probability and Information Theory}
-\bgroup
-\def\arraystretch{1.5}
-\begin{tabular}{p{1.25in}p{3.25in}}
-$\displaystyle P(\ra)$ & A probability distribution over a discrete variable\\
-$\displaystyle p(\ra)$ & A probability distribution over a continuous variable, or over
-a variable whose type has not been specified\\
-$\displaystyle \ra \sim P$ & Random variable $\ra$ has distribution $P$\\% so thing on left of \sim should always be a random variable, with name beginning with \r
-$\displaystyle  \E_{\rx\sim P} [ f(x) ]\text{ or } \E f(x)$ & Expectation of $f(x)$ with respect to $P(\rx)$ \\
-$\displaystyle \Var(f(x)) $ &  Variance of $f(x)$ under $P(\rx)$ \\
-$\displaystyle \Cov(f(x),g(x)) $ & Covariance of $f(x)$ and $g(x)$ under $P(\rx)$\\
-$\displaystyle H(\rx) $ & Shannon entropy of the random variable $\rx$\\
-$\displaystyle \KL ( P \Vert Q ) $ & Kullback-Leibler divergence of P and Q \\
-$\displaystyle \mathcal{N} ( \vx ; \vmu , \mSigma)$ & Gaussian distribution %
-over $\vx$ with mean $\vmu$ and covariance $\mSigma$ \\
-\end{tabular}
-\egroup
-\vspace{0.25cm}
-
-\centerline{\bf Functions}
-\bgroup
-\def\arraystretch{1.5}
-\begin{tabular}{p{1.25in}p{3.25in}}
-$\displaystyle f: \sA \rightarrow \sB$ & The function $f$ with domain $\sA$ and range $\sB$\\
-$\displaystyle f \circ g $ & Composition of the functions $f$ and $g$ \\
-  $\displaystyle f(\vx ; \vtheta) $ & A function of $\vx$ parametrized by $\vtheta$.
-  (Sometimes we write $f(\vx)$ and omit the argument $\vtheta$ to lighten notation) \\
-$\displaystyle \log x$ & Natural logarithm of $x$ \\
-$\displaystyle \sigma(x)$ & Logistic sigmoid, $\displaystyle \frac{1} {1 + \exp(-x)}$ \\
-$\displaystyle \zeta(x)$ & Softplus, $\log(1 + \exp(x))$ \\
-$\displaystyle || \vx ||_p $ & $\normlp$ norm of $\vx$ \\
-$\displaystyle || \vx || $ & $\normltwo$ norm of $\vx$ \\
-$\displaystyle x^+$ & Positive part of $x$, i.e., $\max(0,x)$\\
-$\displaystyle \1_\mathrm{condition}$ & is 1 if the condition is true, 0 otherwise\\
-\end{tabular}
-\egroup
-\vspace{0.25cm}
-
+\end{table}
 
 
 \section{Final instructions}
