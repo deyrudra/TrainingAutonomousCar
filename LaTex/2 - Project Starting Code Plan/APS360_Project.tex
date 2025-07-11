@@ -25,6 +25,19 @@
 \author{Rudra Dey  \\
 Student\# 1010124866\\
 \texttt{rudra.dey@mail.utoronto.ca } \\
+\And
+Pravin Kalaivannan  \\
+Student\# 1010141295 \\
+\texttt{pravin.kalaivannan@mail.utoronto.ca} \\
+\AND
+Aadavan Vasudevan  \\
+Student\# 1010101514 \\
+\texttt{aadavan.vasudevan@mail.utoronto.ca} \\
+\And
+Abishan Baheerathan \\
+Student\# 1010218756 \\
+\texttt{abishan.baheerathan@mail.utoronto.ca} \\
+\AND
 }
 
 % The \author macro works with any number of authors. There are two commands
@@ -62,8 +75,9 @@ code for an autonomous self-driving car. ...\\
 \subsection{Creating the Data Collection Script}
 
 In CARLA, there are already cars which have an autonomous functionality.
-We can create data a RHB Camera Sensor attached to this car, while it drives
-around a designated map. 
+We can create data a RGB Camera Sensor attached to this car, while it drives
+around a designated map. Additionally, we will have ground truth values for the steering angles, allowing
+us to create a model that can predict the steering angle based on the camera feed.
 
 Procedure:
 \begin{enumerate}
@@ -74,15 +88,19 @@ Procedure:
 
 \subsection{Collecting Data in Stable Conditions}
 
-Initially, data would be collected without traffic in the roads (i.e
+Data will  be collected without traffic in the roads (i.e
 no pedestrians or cars on the road). The car would have a constant speed
 and the camera will always be mounted in the same position and angle at
 the front of the car. The FPS will be set to a constant 20 FPS.
-We will use the CARLA's autopilot as the ground truth for our model.
-
+We will use the CARLA's autopilot to gain the steering values necessary to be used as ground truth labels. To get a diverse
+set of data, we will collect data in different maps and weather conditions.
 
 
 \subsection{Cleaning the Data and Saving Dataset}
+
+To ensure the data is clean, we will remove any images that are all black (indicated by the small file size)
+
+
 
 
  
