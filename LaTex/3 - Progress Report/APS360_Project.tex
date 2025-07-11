@@ -15,6 +15,7 @@
 \usepackage{url}
 \usepackage{graphicx}
 \usepackage{float}
+\usepackage{caption} 
 \restylefloat{table}
 
 %######## APS360: Put your project Title here
@@ -27,7 +28,7 @@ Student\# 1010124866\\
 \texttt{rudra.dey@mail.utoronto.ca } \\
 \And
 Pravin Kalaivannan  \\
-Student\# 1010141295 \\
+Student\# 1010141295 \\ 
 \texttt{pravin.kalaivannan@mail.utoronto.ca} \\
 \AND
 Aadavan Vasudevan  \\
@@ -172,10 +173,47 @@ During the data collection process, we faced several challenges and overcame the
 
 \end{itemize}
  
-\section{Creating Baseline Model}
+\section{Baseline Model}
 
-This baseline model will predict steering angles from grayscale images for an autonomous
-vehicle simulator (which already has a autopilot built in). 
+Using a Ridge Regression Algoirthm we created a baseline model that predicts steering angles for a self-driving car 
+from grayscale camera images and turn signal inputs. This baseline model serves as a simple, interpretable baseline
+such that we can compare against our more complex primary neural network model later. To collect data, we used a simulator
+called CARLA, to obtain camera images, turn signal inputs, and our ground truth label the steering angles.
+
+
+\subsection{Ridge Regression with Image Features}
+
+Initially, the grayscale images (of shape 160x120) were flattened into 1D feature vectors and normalized. The features themselves
+represent the visual input of the car's front-facing camera. Additionally, left and right turning signals were captured as an
+additional feature; combining this with our flattened grayscale images we were left with a numpy array of shape $N \times 19201$,
+where $N$ represents the number of images, and 19201 are the number of feature column vectors. The Ridge Regression algorithm was
+selected because it penalized large coefficients ($L_2$ norm), allowing for a generalized model. A series of models were trained
+with different regularization strengths ($\alpha$), and the performance was evaluated using Mean Squared Error (MSE) and $R^2$ Score
+on a held-out 20\% test set.
+
+\subsection{Minimal Tuning of $\alpha$}
+The only hyperparameter needing to be tuned was the regularization strength for the Ridge Regression Algorithm. This was manually tuned,
+and thus no validation set was used. A small set of candidate values for $\alpha$ was chosen: $\alpha \text{ } \epsilon \text{ } 
+\{ 1, 10, 100, 250, 1000, 8000\}$ With each value of $\alpha$, the model was trained and tested with a dataset of 15 minutes of simulated
+driving. By obtaining the average MSE and the average $R^2$ score, our fourth model of $\alpha = 100$ came out to be the best. 
+
+
+\begin{figure}[H] % h = here, t = top, b = bottom, p = page of floats
+    \centering
+    \includegraphics[width=0.6\textwidth]{model4learningcurve.png} % Adjust path and size
+    \caption{This is the learning curve for "Model 4" a Ridge Regression Model with $\alpha = 100$}
+    \label{fig:example}
+\end{figure}
+
+\subsection{Overfitting and Model Quality}
+As shown in Figure~\ref{fig:example}, the results are clear.
+
+
+
+
+\subsection{Qualitative Observations}
+
+
 
 The following libraries will be used:
 \begin{enumerate}
@@ -207,6 +245,12 @@ fit: $\hat{y} = Xw + b$, but now we try to minimize the loss function: $LOSS = M
 steering.
 
 We will compute two metrics, the mean square error (MSE) and the $R^2$ score (proportion of variance). 
+
+This Ridge Regression Algorithm is a linear regression technique which introduces a $L_2$ penalty which discourages the model
+from using very large weights, and thus improving generalization to unseen data. This model was chosen due to its simplicity and
+fast training time but also allowed quick adjustment to an $\alpha$ value which allowed us to adjust the regularization effect
+on the performance. By not using a plain linear regresion model, we were able to prevent major overfitting, and generalize better.
+
 
 
 
