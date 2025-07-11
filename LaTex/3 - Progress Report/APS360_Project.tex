@@ -4,7 +4,7 @@
 \input{math_commands.tex}
 
 %######## APS360: Uncomment your submission name
-\newcommand{\apsname}{Project Proposal}
+\newcommand{\apsname}{Project Progress Report}
 %\newcommand{\apsname}{Progress Report}
 %\newcommand{\apsname}{Final Report}
 
@@ -18,7 +18,7 @@
 \restylefloat{table}
 
 %######## APS360: Put your project Title here
-\title{Autonomous Car Starting Code Planning\\}
+\title{Progress Report: AUTONOMOUS CAR USING CNN\\}
 
 
 %######## APS360: Put your names, student IDs and Emails here
@@ -63,30 +63,50 @@ code for an autonomous self-driving car. ...\\
 
 \end{abstract}
 
-\section{Setting Up the Enironment}
+\section{Project Description}
 
-\subsection{Installing CARLA}
+\section{Individual Contributions and Responsibilities}
 
-\subsection{Installing Anaconda}
+\subsection{Individual Contributions}
+
+\section{Data Processing}
+
+Data was collected from the CARLA simulator, including images and corresponding steering values. We then normalized the images allowing us to train our CNN.
+Further, data augmentation was applied to increase the size and diversity of the dataset, leading to better generalization of the model.
 
 
-\section{Data Collection}
+\subsection{Data Collection and Cleaning}
 
-\subsection{Creating the Data Collection Script}
+In CARLA, there is vehicles that have autonomous functionality, which we used to collect data.
+We attached an RGB Camera Sensor to the car to record 10 frames per second (FPS) as the car
+travels around a designated map. In addition to the images, data for the steering values and turn signals of the car
+was collected allowing for use as ground truth labels for training the model. This data collection was done on diffreent maps with different weather conditions
+to ensure a diverse dataset. We collected samples on eight maps, in which the car collected data for 30 minitues, resulting in 14400 total images.
 
-In CARLA, there are already cars which have an autonomous functionality.
-We can create data a RGB Camera Sensor attached to this car, while it drives
-around a designated map. Additionally, we will have ground truth values for the steering angles, allowing
-us to create a model that can predict the steering angle based on the camera feed.
+
+To clean the data, we removed any images that were all black, duplicates or not the correct resolution of 320x240 leaving us with 14239 images.  We then saved 
+the data as numpy arrays, zipped and uploaded to a shared Google Colab file along, ensuring access for all members. 
 
 Procedure:
 \begin{enumerate}
   \item{Spawn in a vehicle}
   \item{Attach an RGB Camera Sensor (front-facing) to the dash of the car.}
-  \item{Collect image data (20 fps) and steering values for the car.}
+  \item{Collect image data (10 fps) along with steering data and turn signals.}
+  \item {Clean the data by removing corrupted images and duplicates.}
+  \item {Save the data as numpy arrays for easy access and processing.}
 \end{enumerate}
 
-\subsection{Collecting Data in Stable Conditions}
+
+\subsection{Data Preprocessing}
+All collected images were resized to a resolution of 160x120 pixels, with the pixel values normalized to a range of [0, 1]. 
+This was done to ensure consistency in the input data  
+
+\subsection{Data Agumentation}
+
+\subsection{Plan for Testing on Unseen Data}
+
+\subsection{Challeneges Faced and Solutions}
+
 
 Data will  be collected without traffic in the roads (i.e
 no pedestrians or cars on the road). The car would have a constant speed
@@ -96,9 +116,7 @@ We will use the CARLA's autopilot to gain the steering values necessary to be us
 set of data, we will collect data in different maps and weather conditions.
 
 
-\subsection{Cleaning the Data and Saving Dataset}
 
-To ensure the data is clean, we will remove any images that are all black (indicated by the small file size)
 
 
 

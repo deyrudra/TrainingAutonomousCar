@@ -1,11 +1,30 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
-images = np.load("output/images.npy")
-angles = np.load("output/angles.npy")
+# Load files
+images = np.load("output/extra_large_images.npy")
+angles = np.load("output/extra_large_angles.npy")
+turn_signals = np.load("output/extra_large_turn_signals.npy")
 
-idx = 310 #the index of the image you want to visualize
-plt.imshow(images[idx], cmap='gray')
-plt.title(f"Steering Angle: {angles[idx]:.2f}")
-plt.axis('off')
-plt.show()
+# Choose index to check
+idx = 1500
+
+# Sanity check
+if idx >= len(images):
+    print(f"Index {idx} is out of bounds (only {len(images)} entries).")
+else:
+    steering = angles[idx]
+    turn = int(turn_signals[idx])  # -1, 0, 1
+
+    # Turn label for readability
+    turn_label = "Left" if turn == -1 else "Right" if turn == 1 else "None"
+
+    print(f"Index: {idx}")
+    print(f"Steering Angle: {steering:.2f}")
+    print(f"Turn Signal: {turn_label} ({turn})")
+
+    # Show image
+    plt.imshow(images[idx], cmap='gray')
+    plt.title(f"Steering: {steering:.2f} | Turn: {turn_label}")
+    plt.axis('off')
+    plt.show()

@@ -75,23 +75,22 @@ code for an autonomous self-driving car. ...\\
 \subsection{Creating the Data Collection Script}
 
 In CARLA, there are already cars which have an autonomous functionality.
-We can create data a RGB Camera Sensor attached to this car, while it drives
-around a designated map. Additionally, we will have ground truth values for the steering angles, allowing
-us to create a model that can predict the steering angle based on the camera feed.
+To create the dataset, we collect data from the RGB Camera Sensor attached to the car at 10 frames per second (FPS) as the car
+travels around a designated map. Additionally, we collect data for the steering values and turn signals of the car
+allowing for use as ground truth labels for training the model. This data collection was done on diffreent maps with different weather conditions
+to ensure a diverse dataset.
 
 Procedure:
 \begin{enumerate}
   \item{Spawn in a vehicle}
   \item{Attach an RGB Camera Sensor (front-facing) to the dash of the car.}
-  \item{Collect image data (20 fps) and steering values for the car.}
+  \item{Collect image data (10 fps) along with steering values and turn signals at that frame.}
 \end{enumerate}
 
 \subsection{Collecting Data in Stable Conditions}
 
-Data will  be collected without traffic in the roads (i.e
-no pedestrians or cars on the road). The car would have a constant speed
-and the camera will always be mounted in the same position and angle at
-the front of the car. The FPS will be set to a constant 20 FPS.
+The data was collected on a map without traffic on the road with the car travelling a constant speed. The camera will always be mounted in the same position and angle at
+the front of the car, as seen in a dash-cam. The FPS will be set to a constant 10 FPS.
 We will use the CARLA's autopilot to gain the steering values necessary to be used as ground truth labels. To get a diverse
 set of data, we will collect data in different maps and weather conditions.
 
