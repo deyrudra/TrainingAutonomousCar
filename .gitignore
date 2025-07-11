@@ -12,3 +12,4 @@ LaTex/Project Proposal/APS360_Project.pdf
 *.log
 *.out
 *.gz
+/output
