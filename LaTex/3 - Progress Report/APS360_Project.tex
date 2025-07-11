@@ -81,10 +81,10 @@ In CARLA, there is vehicles that have autonomous functionality, which we used to
 We attached an RGB Camera Sensor to the car to record 10 frames per second (FPS) as the car
 travels around a designated map. In addition to the images, data for the steering values and turn signals of the car
 was collected allowing for use as ground truth labels for training the model. This data collection was done on diffreent maps with different weather conditions
-to ensure a diverse dataset. We collected samples on eight maps, in which the car collected data for 30 minitues, resulting in 14400 total images.
+to ensure a diverse dataset. We collected samples on three maps, in which the car collected data for 30 minitues, resulting in 54000 total images.
 
 
-To clean the data, we removed any images that were all black, duplicates or not the correct resolution of 320x240 leaving us with 14239 images.  We then saved 
+To clean the data, we removed any images that were all black, duplicates or not the correct resolution of 320x240 leaving us with 53457 images.  We then saved 
 the data as numpy arrays, zipped and uploaded to a shared Google Colab file along, ensuring access for all members. 
 
 Procedure:
@@ -99,28 +99,78 @@ Procedure:
 
 \subsection{Data Preprocessing}
 All collected images were resized to a resolution of 160x120 pixels, with the pixel values normalized to a range of [0, 1]. 
-This was done to ensure consistency in the input data  
+This was done to ensure consistency in the input data, allowing the model to learn effectively from the images.
+
+\subsection{Data Distribution}
+We decided to do a 80/10/10 split for the training, validation and test sets respecivelty. This was done to ensure that have a
+large set of data for training, while also having enough data for validation and testing. Table 3 shows the distribution of the data.
+
+\begin{table}[h]
+\centering
+\caption{Dataset Distribution}
+\vspace{0.5em}
+\begin{tabular}{|p{2cm}|p{2cm}|}
+\hline
+\textbf{Dataset Split} & \textbf{Total Images} \\ \hline
+Training Set           & 42766 \\ \hline
+Validation Set         & 5345 \\ \hline
+Test Set               & 5346 \\ \hline
+Total Images           & 53457  \\ \hline
+\end{tabular}
+\end{table}
+
 
 \subsection{Data Agumentation}
 
+Data augmentation was applied to the training set to increase the size and diversity of the dataset. We applied two tenchniquies to generalzie the model and forces
+it to learn critical features. 
+
+\begin{itemize}
+  \item \textbf{Greyscale Conversion:} All training images were converted to greyscale reducing model's reliance on color-based features, encouraging learning of more genreal visual features/road patterns. This will allow the model to improve, and work in different lighting conditions or if the camera is distorted.
+
+  \item \textbf{Cutout Augmentation:} A rectangular region of each training image was masked out to simulate real-world situations (e.g. raindrop or debris on the camera lens). This encoruses the model to learn relevant features from different parts of the image making it more robust overall. 
+\end{itemize}
+
+These agumentations lead to the training set being increased to 128298 images, with each image having two copies with each augmentations applied respecivelty.
+
+\begin{table}[h]
+\centering
+\caption{Dataset Distribution after Training Set Augmentation}
+\vspace{0.5em}
+\begin{tabular}{|p{2cm}|p{2cm}|}
+\hline
+\textbf{Dataset Split} & \textbf{Total Images} \\ \hline
+Training Set           & 42766 x 3 =  128298\\ \hline
+Validation Set         & 5345 \\ \hline
+Test Set               & 5346 \\ \hline
+Total Images           & 138989 \\ \hline
+\end{tabular}
+\end{table}
+
 \subsection{Plan for Testing on Unseen Data}
+
+In order to evaluate the model's performance, we will be testing it on unseen data which we reserved 10\% of the dataset for. Given how 
+the data was collected sequentially across different maps and weather conditions, the test set will inheritely contain frames the model has not encountered before.
+This will provide the model differnt roads and turns to encounter and we can see how well it generalizes to new situations.
+
+Additionally, to further test the model's generalization, we can load the model in CARLA and make it drive around a new map where data was not collected from, and see how well the model performs in 
+real-time. This will allow us to visualize the model's performance and see how well it can adapt to new environments.
 
 \subsection{Challeneges Faced and Solutions}
 
+During the data collection process, we faced several challenges and overcame them with the following solutions:
 
-Data will  be collected without traffic in the roads (i.e
-no pedestrians or cars on the road). The car would have a constant speed
-and the camera will always be mounted in the same position and angle at
-the front of the car. The FPS will be set to a constant 20 FPS.
-We will use the CARLA's autopilot to gain the steering values necessary to be used as ground truth labels. To get a diverse
-set of data, we will collect data in different maps and weather conditions.
+\begin{itemize}
+  \item \textbf{Slow Initial Data Collection:} The simulator originally ran in real time, meaning that collecting data for 30 minitues would take that long in real time. 
+  To solve this issue, we sped up the simulation, allowing us to collect data at a faster rate and collect more data in a shorter time frame.
 
+  \item \textbf{Turn Signal Data Collection:} Collecting turn signal data was initially problematic, 
+  because the vehicle's indicators were not being used by the automated vehicle in CARLA. 
+  We tried to resolve this through manual activation based on steering angle, but this proved to be innacurate and inconsistent. 
+  We resolved this by enabling the CARLA Traffic Manager’s automatic lights, allowing turn signals to activate based on the vehicle's navigation. \
+  Allowing us to have accurate turn signal data for the training set. 
 
-
-
-
-
-
+\end{itemize}
  
 \section{Creating Baseline Model}
 
