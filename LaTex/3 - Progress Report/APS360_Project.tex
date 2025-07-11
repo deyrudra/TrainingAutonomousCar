@@ -202,64 +202,40 @@ driving. By obtaining the average MSE and the average $R^2$ score, our fourth mo
     \centering
     \includegraphics[width=0.6\textwidth]{model4learningcurve.png} % Adjust path and size
     \caption{This is the learning curve for "Model 4" a Ridge Regression Model with $\alpha = 100$}
-    \label{fig:example}
+    \label{fig:model4learningcurve}
 \end{figure}
 
 \subsection{Overfitting and Model Quality}
-As shown in Figure~\ref{fig:example}, the results are clear.
-
-
+As shown in Figure~\ref{fig:model4learningcurve}, the results are suggesting some overfitting due to the models tendency
+to perform much better on training data than unseen data. This is reasonable since the training data frames, 
+are all consecutive in nature, and the dataset used isn't extremely large either. In addition, as the training size
+increase the gap between Test and Train MSEs narrow, suggesting that with more data the model will generalize better. 
+The final test MSE is (~0.0025) which is quite low, meaning the model performs well overall after training on the data.
 
 
 \subsection{Qualitative Observations}
+When running the steering angle prediction model in CARLA simulator, the model exhibited promising behaviour in terms of
+autonomous driving capabilities, however with large limitations. The car was able to drive freely, using the model's predictions
+from the front-facing grayscale camera images and turn signals provided by the user. In Figure~\ref{fig:model4demo} we can see 
+the model taking a left turn in an intersection.
+
+\begin{itemize}
+  \item \textbf{Turn Signal Response:} The car consistently turned in the correct direction when prompted, showing that the model incorporated turn signal input effectively.
+
+  \item \textbf{Obstacle Avoidance:} The vehicle generally avoided obstacles but occasionally clipped walls, suggesting basic spatial awareness but limited precision.
+
+  \item \textbf{Lane-Keeping:} The car had trouble staying within lane boundaries, often drifting, especially during turns or on complex roads.
+
+  \item \textbf{Map Generalization:} Despite limitations, the car performed reasonably well across different map layouts, showing decent control over turns.
+\end{itemize}
 
 
-
-The following libraries will be used:
-\begin{enumerate}
-  \item numpy: For numerical operations on arrays
-  \item matplotlib: For visualization of data
-  \item scikit-learn: For machine learning components
-  \begin{enumerate}
-    \item Ridge: A regularized linear regression model
-    \item MSE: Mean Square Error for evaluation metrics
-    \item train\_test\_split: For data splitting
-  \end{enumerate}
-\end{enumerate}
-
-The data will be loaded using two numpy arrays: images.npy and angles.npy. The images.npy
-will contain N grayscale images of resolutions 160x120, and the angles will have the corresponding
-images steering angles (of the car) in a range from [-1,1]. This makes it so the image data is 
-represented as 3D arrays of samples x hieght x width as the dimension. The steering angles are
-continuous (regression problem). 
-
-The images will be flattened from their 2D representation of 160x120 matrix to a 1D representation
-of 19200 vectors. Where each image becomes a single row in a feature matrix. Additionally,
-we will split do a 80-20 train-test split.
-
-The baseline model will be a ridge regression model. The ridge regression model is basically, the
-same as a linear regression model except, it regularizes large weights. It adds an L2 penality to
-discourage large weights, this helps with overfitting. The same as linear regression as we try to
-fit: $\hat{y} = Xw + b$, but now we try to minimize the loss function: $LOSS = MSE + \alpha 
-||\omega||^2_2$. The model will learn the weights corresponding to each pixel's contribution to 
-steering.
-
-We will compute two metrics, the mean square error (MSE) and the $R^2$ score (proportion of variance). 
-
-This Ridge Regression Algorithm is a linear regression technique which introduces a $L_2$ penalty which discourages the model
-from using very large weights, and thus improving generalization to unseen data. This model was chosen due to its simplicity and
-fast training time but also allowed quick adjustment to an $\alpha$ value which allowed us to adjust the regularization effect
-on the performance. By not using a plain linear regresion model, we were able to prevent major overfitting, and generalize better.
-
-
-
-
-
-
-\subsection{Building the model}
-
-\subsection{Evaluating the model}
-
+\begin{figure}[H] % h = here, t = top, b = bottom, p = page of floats
+    \centering
+    \includegraphics[width=1.0\textwidth]{model4demo.png} % Adjust path and size
+    \caption{This is the demo for "Model 4" in CARLA}
+    \label{fig:model4demo}
+\end{figure}
 
 
 \section{Training Neural Netowrk}
