@@ -106,6 +106,44 @@ To ensure the data is clean, we will remove any images that are all black (indic
  
 \section{Creating Baseline Model}
 
+This baseline model will predict steering angles from grayscale images for an autonomous
+vehicle simulator (which already has a autopilot built in). 
+
+The following libraries will be used:
+\begin{enumerate}
+  \item numpy: For numerical operations on arrays
+  \item matplotlib: For visualization of data
+  \item scikit-learn: For machine learning components
+  \begin{enumerate}
+    \item Ridge: A regularized linear regression model
+    \item MSE: Mean Square Error for evaluation metrics
+    \item train\_test\_split: For data splitting
+  \end{enumerate}
+\end{enumerate}
+
+The data will be loaded using two numpy arrays: images.npy and angles.npy. The images.npy
+will contain N grayscale images of resolutions 160x120, and the angles will have the corresponding
+images steering angles (of the car) in a range from [-1,1]. This makes it so the image data is 
+represented as 3D arrays of samples x hieght x width as the dimension. The steering angles are
+continuous (regression problem). 
+
+The images will be flattened from their 2D representation of 160x120 matrix to a 1D representation
+of 19200 vectors. Where each image becomes a single row in a feature matrix. Additionally,
+we will split do a 80-20 train-test split.
+
+The baseline model will be a ridge regression model. The ridge regression model is basically, the
+same as a linear regression model except, it regularizes large weights. It adds an L2 penality to
+discourage large weights, this helps with overfitting. The same as linear regression as we try to
+fit: $\hat{y} = Xw + b$, but now we try to minimize the loss function: $LOSS = MSE + \alpha 
+||\omega||^2_2$. The model will learn the weights corresponding to each pixel's contribution to 
+steering.
+
+We will compute two metrics, the mean square error (MSE) and the $R^2$ score (proportion of variance). 
+
+
+
+
+
 \subsection{Building the model}
 
 \subsection{Evaluating the model}
