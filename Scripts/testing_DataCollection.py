@@ -10,7 +10,7 @@ def collect_data(duration_sec, image_filename, angle_filename):
     Path("output").mkdir(parents=True, exist_ok=True)
 
     # Connect to CARLA
-    client = carla.Client('localhost', 2000)
+    client = carla.Client('192.168.86.116', 2000)
     client.set_timeout(10.0)
 
     client.load_world("Town05")
@@ -46,23 +46,23 @@ def collect_data(duration_sec, image_filename, angle_filename):
     def save_image(image):
         array = np.frombuffer(image.raw_data, dtype=np.uint8).reshape((image.height, image.width, 4))
         gray = cv2.cvtColor(array, cv2.COLOR_BGRA2GRAY)
-        resized = cv2.resize(gray, (160, 120))
+        resized = cv2.resize(gray, (80, 60))
         angle = np.clip(vehicle.get_control().steer, -1.0, 1.0)
         image_list.append(resized)
         angle_list.append(angle)
 
     camera.listen(save_image)
 
-    # Optional: Spectator follows vehicle
-    spectator = world.get_spectator()
-    def follow():
-        while True:
-            transform = vehicle.get_transform()
-            spectator.set_transform(carla.Transform(
-                transform.location + carla.Location(x=-6, z=3),
-                transform.rotation))
-            time.sleep(0.03)
-    threading.Thread(target=follow, daemon=True).start()
+    # # Optional: Spectator follows vehicle
+    # spectator = world.get_spectator()
+    # def follow():
+    #     while True:
+    #         transform = vehicle.get_transform()
+    #         spectator.set_transform(carla.Transform(
+    #             transform.location + carla.Location(x=-6, z=3),
+    #             transform.rotation))
+    #         time.sleep(0.03)
+    # threading.Thread(target=follow, daemon=True).start()
 
     # Run for specified duration
     time.sleep(duration_sec)
@@ -79,11 +79,11 @@ def collect_data(duration_sec, image_filename, angle_filename):
     print("Vehicle destroyed\n")
 
 def main():
-    collect_data(duration_sec=60,  image_filename="small_images",  angle_filename="small_angles")
+    collect_data(duration_sec=60,  image_filename="small_lowres_images",  angle_filename="small_lowres_angles")
     time.sleep(5)
-    collect_data(duration_sec=180, image_filename="medium_images", angle_filename="medium_angles")
+    collect_data(duration_sec=180, image_filename="medium_lowres_images", angle_filename="medium_lowres_angles")
     time.sleep(5)
-    collect_data(duration_sec=300, image_filename="large_images",  angle_filename="large_angles")
+    collect_data(duration_sec=300, image_filename="large_lowres_images",  angle_filename="large_lowres_angles")
 
 if __name__ == "__main__":
     main()

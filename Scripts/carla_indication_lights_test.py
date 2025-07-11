@@ -7,6 +7,13 @@ def main():
     client = carla.Client('174.138.208.33', 2000)
     client.set_timeout(10.0)
 
+    traffic_manager = client.get_trafficmanager()
+    traffic_manager.set_hybrid_physics_mode(True)  # Optional, helps realism
+    traffic_manager.set_synchronous_mode(True)     # If your sim is in sync mode
+
+    # Enable auto vehicle light control
+    traffic_manager.set_auto_vehicle_lights(True)
+
     # Getting CARLA world
     world = client.get_world()
 
@@ -26,7 +33,7 @@ def main():
     spawn_points = world.get_map().get_spawn_points()
     spawn_point = spawn_points[6]
 
-    # Spawn the vehicle
+    # Spawn the vehicle 
     vehicle = world.spawn_actor(vehicle_bp, spawn_point)
     vehicle.set_autopilot(True)
     print(f"Spawned vehicle: {vehicle.type_id}")
@@ -43,11 +50,11 @@ def main():
     camera_transform = carla.Transform(carla.Location(x=1.5, z=2.4))  # hood-mounted camera
     camera = world.spawn_actor(camera_bp, camera_transform, attach_to=vehicle)  
 
-    def save_image(image):
-        image.convert(carla.ColorConverter.Raw)  # Convert before saving
-        image.save_to_disk('output/fixed_%06d.png' % image.frame)
+    # def save_image(image):
+    #     image.convert(carla.ColorConverter.Raw)  # Convert before saving
+    #     image.save_to_disk('output/fixed_%06d.png' % image.frame)
 
-    camera.listen(save_image)
+    # camera.listen(save_image)
 
     # camera.listen(lambda image: image.save_to_disk('output/%d064.png'%image.frame))
 
@@ -65,7 +72,17 @@ def main():
     threading.Thread(target=follow, daemon=True).start()
 
     # Let it sit in the world for a bit
-    time.sleep(30)
+    i = 0
+    while i < 31:
+        light_state = vehicle.get_light_state()
+        if light_state & carla.VehicleLightState.LeftBlinker:
+            print("Left indicator ON")
+        elif light_state & carla.VehicleLightState.RightBlinker:
+            print("Right indicator ON")
+        else:
+            print("No indicator")
+        time.sleep(1)
+        i += 1
 
     # === Clean up ===
     camera.stop()
