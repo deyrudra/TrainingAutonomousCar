@@ -10,7 +10,7 @@ def collect_data(duration_sec, image_filename, angle_filename):
     Path("output").mkdir(parents=True, exist_ok=True)
 
     # Connect to CARLA
-    client = carla.Client('192.168.86.116', 2000)
+    client = carla.Client('174.138.208.33', 2000)
     client.set_timeout(10.0)
 
     client.load_world("Town05")
