@@ -86,28 +86,67 @@ Each team member was assigned specific responsibilities:
 
 \subsection{Timeline of Completed Tasks}
 
-We maintained an internal task schedule which helped the team stay on track. The following table summarizes the tasks completed by each team member, their completion dates, and the outcomes of each task.
+We maintained an internal task schedule which helped the team stay on track. Table~\ref{tab:currentTimeline} summarizes the tasks completed by each team member, their completion dates, and the outcomes of each task.
 
-\begin{table}[h]
+\begin{table}[h!]
 \centering
-\caption{Individual Contributions and Timeline}
-\vspace{0.5em}
-\begin{tabular}{|p{4.5cm}|p{3cm}|p{3cm}|p{3cm}|}
+\caption{Timeline of all completed tasks}
+\begin{tabular}{|p{2.5cm}|p{3cm}|p{3cm}|p{5.5cm}|}
 \hline
-\textbf{Task} & \textbf{Team Members} & \textbf{Completion Date} & \textbf{Outcome} \\ \hline
-Brainstorm Project Ideas & All Members & June 9, 2025 & \\ \hline
-Model Selection & All Members & June 10, 2025 & \\ \hline
-Project Proposal (Draft \& Final) & All Members & June 12–13, 2025 & \\ \hline
-Data Collection \& Setup & Rudra, Aadavan, Pravin & June 20, 2025 & \\ \hline
-Data Preprocessing & Rudra, Abishan & June 27, 2025 & \\ \hline
-Baseline Model Implementation & Aadavan & June 30, 2025 & \\ \hline
-Architecture \& Model Building & Pravin, Aadavan & July 4, 2025 & \\ \hline
-Training Regime Development & Abishan, Pravin & July 8, 2025 & \\ \hline
-Model Training \& Tuning & Abishan, Rudra & July 10, 2025 & \\ \hline
-Progress Report & All Members & July 11, 2025 & \\ \hline
+\textbf{Task} & \textbf{Team Members} & \textbf{Completion Date} & \textbf{Result} \\
+\hline
+Brainstorm Project Ideas & All Members & June 9, 2025 & Team decided to work on a simulated autonomous car \\
+\hline
+Model Selection & All Members & June 10, 2025 & Team decided on using a CNN model \\
+\hline
+Project Proposal (Draft \& Final) & All Members & June 12--13, 2025 & Completed a Project Proposal document \\
+\hline
+Data Collection \& Setup & Rudra, Aadavan & June 20, 2025 & Team successfully set up CARLA simulator and collected data \\
+\hline
+Data Preprocessing & Rudra, Abishan & June 27, 2025 & Resized and normalized the image \\
+\hline
+Baseline Model Implementation & Aadavan & June 30, 2025 & Implemented ridge regression algorithm to create the baseline model \\
+\hline
+Architecture \& Model Building & Pravin, Aadavan & July 4, 2025 & Created a CNN architecture, to apply transfer learning \\
+\hline
+Training Regime Development & Abishan, Pravin & July 8, 2025 & Chose training parameters \\
+\hline
+Model Training \& Tuning & Abishan, Rudra & July 10, 2025 & Trained model through a training dataset, adjusted overfitting, and quantified results \\
+\hline
+Progress Report & All Members & July 11, 2025 & Summarized work done so far, completed a progress report document \\
+\hline
 \end{tabular}
+\label{tab:currentTimeline}
 \end{table}
 
+\subsection{Future Task Timeline and Responsibilities}
+
+Table~\ref{tab:futureTimeline} outlines the tasks to be completed in the next phase of the project.
+
+\begin{table}[h!]
+\centering
+\caption{Future Timeline With Redundancies}
+\begin{tabular}{|p{2.5cm}|p{4cm}|p{4cm}|p{4cm}|}
+\hline
+\textbf{Task} & \textbf{Team Member / Deadline} & \textbf{Description} & \textbf{Solutions to Redundancies} \\
+\hline
+Model Evaluation \& Testing & Aadavan, Pravin (July 25, 2025) & Test trained model with live input, identify weaknesses, confusion matrix. & The model should be tested under the same conditions to ensure consistency. \\
+\hline
+Final Report (Draft) & Everyone (Aug 1, 2025) & Write first full draft including abstract, results, ethics, background, etc. & If an assigned section has not been started 2 days before the deadline, it will be redistributed. \\
+\hline
+Final Report (Final) & Everyone (Aug 8, 2025) & Submit the polished report with citations and final results. & Everyone is required to edit their section and must read through the entire document once. \\
+\hline
+Record Presentation & Everyone (Aug 12, 2025) & Record team sections, align visuals with speech. & Everyone will record their assigned section and upload to shared drive to ensure all clips are collected. \\
+\hline
+Edit Presentation Video & Rudra, Pravin (Aug 13, 2025) & Merge clips, finalize cuts, add transitions, captions, or diagrams. & Rudra will be the primary editor; Pravin will take over if necessary. \\
+\hline
+Final Deliverable & Rudra (Aug 15, 2025) & Submit final code, data, report, and video via the course portal. & Rudra will be responsible for submitting all final work and verifying it is satisfied. \\
+\hline
+\end{tabular}
+\label{tab:futureTimeline}
+\end{table}
+
+Each task was documented, versioned, and reviewed by at least one other team member. This structure helped us manage project risks, distribute workload evenly, and ensure consistent progress through each phase.
 
 \section{Data Processing}
 
@@ -138,14 +177,14 @@ Procedure:
 
 
 \subsection{Data Preprocessing}
-All collected images were resized to a resolution of 160x120 pixels, with the pixel values normalized to a range of [0, 1]. 
+All collected images were resized to a resolution of 160x120 pixels as shown in Figure~\ref{fig:exampleofdataset}, with the pixel values normalized to a range of [0, 1]. 
 This was done to ensure consistency in the input data, allowing the model to learn effectively from the images.
 
 \begin{figure}[H] % h = here, t = top, b = bottom, p = page of floats
     \centering
     \includegraphics[width=0.6\textwidth]{exampleofdataset.png} % Adjust path and size
     \caption{Resized 3x160x120 example images from dataset}
-    \label{fig:example}
+    \label{fig:exampleofdataset}
 \end{figure}
 
 
@@ -180,13 +219,13 @@ it to learn critical features.
   \item \textbf{Cutout Augmentation:} A rectangular region of each training image was masked out to simulate real-world situations (e.g. raindrop or debris on the camera lens). This encoruses the model to learn relevant features from different parts of the image making it more robust overall. 
 \end{itemize}
 
-These agumentations lead to the training set being increased to 128298 images, with each image having two copies with each augmentations applied respecivelty.
+These agumentations lead to the training set being increased to 128298 images, with each image having two copies with each augmentations applied respecivelty as shown in Figure~\ref{fig:exampleofaugmented}.
 
 \begin{figure}[H] % h = here, t = top, b = bottom, p = page of floats
     \centering
     \includegraphics[width=0.6\textwidth]{exampleofaugmented.png} % Adjust path and size
     \caption{Augmented image examples (greyscale and cutout)}
-    \label{fig:example}
+    \label{fig:exampleofaugmented}
 \end{figure}
 
 
