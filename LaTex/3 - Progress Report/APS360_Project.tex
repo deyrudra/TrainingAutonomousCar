@@ -58,17 +58,56 @@ Student\# 1010218756 \\
 
 \maketitle
 
-\begin{abstract}
-This document presents our team's procedure to create the baseline model
-code for an autonomous self-driving car. ...\\
-
-\end{abstract}
 
 \section{Project Description}
 
+This project involves training an simulated autonomous car using a convolutional neural network (CNN) and a forward-facing camera. The goal of this project is to build a model that can predict steering commands based on visual input from the camera. This should allow the car to drive on its own without the need of additional sensors or manual commands.  
+
+Our team’s motivation behind the project was to explore a simplified, small-scale version of autonomous driving systems, using deep learning. Furthermore, traditional rule-based approaches are limited by their inability to predict the vast number of driving scenarios that can occur. Deep learning offers the ability to learn from data and generalize across different visual conditions. This made it a suitable choice for handling the complex input from a moving car. The project also provided insight into the effectiveness of vision-only autonomous systems and the role of deep learning in embedded robotics.
+
+
 \section{Individual Contributions and Responsibilities}
 
+Our team worked collaboratively over the duration of the project with clear task divisions and weekly milestones. All communication was handled through Discord, where we maintained an active group chat with frequent updates and responses. We held two scheduled meetings every week, and used GitHub to track code progress, manage issues, and handle version control across all components. The team has a shared Google Drive where documents are added for collaboration. 
+
+
 \subsection{Individual Contributions}
+Each team member was assigned specific responsibilities:
+
+\begin{itemize}
+  \item \textbf{Aadavan} handled the baseline rule-based model used for comparison, authored the ethical considerations section, and participated in model evaluation.
+
+  \item \textbf{Rudra} led the software setup and camera mounting, collected the training dataset, and worked on preprocessing the image data.
+
+  \item \textbf{Pravin} contributed to background research on similar projects and built the CNN architecture. Helped create the dataset in CARLA by collecting images and steering values of cars.
+
+  \item \textbf{Abishan} supported data preprocessing, designed the training setup (optimizer, loss function, hyperparameters), created the project's risk register, and contributed to model training.
+\end{itemize}
+
+\subsection{Timeline of Completed Tasks}
+
+We maintained an internal task schedule which helped the team stay on track. The following table summarizes the tasks completed by each team member, their completion dates, and the outcomes of each task.
+
+\begin{table}[h]
+\centering
+\caption{Individual Contributions and Timeline}
+\vspace{0.5em}
+\begin{tabular}{|p{4.5cm}|p{3cm}|p{3cm}|p{3cm}|}
+\hline
+\textbf{Task} & \textbf{Team Members} & \textbf{Completion Date} & \textbf{Outcome} \\ \hline
+Brainstorm Project Ideas & All Members & June 9, 2025 & \\ \hline
+Model Selection & All Members & June 10, 2025 & \\ \hline
+Project Proposal (Draft \& Final) & All Members & June 12–13, 2025 & \\ \hline
+Data Collection \& Setup & Rudra, Aadavan, Pravin & June 20, 2025 & \\ \hline
+Data Preprocessing & Rudra, Abishan & June 27, 2025 & \\ \hline
+Baseline Model Implementation & Aadavan & June 30, 2025 & \\ \hline
+Architecture \& Model Building & Pravin, Aadavan & July 4, 2025 & \\ \hline
+Training Regime Development & Abishan, Pravin & July 8, 2025 & \\ \hline
+Model Training \& Tuning & Abishan, Rudra & July 10, 2025 & \\ \hline
+Progress Report & All Members & July 11, 2025 & \\ \hline
+\end{tabular}
+\end{table}
+
 
 \section{Data Processing}
 
@@ -102,6 +141,15 @@ Procedure:
 All collected images were resized to a resolution of 160x120 pixels, with the pixel values normalized to a range of [0, 1]. 
 This was done to ensure consistency in the input data, allowing the model to learn effectively from the images.
 
+\begin{figure}[H] % h = here, t = top, b = bottom, p = page of floats
+    \centering
+    \includegraphics[width=0.6\textwidth]{exampleofdataset.png} % Adjust path and size
+    \caption{Resized 3x160x120 example images from dataset}
+    \label{fig:example}
+\end{figure}
+
+
+
 \subsection{Data Distribution}
 We decided to do a 80/10/10 split for the training, validation and test sets respecivelty. This was done to ensure that have a
 large set of data for training, while also having enough data for validation and testing. Table 3 shows the distribution of the data.
@@ -134,6 +182,14 @@ it to learn critical features.
 
 These agumentations lead to the training set being increased to 128298 images, with each image having two copies with each augmentations applied respecivelty.
 
+\begin{figure}[H] % h = here, t = top, b = bottom, p = page of floats
+    \centering
+    \includegraphics[width=0.6\textwidth]{exampleofaugmented.png} % Adjust path and size
+    \caption{Augmented image examples (greyscale and cutout)}
+    \label{fig:example}
+\end{figure}
+
+
 \begin{table}[h]
 \centering
 \caption{Dataset Distribution after Training Set Augmentation}
@@ -147,6 +203,7 @@ Test Set               & 5346 \\ \hline
 Total Images           & 138989 \\ \hline
 \end{tabular}
 \end{table}
+
 
 \subsection{Plan for Testing on Unseen Data}
 
@@ -169,7 +226,7 @@ During the data collection process, we faced several challenges and overcame the
   because the vehicle's indicators were not being used by the automated vehicle in CARLA. 
   We tried to resolve this through manual activation based on steering angle, but this proved to be innacurate and inconsistent. 
   We resolved this by enabling the CARLA Traffic Manager’s automatic lights, allowing turn signals to activate based on the vehicle's navigation. \
-  Allowing us to have accurate turn signal data for the training set. 
+  In turn, allowing us to have accurate turn signal data for the training set. 
 
 \end{itemize}
  
