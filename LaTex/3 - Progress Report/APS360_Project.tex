@@ -67,7 +67,7 @@ Total Pages: \pageref{last_page}
 
 \section{Project Description}
 
-This project involves training a simulated autonomous car using a convolutional neural network (CNN) and a forward-facing camera. The goal of this project is to build a model that can predict steering commands based on visual input from the camera. This should allow the car to drive on its own without the need for additional sensors or manual commands.  
+This project involves training a simulated autonomous car using a convolutional neural network (CNN) and a forward-facing camera. The goal of this project is to build a model that can predict steering commands based on visual input from the camera. This should allow the car to drive on its own without the need for additional sensors.  
 
 Our team’s motivation behind the project was to explore a simplified, small-scale version of autonomous driving systems, using deep learning. Furthermore, traditional rule-based approaches are limited by their inability to predict the vast number of driving scenarios that can occur. Deep learning offers the ability to learn from data and generalize across different visual conditions. This made it a suitable choice for handling the complex input from a moving car. The project also provided insight into the effectiveness of vision-only autonomous systems and the role of deep learning in embedded robotics.
 
@@ -413,8 +413,15 @@ The small gaps between the training and validation loss after epoch 1, show that
 \subsubsection{Qualitative Results}
 
 When running the CNN model in the CARLA simulator, the car exhibited significantly improved driving behaviour compared to the baseline model. 
-The car was able to navigate complex turns and maintain lane discipline more effectively. The model was able to make lane changes and stay within its respective lane.
+The car was able to navigate complex turns and maintain lane discipline more effectively as seen in Figure~\ref{fig:primary}. The model was able to make lane changes and stay within its respective lane.
 Similar to the baseline, the model struggles when it comes to large turns, but it does a better job staying away from walls and other obstacles.
+
+\begin{figure}[H] % h = here, t = top, b = bottom, p = page of floats
+    \centering
+    \includegraphics[width=1.0\textwidth]{primary.png} % Adjust path and size
+    \caption{Primary Model Lane Switching}
+    \label{fig:primary}
+\end{figure}
 
 
 \subsubsection{Challenges and Observations}
