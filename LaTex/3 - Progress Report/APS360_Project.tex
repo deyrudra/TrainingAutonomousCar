@@ -115,7 +115,7 @@ Baseline Model Implementation & Aadavan & June 30, 2025 & Implemented ridge regr
 \hline
 Architecture \& Model Building & Pravin, Aadavan & July 4, 2025 & Created a CNN architecture, to apply transfer learning \\
 \hline
-Training Regime Development & Abishan, Pravin & July 8, 2025 & Selecting appropirate training parameters \\
+Training Regime Development & Abishan, Pravin & July 8, 2025 & Selecting appropriate training parameters \\
 \hline
 Model Training \& Tuning & Abishan, Rudra & July 10, 2025 & Trained model through a training dataset, adjusted overfitting, and quantified results \\
 \hline
@@ -353,11 +353,11 @@ the model taking a left turn in an intersection.
 
 \subsubsection{Transfer Learning with ResNet}
 
-We opted to use transfer learning to take advantage of powerful visual feature extraction from pre-trained models, in this case we
+We opted to use transfer learning to take advantage of powerful visual feature extraction from pre-trained models, in this case, we
 used ResNet-18. This model was trained on ImageNet, and it has general-purpose feature extraction for RGB images. Rather than training
-a convolutional neural network from scratch (which would require large amounts of labeled data and time). To use ResNet-18 we had 
-removed its final classifcation layer which allowed us to reuse the learned convlutional layers for predicting the steering angles from 
-the images themselves. By freezing the pretrained weights the model benefits from previous feature extraction and use it towards our dataset.
+a convolutional neural network from scratch (which would require large amounts of labelled data and time). To use ResNet-18 we had 
+removed its final classification layer which allowed us to reuse the learned convolutional layers for predicting the steering angles from 
+the images themselves. By freezing the pretrained weights the model benefits from previous feature extraction and uses it towards our dataset.
 
 \subsubsection{Architecture Design}
 The model architecture consists of two main components:
@@ -406,24 +406,24 @@ Figure~\ref{fig:learningCurveforCNN} shows the learning curve for the CNN model 
 As shown in Figure~\ref{fig:learningCurveforCNN}, the CNN model shows a significant improvement over the baseline model. 
 The training loss began at around 0.007 and decreased sharply to around 0.0015 by epoch 1, then steadily decreased to around 0.0005 by the final 
 epoch. This indicates that the model is learning effectively from the training data. 
-We also see that the validation loss started near 0.0024 an over the 10 epochs decreased to 0.001, showing good generalization with minimal overfitting.
+We also see that the validation loss started near 0.0024 and over the 10 epochs decreased to 0.001, showing good generalization with minimal overfitting.
 The small gaps between the training and validation loss after epoch 1, show that the model is performing well on both training and unseen data.
 
 
 \subsubsection{Qualitative Results}
 
-When running the CNN model in the CARLA simulator, the car exhibited significantly improved driving behavior compared to the baseline model. 
-The car was able to navigate complex turns and maintain lane discipline more effectively. The model was able to make lane changes, and stay within its respective lane.
+When running the CNN model in the CARLA simulator, the car exhibited significantly improved driving behaviour compared to the baseline model. 
+The car was able to navigate complex turns and maintain lane discipline more effectively. The model was able to make lane changes and stay within its respective lane.
 Similar to the baseline, the model struggles when it comes to large turns, but it does a better job staying away from walls and other obstacles.
 
 
 \subsubsection{Challenges and Observations}
 
-One key challenge was in the integration of image and turn signal data in a single model. This required tensor dimension reshaping and matching in PyTorch correctly, specifically in concatenating CNN-extracted features with scalar turn signal input. Mistakes here led to early runtime errors that had to be painstakingly debugged.
+One key challenge was in the integration of image and turn signal data in a single model. This required tensor dimension reshaping and matching in PyTorch correctly, specifically in concatenating CNN-extracted features with the scalar turn signal input. Mistakes here led to early runtime errors that had to be painstakingly debugged.
 There was also the problem of generalization tracking. As training loss kept improving, validation loss began to plateau from epoch 6 onward, indicating the possibility of overfitting. This indicates the need for early stopping or regularization in subsequent models.
 
 
-One key finding is that the CNN model performs much better than the baseline model, especially on examples where there are lane markings. The CNN learned to recognize helpful spatial features from the driving environment, resulting in smoother and more accurate steering and improved lane-keeping behavior at test time. 
+One key finding is that the CNN model performs much better than the baseline model, especially on examples where there are lane markings. The CNN learned to recognize helpful spatial features from the driving environment, resulting in smoother and more accurate steering and improved lane-keeping behaviour at test time. 
 
 \section{Conclusion}
 
