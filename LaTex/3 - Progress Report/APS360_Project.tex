@@ -183,13 +183,21 @@ called CARLA, to obtain camera images, turn signal inputs, and our ground truth 
 
 \subsection{Ridge Regression with Image Features}
 
-Initially, the grayscale images (of shape 160x120) were flattened into 1D feature vectors and normalized. The features themselves
+In the model outlined in Figure~\ref{fig:diagram}, the grayscale images (of shape 160x120) were flattened into 1D feature vectors and normalized. The features themselves
 represent the visual input of the car's front-facing camera. Additionally, left and right turning signals were captured as an
 additional feature; combining this with our flattened grayscale images we were left with a numpy array of shape $N \times 19201$,
 where $N$ represents the number of images, and 19201 are the number of feature column vectors. The Ridge Regression algorithm was
 selected because it penalized large coefficients ($L_2$ norm), allowing for a generalized model. A series of models were trained
 with different regularization strengths ($\alpha$), and the performance was evaluated using Mean Squared Error (MSE) and $R^2$ Score
-on a held-out 20\% test set.
+on a held-out 20\% test set. 
+
+\begin{figure}[H] % h = here, t = top, b = bottom, p = page of floats
+    \centering
+    \includegraphics[width=1.0\textwidth]{diagram.png} % Adjust path and size
+    \caption{Basic Architecture of Steering Angle Ridge Regrsession Model}
+    \label{fig:diagram}
+\end{figure}
+
 
 \subsection{Minimal Tuning of $\alpha$}
 The only hyperparameter needing to be tuned was the regularization strength for the Ridge Regression Algorithm. This was manually tuned,
