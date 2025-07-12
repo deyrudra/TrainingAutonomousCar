@@ -353,10 +353,40 @@ the model taking a left turn in an intersection.
 
 \subsubsection{Transfer Learning with ResNet}
 
+We opted to use transfer learning to take advantage of powerful visual feature extraction from pre-trained models, in this case we
+used ResNet-18. This model was trained on ImageNet, and it has general-purpose feature extraction for RGB images. Rather than training
+a convolutional neural network from scratch (which would require large amounts of labeled data and time). To use ResNet-18 we had 
+removed its final classifcation layer which allowed us to reuse the learned convlutional layers for predicting the steering angles from 
+the images themselves. By freezing the pretrained weights the model benefits from previous feature extraction and use it towards our dataset.
+
 \subsubsection{Architecture Design}
-
+The model architecture consists of two main components:
+\begin{enumerate}
+  \item Feature Extractor (ResNet-18)
+    \begin{itemize}
+      \item Input: RGB image resized to 224x224
+      \item Output: 512-dimensional feature vector
+      \item Final fully connected layer removed (cnn.fc = nn.Identity())
+    \end{itemize}
+  \item Prediction layer
+    \begin{itemize}
+      \item The extracted 512-dimensional image features are concatenated with a scalar turn signal input (left=-1, straight=0, right=1), forming a 513-dimensional input vector.
+      \item This combined vector is passed through a small fully connected network:
+      \begin{itemize}
+        \item Linear(513 → 128) + ReLU activation
+        \item Linear(128 → 1) for the final steering angle prediction
+      \end{itemize}
+    \end{itemize}
+\end{enumerate}
 \subsubsection{Training Methodology}
-
+The model was trained using the following methodology:
+\begin{itemize}
+  \item Loss Function: Mean Squared Error (MSE) between predicted and ground truth steering angles.
+  \item Optimizer: Adam optimizer with a learning rate of 1e-4, chosen for its robust adaptive learning capabilities.
+  \item Batch Size: 32
+  \item Epochs: 10
+  \item Train/Validation Split: 80/20
+\end{itemize}
 
 
 \subsection{Model Performance}
