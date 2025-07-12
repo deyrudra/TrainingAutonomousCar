@@ -58,28 +58,34 @@ Student\# 1010218756 \\
 
 \maketitle
 
+\begin{abstract}
+This document presents our team’s progress in developing an autonomous car. The project description contains minor changes that we made and explains why deep learning is necessary for this project. The team’s responsibilities, work completed, and a future timeline are listed, which also provides solutions to redundancies. The data processing section discusses how the team collects data from the simulator to create a dataset and how that data is modified to use on the CNN model. This document compares a baseline model to our primary model and shows the quantitative results that we collected. 
+\\
+%######## APS360: Do not change the next line. This shows your Main body page count.
+Total Pages: \pageref{last_page}
+\end{abstract}
 
 \section{Project Description}
 
-This project involves training an simulated autonomous car using a convolutional neural network (CNN) and a forward-facing camera. The goal of this project is to build a model that can predict steering commands based on visual input from the camera. This should allow the car to drive on its own without the need of additional sensors or manual commands.  
+This project involves training a simulated autonomous car using a convolutional neural network (CNN) and a forward-facing camera. The goal of this project is to build a model that can predict steering commands based on visual input from the camera. This should allow the car to drive on its own without the need for additional sensors or manual commands.  
 
 Our team’s motivation behind the project was to explore a simplified, small-scale version of autonomous driving systems, using deep learning. Furthermore, traditional rule-based approaches are limited by their inability to predict the vast number of driving scenarios that can occur. Deep learning offers the ability to learn from data and generalize across different visual conditions. This made it a suitable choice for handling the complex input from a moving car. The project also provided insight into the effectiveness of vision-only autonomous systems and the role of deep learning in embedded robotics.
 
 
 \section{Individual Contributions and Responsibilities}
 
-Our team worked collaboratively over the duration of the project with clear task divisions and weekly milestones. All communication was handled through Discord, where we maintained an active group chat with frequent updates and responses. We held two scheduled meetings every week, and used GitHub to track code progress, manage issues, and handle version control across all components. The team has a shared Google Drive where documents are added for collaboration. 
+Our team worked collaboratively throughout the project with clear task divisions and weekly milestones. All communication was handled through Discord, where we maintained an active group chat with frequent updates and responses. We held two scheduled meetings every week and used GitHub to track code progress, manage issues, and handle version control across all components. The team has a shared Google Drive where documents are added for collaboration. 
 
 
 \subsection{Individual Contributions}
 Each team member was assigned specific responsibilities:
 
 \begin{itemize}
-  \item \textbf{Aadavan} handled the baseline rule-based model used for comparison, authored the ethical considerations section, and participated in model evaluation.
+  \item \textbf{Aadavan} handled the baseline rule-based model used for comparison, authored the ethical considerations section, and participated in model evaluation. Additionally, helped build the CNN architecture.
 
-  \item \textbf{Rudra} led the software setup and camera mounting, collected the training dataset, and worked on preprocessing the image data.
+  \item \textbf{Rudra} led the software and simulator setup (camera system), collected the training dataset, and worked on preprocessing the image data. Helped with model training and tuning. 
 
-  \item \textbf{Pravin} contributed to background research on similar projects and built the CNN architecture. Helped create the dataset in CARLA by collecting images and steering values of cars.
+  \item \textbf{Pravin} contributed to background research on similar projects and helped build the CNN architecture. Additionally, helped create the dataset using CARLA along with a training regime.
 
   \item \textbf{Abishan} supported data preprocessing, designed the training setup (optimizer, loss function, hyperparameters), created the project's risk register, and contributed to model training.
 \end{itemize}
@@ -101,7 +107,7 @@ Model Selection & All Members & June 10, 2025 & Team decided on using a CNN mode
 \hline
 Project Proposal (Draft \& Final) & All Members & June 12--13, 2025 & Completed a Project Proposal document \\
 \hline
-Data Collection \& Setup & Rudra, Aadavan & June 20, 2025 & Team successfully set up CARLA simulator and collected data \\
+Data Collection \& Setup & Rudra, Aadavan, Pravin & June 20, 2025 & Team successfully set up CARLA simulator and collected data \\
 \hline
 Data Preprocessing & Rudra, Abishan & June 27, 2025 & Resized and normalized the image \\
 \hline
@@ -109,7 +115,7 @@ Baseline Model Implementation & Aadavan & June 30, 2025 & Implemented ridge regr
 \hline
 Architecture \& Model Building & Pravin, Aadavan & July 4, 2025 & Created a CNN architecture, to apply transfer learning \\
 \hline
-Training Regime Development & Abishan, Pravin & July 8, 2025 & Chose training parameters \\
+Training Regime Development & Abishan, Pravin & July 8, 2025 & Selecting appropirate training parameters \\
 \hline
 Model Training \& Tuning & Abishan, Rudra & July 10, 2025 & Trained model through a training dataset, adjusted overfitting, and quantified results \\
 \hline
@@ -123,9 +129,9 @@ Progress Report & All Members & July 11, 2025 & Summarized work done so far, com
 
 Table~\ref{tab:futureTimeline} outlines the tasks to be completed in the next phase of the project.
 
-\begin{table}[h!]
+\begin{table}[H]
 \centering
-\caption{Future Timeline With Redundancies}
+\caption{Future timeline with redundancies}
 \begin{tabular}{|p{2.5cm}|p{4cm}|p{4cm}|p{4cm}|}
 \hline
 \textbf{Task} & \textbf{Team Member / Deadline} & \textbf{Description} & \textbf{Solutions to Redundancies} \\
@@ -136,11 +142,11 @@ Final Report (Draft) & Everyone (Aug 1, 2025) & Write first full draft including
 \hline
 Final Report (Final) & Everyone (Aug 8, 2025) & Submit the polished report with citations and final results. & Everyone is required to edit their section and must read through the entire document once. \\
 \hline
-Record Presentation & Everyone (Aug 12, 2025) & Record team sections, align visuals with speech. & Everyone will record their assigned section and upload to shared drive to ensure all clips are collected. \\
+Record Presentation & Everyone (Aug 12, 2025) & Record team sections, align visuals with speech. & Everyone will record their assigned section and upload to the shared drive to ensure all clips are collected. \\
 \hline
 Edit Presentation Video & Rudra, Pravin (Aug 13, 2025) & Merge clips, finalize cuts, add transitions, captions, or diagrams. & Rudra will be the primary editor; Pravin will take over if necessary. \\
 \hline
-Final Deliverable & Rudra (Aug 15, 2025) & Submit final code, data, report, and video via the course portal. & Rudra will be responsible for submitting all final work and verifying it is satisfied. \\
+Final Deliverable & Rudra (Aug 15, 2025) & Submit final code, data, report, and video via the course portal. & Rudra will be responsible for submitting all final work and verifying that it is satisfactory. \\
 \hline
 \end{tabular}
 \label{tab:futureTimeline}
@@ -156,15 +162,15 @@ Further, data augmentation was applied to increase the size and diversity of the
 
 \subsection{Data Collection and Cleaning}
 
-In CARLA, there is vehicles that have autonomous functionality, which we used to collect data.
+In CARLA, some vehicles have autonomous functionality, which we used to collect data.
 We attached an RGB Camera Sensor to the car to record 10 frames per second (FPS) as the car
 travels around a designated map. In addition to the images, data for the steering values and turn signals of the car
-was collected allowing for use as ground truth labels for training the model. This data collection was done on diffreent maps with different weather conditions
-to ensure a diverse dataset. We collected samples on three maps, in which the car collected data for 30 minitues, resulting in 54000 total images.
+were collected allowing for use as ground truth labels for training the model. This data collection was done on different maps with different weather conditions
+to ensure a diverse dataset. We collected samples on three maps, in which the car collected data for 30 minutes, resulting in 54000 total images.
 
 
-To clean the data, we removed any images that were all black, duplicates or not the correct resolution of 320x240 leaving us with 53457 images.  We then saved 
-the data as numpy arrays, zipped and uploaded to a shared Google Colab file along, ensuring access for all members. 
+To clean the data, we removed any images that were all black, duplicates or not the correct resolution of 320x240 leaving us with 53457 images.  
+The data is stored as numpy arrays, zipped and uploaded to a shared Google Colab file, ensuring access for all members. 
 
 Procedure:
 \begin{enumerate}
@@ -190,7 +196,7 @@ This was done to ensure consistency in the input data, allowing the model to lea
 
 
 \subsection{Data Distribution}
-We decided to do a 80/10/10 split for the training, validation and test sets respecivelty. This was done to ensure that have a
+We decided to do an 80/10/10 split for the training, validation and test sets respectively. This was done to ensure that we have a
 large set of data for training, while also having enough data for validation and testing. Table 3 shows the distribution of the data.
 
 \begin{table}[h]
@@ -210,16 +216,16 @@ Total Images           & 53457  \\ \hline
 
 \subsection{Data Agumentation}
 
-Data augmentation was applied to the training set to increase the size and diversity of the dataset. We applied two tenchniquies to generalzie the model and forces
+Data augmentation was applied to the training set to increase the size and diversity of the dataset. We applied two techniques to generalize  the model and force
 it to learn critical features. 
 
 \begin{itemize}
-  \item \textbf{Greyscale Conversion:} All training images were converted to greyscale reducing model's reliance on color-based features, encouraging learning of more genreal visual features/road patterns. This will allow the model to improve, and work in different lighting conditions or if the camera is distorted.
+  \item \textbf{Greyscale Conversion:} All training images were converted to greyscale reducing the the model's reliance on colour-based features, encouraging learning of more general visual features/road patterns. This will allow the model to improve, and work in different lighting conditions or if the camera is distorted.
 
-  \item \textbf{Cutout Augmentation:} A rectangular region of each training image was masked out to simulate real-world situations (e.g. raindrop or debris on the camera lens). This encoruses the model to learn relevant features from different parts of the image making it more robust overall. 
+  \item \textbf{Cutout Augmentation:} A rectangular region of each training image was masked out to simulate real-world situations (e.g. raindrop or debris on the camera lens). This encourages the model to learn relevant features from different parts of the image making it more robust overall. 
 \end{itemize}
 
-These agumentations lead to the training set being increased to 128298 images, with each image having two copies with each augmentations applied respecivelty as shown in Figure~\ref{fig:exampleofaugmented}.
+These augmentations lead to the training set being increased to 128298 images, with each image having two copies with each augmentations applied respectively as shown in Figure~\ref{fig:exampleofaugmented}.
 
 \begin{figure}[H] % h = here, t = top, b = bottom, p = page of floats
     \centering
@@ -246,14 +252,14 @@ Total Images           & 138989 \\ \hline
 
 \subsection{Plan for Testing on Unseen Data}
 
-In order to evaluate the model's performance, we will be testing it on unseen data which we reserved 10\% of the dataset for. Given how 
-the data was collected sequentially across different maps and weather conditions, the test set will inheritely contain frames the model has not encountered before.
-This will provide the model differnt roads and turns to encounter and we can see how well it generalizes to new situations.
+In order to evaluate the model's performance, we will be testing it on unseen data which we reserved 10\% of the dataset. Given how 
+the data was collected sequentially across different maps and weather conditions, the test set will inherently contain frames that the model has not encountered before.
+This will provide the model with different roads and turns to encounter and we can see how well it generalizes to new situations.
 
 Additionally, to further test the model's generalization, we can load the model in CARLA and make it drive around a new map where data was not collected from, and see how well the model performs in 
 real-time. This will allow us to visualize the model's performance and see how well it can adapt to new environments.
 
-\subsection{Challeneges Faced and Solutions}
+\subsection{Challenges Faced and Solutions}
 
 During the data collection process, we faced several challenges and overcame them with the following solutions:
 
@@ -263,18 +269,18 @@ During the data collection process, we faced several challenges and overcame the
 
   \item \textbf{Turn Signal Data Collection:} Collecting turn signal data was initially problematic, 
   because the vehicle's indicators were not being used by the automated vehicle in CARLA. 
-  We tried to resolve this through manual activation based on steering angle, but this proved to be innacurate and inconsistent. 
+  We tried to resolve this through manual activation based on steering angle, but this proved to be inaccurate and inconsistent. 
   We resolved this by enabling the CARLA Traffic Manager’s automatic lights, allowing turn signals to activate based on the vehicle's navigation. \
-  In turn, allowing us to have accurate turn signal data for the training set. 
+  In turn, this allows us to have accurate turn signal data for the training set. 
 
 \end{itemize}
  
 \section{Baseline Model}
 
-Using a Ridge Regression Algoirthm we created a baseline model that predicts steering angles for a self-driving car 
+Using a Ridge Regression Algorithm we created a baseline model that predicts steering angles for a self-driving car 
 from grayscale camera images and turn signal inputs. This baseline model serves as a simple, interpretable baseline
-such that we can compare against our more complex primary neural network model later. To collect data, we used a simulator
-called CARLA, to obtain camera images, turn signal inputs, and our ground truth label the steering angles.
+such that we can compare our more complex primary neural network model later. To collect data, we used a simulator
+called CARLA, to obtain camera images, turn signal inputs, and our ground truth label for the steering angles.
 
 
 \subsection{Ridge Regression with Image Features}
@@ -310,15 +316,15 @@ driving. By obtaining the average MSE and the average $R^2$ score, our fourth mo
 \end{figure}
 
 \subsection{Overfitting and Model Quality}
-As shown in Figure~\ref{fig:model4learningcurve}, the results are suggesting some overfitting due to the models tendency
+As shown in Figure~\ref{fig:model4learningcurve}, the results suggest some overfitting due to the model's tendency
 to perform much better on training data than unseen data. This is reasonable since the training data frames, 
 are all consecutive in nature, and the dataset used isn't extremely large either. In addition, as the training size
-increase the gap between Test and Train MSEs narrow, suggesting that with more data the model will generalize better. 
+increases the gap between Test and Train MSEs narrows, suggesting that with more data the model will generalize better. 
 The final test MSE is (~0.0025) which is quite low, meaning the model performs well overall after training on the data.
 
 
 \subsection{Qualitative Observations}
-When running the steering angle prediction model in CARLA simulator, the model exhibited promising behaviour in terms of
+When running the steering angle prediction model in the CARLA simulator, the model exhibited promising behaviour in terms of
 autonomous driving capabilities, however with large limitations. The car was able to drive freely, using the model's predictions
 from the front-facing grayscale camera images and turn signals provided by the user. In Figure~\ref{fig:model4demo} we can see 
 the model taking a left turn in an intersection.
@@ -360,5 +366,6 @@ the model taking a left turn in an intersection.
 
 \subsection{Running model in CARLA using live camera feed}
 
+\label{last_page}
 
 \end{document}
