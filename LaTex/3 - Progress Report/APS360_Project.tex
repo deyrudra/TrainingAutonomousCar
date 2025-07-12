@@ -361,12 +361,49 @@ the model taking a left turn in an intersection.
 
 \subsection{Model Performance}
 
+Figure~\ref{fig:learningCurveforCNN} shows the learning curve for the CNN model using ResNet18. 
+
+
+\begin{figure}[H] % h = here, t = top, b = bottom, p = page of floats
+    \centering
+    \includegraphics[width=1.0\textwidth]{learningCurveforCNN.png} % Adjust path and size
+    \caption{Learning Curve for CNN model using ResNet18 for 10 epochs}
+    \label{fig:learningCurveforCNN}
+\end{figure}
 
 \subsubsection{Quantitative Results}
+
+As shown in Figure~\ref{fig:learningCurveforCNN}, the CNN model shows a significant improvement over the baseline model. 
+The training loss began at around 0.007 and decreased sharply to around 0.0015 by epoch 1, then steadily decreased to around 0.0005 by the final 
+epoch. This indicates that the model is learning effectively from the training data. 
+We also see that the validation loss started near 0.0024 an over the 10 epochs decreased to 0.001, showing good generalization with minimal overfitting.
+The small gaps between the training and validation loss after epoch 1, show that the model is performing well on both training and unseen data.
+
+
 \subsubsection{Qualitative Results}
+
+When running the CNN model in the CARLA simulator, the car exhibited significantly improved driving behavior compared to the baseline model. 
+The car was able to navigate complex turns and maintain lane discipline more effectively. The model was able to make lane changes, and stay within its respective lane.
+Similar to the baseline, the model struggles when it comes to large turns, but it does a better job staying away from walls and other obstacles.
+
+
 \subsubsection{Challenges and Observations}
 
+One key challenge was in the integration of image and turn signal data in a single model. This required tensor dimension reshaping and matching in PyTorch correctly, specifically in concatenating CNN-extracted features with scalar turn signal input. Mistakes here led to early runtime errors that had to be painstakingly debugged.
+There was also the problem of generalization tracking. As training loss kept improving, validation loss began to plateau from epoch 6 onward, indicating the possibility of overfitting. This indicates the need for early stopping or regularization in subsequent models.
+
+
+One key finding is that the CNN model performs much better than the baseline model, especially on examples where there are lane markings. The CNN learned to recognize helpful spatial features from the driving environment, resulting in smoother and more accurate steering and improved lane-keeping behavior at test time. 
+
 \section{Conclusion}
+
+Our ResNet18 model outperformed the ridge regression baseline, keeping the car in its lane more reliably and 
+cutting validation loss by a noticeable margin. To build on this, we’ll introduce stronger data augmentation like MixUp or 
+CutMix so the network learns to ignore odd artifacts and lighting changes. We also want to experiment with newer backbones 
+such as EfficientNetV2 or Vision Transformers and try combining several models in an ensemble to cover each other’s weaknesses. 
+Finally, more hyperparameter tuning based on the dataset collected from CARLA should help the model pick up 
+driving‑specific features. 
+These updates should lead to smoother steering on tight turns and better handling of roads the model hasn’t seen before.
 \label{last_page}
 
 \end{document}
