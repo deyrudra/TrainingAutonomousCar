@@ -104,8 +104,8 @@ def collect_data(duration_sec, image_filename, angle_filename, signal_filename):
 
         # Convert and store image
         array = np.frombuffer(image.raw_data, dtype=np.uint8).reshape((image.height, image.width, 4))
-        gray = cv2.cvtColor(array, cv2.COLOR_BGRA2GRAY)
-        resized = cv2.resize(gray, (160, 120))
+        # gray = cv2.cvtColor(array, cv2.COLOR_BGRA2GRAY)
+        resized = cv2.resize(array, (160, 120))
 
         image_list.append(resized)
         angle_list.append(angle)

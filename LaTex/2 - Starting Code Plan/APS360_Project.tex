@@ -151,19 +151,36 @@ on the performance. By not using a plain linear regresion model, we were able to
 
 \subsection{Building the model}
 
+We used Python and the following libraries:
+\begin{itemize}
+  \item \texttt{numpy} for numerical array operations.
+  \item \texttt{matplotlib} for visualization.
+  \item \texttt{scikit-learn} for machine learning tools like Ridge Regression and metrics.
+\end{itemize}
+
+The dataset was loaded using numpy from three files:
+\begin{itemize}
+  \item \texttt{images.npy}: shape $(N, H, W)$, grayscale image data normalized between [0, 1].
+  \item \texttt{angles.npy}: shape $(N,)$, corresponding steering angles in range [-1, 1].
+  \item \texttt{turn\_signals.npy}: shape $(N,)$, values in \{-1, 0, 1\} representing left, straight, and right signals.
+\end{itemize}
+
+We flattened each image (e.g., from $80 \times 60$ to 4800) to create the feature matrix. The dataset was then split using an 80-20 train-test split.
+
+
 \subsection{Evaluating the model}
 
+We trained the Ridge Regression model using:
+\[
+\hat{y} = Xw + b, \quad \text{Loss: } \text{MSE} + \alpha \|w\|_2^2
+\]
+The model was trained on the training set and evaluated on the test set using:
+\begin{itemize}
+  \item \textbf{Mean Squared Error (MSE)} to measure average squared difference between predictions and ground truth.
+  \item \textbf{\(R^2\) Score} to evaluate proportion of variance explained by the model.
+\end{itemize}
 
-
-\section{Training Neural Netowrk}
-
-*Quantitative Results: Training Loss (MSE) and Validation Loss
-
-\subsection{Model Training Script}
-
-\subsection{Logging}
-
-\subsection{Outputting Results}
+Training and testing predictions were plotted to visualize performance. The MSE and $R^2$ were printed to assess accuracy and generalization.
 
 
 
@@ -172,6 +189,8 @@ on the performance. By not using a plain linear regresion model, we were able to
 *Qualitative Results: Using model for actual driving in CARLA
 
 \subsection{Running model in CARLA using live camera feed}
+
+\href{https://youtu.be/deTSf7lqKn0}{Watch our demo video on YouTube: https://youtu.be/deTSf7lqKn0}
 
 
 \end{document}
