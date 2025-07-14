@@ -7,12 +7,31 @@ import random
 from pathlib import Path
 from carla import VehicleLightState
 
+#from agents.navigation.global_route_planner import GlobalRoutePlannerDAO, GlobalRoutePlanner
+
+
+#car travels from point a-b, once we reach b, find a new b and travel there
+def set_new_destination(vehicle, world):
+
+    #get possible spawn points in the world along with current
+    #locatoin and drive to a random spawn point
+    spawn_points = world.get_map().get_spawn_points()
+    current_location = vehicle.get_location()
+
+    while True:
+        dest = random.choice(spawn_points).location
+        if dest.distance(current_location) > 35.0: #ensure the destination is far
+            break
+
+    vehicle.get_navigation().go_to_location(dest)
+    return dest
+
 
 def collect_data(duration_sec, image_filename, angle_filename, signal_filename):
     Path("output").mkdir(parents=True, exist_ok=True)
 
     client = carla.Client('localhost', 2000)
-    client.set_timeout(25.0)
+    client.set_timeout(10.0)
     client.load_world("Town05")
 
     world = client.get_world()
@@ -24,7 +43,7 @@ def collect_data(duration_sec, image_filename, angle_filename, signal_filename):
     world.apply_settings(settings)
 
     vehicle_bp = blueprint_library.find('vehicle.tesla.model3')
-    vehicle_bp.set_attribute('color', '255,0,255')
+    vehicle_bp.set_attribute('color', '255,255,0')
     spawn_point = random.choice(world.get_map().get_spawn_points())
     vehicle = world.spawn_actor(vehicle_bp, spawn_point)
 
@@ -67,18 +86,25 @@ def collect_data(duration_sec, image_filename, angle_filename, signal_filename):
 
     threading.Thread(target=follow, daemon=True).start()
 
-    frame_count = int(duration_sec / settings.fixed_delta_seconds)
-    for i in range(frame_count):
+    print("Starting data collection...")
+    start_time = time.time()
+    current_dest = set_new_destination(vehicle, world)
+
+    while time.time() - start_time < duration_sec:
         world.tick()
 
         image = latest_image[0]
         if image is None:
-            continue  # wait for first image
+            continue
 
-        #getting the vechile turn angle
+        #if the vechile is about to get to the destination set a new one
+        if vehicle.get_location().distance(current_dest) < 5.0:
+            current_dest = set_new_destination(vehicle, world) #change the destination
+
+        #get the steering angle for the car at the frame
         angle = np.clip(vehicle.get_control().steer, -1.0, 1.0)
 
-        #getting the turn signal state
+        #get the turn signal state
         light_state = vehicle.get_light_state()
         if light_state & VehicleLightState.LeftBlinker:
             turn_signal = -1
@@ -87,29 +113,27 @@ def collect_data(duration_sec, image_filename, angle_filename, signal_filename):
         else:
             turn_signal = 0
 
-        # Convert and store image
+        #saving 244x244 rgb images
         array = np.frombuffer(image.raw_data, dtype=np.uint8).reshape((image.height, image.width, 4))
         rgb = cv2.cvtColor(array, cv2.COLOR_BGRA2RGB)
         resized = cv2.resize(rgb, (244, 244))
-        chw_image = np.transpose(resized, (2, 0, 1))
+        chw_image = np.transpose(resized, (2, 0, 1)) 
 
-        image_list.append(resized)
+        image_list.append(chw_image)
         angle_list.append(angle)
         signal_list.append(turn_signal)
 
-    # === Save results ===
+    #save the collected data
     np.save(f"output/{image_filename}.npy", np.array(image_list))
     np.save(f"output/{angle_filename}.npy", np.array(angle_list))
     np.save(f"output/{signal_filename}.npy", np.array(signal_list))
 
     print(f"Saved {len(image_list)} images, angles, and signals.")
 
-    # === Cleanup ===
+    #break the setup.
     camera.stop()
     camera.destroy()
     vehicle.destroy()
-
-    # Reset world settings
     settings.synchronous_mode = False
     settings.fixed_delta_seconds = None
     world.apply_settings(settings)

@@ -2,12 +2,12 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 # Load files
-images = np.load("output/extra_large_images.npy")
-angles = np.load("output/extra_large_angles.npy")
-turn_signals = np.load("output/extra_large_turn_signals.npy")
+images = np.load("output/images.npy")
+angles = np.load("output/angles.npy")
+turn_signals = np.load("output/turn_signals.npy")
 
 # Choose index to check
-idx = 1500
+idx = 3045
 
 # Sanity check
 if idx >= len(images):
