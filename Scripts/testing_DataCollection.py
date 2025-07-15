@@ -13,7 +13,7 @@ def collect_data(duration_sec, image_filename, angle_filename, signal_filename):
 
     client = carla.Client('localhost', 2000)
     client.set_timeout(25.0)
-    client.load_world("Town05")
+    client.load_world("Town02")
 
     world = client.get_world()
     blueprint_library = world.get_blueprint_library()
@@ -25,8 +25,16 @@ def collect_data(duration_sec, image_filename, angle_filename, signal_filename):
 
     vehicle_bp = blueprint_library.find('vehicle.tesla.model3')
     vehicle_bp.set_attribute('color', '255,0,255')
-    spawn_point = random.choice(world.get_map().get_spawn_points())
-    vehicle = world.spawn_actor(vehicle_bp, spawn_point)
+    
+    # spawn_point = random.choice(world.get_map().get_spawn_points())
+    # vehicle = world.spawn_actor(vehicle_bp, spawn_point)
+
+    spawn_points = world.get_map().get_spawn_points()
+    vehicle = None
+    for spawn_point in spawn_points:
+        vehicle = world.try_spawn_actor(vehicle_bp, spawn_point)
+        if vehicle is not None:
+            break
 
     tm = client.get_trafficmanager()
     tm_port = tm.get_port()
@@ -48,6 +56,11 @@ def collect_data(duration_sec, image_filename, angle_filename, signal_filename):
     image_list = []
     angle_list = []
     signal_list = []
+
+    flipped_image_list = []
+    flipped_angle_list = []
+    flipped_signal_list = []
+
     latest_image = [None]
 
     def save_image(image):
@@ -97,6 +110,21 @@ def collect_data(duration_sec, image_filename, angle_filename, signal_filename):
         angle_list.append(angle)
         signal_list.append(turn_signal)
 
+
+        # # === Augmented frame (flipped image, inverted angle/signal) ===
+        # flipped_image = cv2.flip(resized, 1)  # Horizontal flip
+        # flipped_angle = -angle
+        # flipped_signal = -turn_signal if turn_signal != 0 else 0
+
+        # flipped_image_list.append(flipped_image)
+        # flipped_angle_list.append(flipped_angle)
+        # flipped_signal_list.append(flipped_signal)
+
+
+    # image_list.extend(flipped_image_list)
+    # angle_list.extend(flipped_angle_list)
+    # signal_list.extend(flipped_signal_list)
+
     # === Save results ===
     np.save(f"output/{image_filename}.npy", np.array(image_list))
     np.save(f"output/{angle_filename}.npy", np.array(angle_list))
@@ -119,10 +147,10 @@ def collect_data(duration_sec, image_filename, angle_filename, signal_filename):
 
 def main():
     collect_data(
-        duration_sec=900,
-        image_filename="images",
-        angle_filename="angles",
-        signal_filename="turn_signals"
+        duration_sec=120,
+        image_filename="small_images",
+        angle_filename="small_angles",
+        signal_filename="small_turn_signals"
     )
 
 if __name__ == "__main__":
