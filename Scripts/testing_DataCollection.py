@@ -13,7 +13,7 @@ def collect_data(duration_sec, image_filename, angle_filename, signal_filename):
 
     client = carla.Client('localhost', 2000)
     client.set_timeout(25.0)
-    client.load_world("Town02")
+    client.load_world("Town07")
 
     world = client.get_world()
     blueprint_library = world.get_blueprint_library()
@@ -147,10 +147,10 @@ def collect_data(duration_sec, image_filename, angle_filename, signal_filename):
 
 def main():
     collect_data(
-        duration_sec=120,
-        image_filename="small_images",
-        angle_filename="small_angles",
-        signal_filename="small_turn_signals"
+        duration_sec=600,
+        image_filename="Town07_600s_images",
+        angle_filename="Town07_600s_angles",
+        signal_filename="Town07_600s_turn_signals"
     )
 
 if __name__ == "__main__":
