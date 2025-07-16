@@ -11,7 +11,7 @@ screen = pygame.display.set_mode((width, height))
 pygame.display.set_caption("CARLA Manual Control")
 
 # === Connect to CARLA ===
-client = carla.Client("174.138.208.33", 2000)
+client = carla.Client("localhost", 2000)
 client.set_timeout(10.0)
 world = client.get_world()
 blueprint_library = world.get_blueprint_library()
