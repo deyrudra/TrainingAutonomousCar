@@ -147,10 +147,10 @@ def collect_data(duration_sec, image_filename, angle_filename, signal_filename):
 
 def main():
     collect_data(
-        duration_sec=600,
-        image_filename="Town07_600s_images",
-        angle_filename="Town07_600s_angles",
-        signal_filename="Town07_600s_turn_signals"
+        duration_sec=400,
+        image_filename="Town07_400s_images",
+        angle_filename="Town07_400s_angles",
+        signal_filename="Town07_400s_turn_signals"
     )
 
 if __name__ == "__main__":

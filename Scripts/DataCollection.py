@@ -8,58 +8,58 @@ from pathlib import Path
 from carla import VehicleLightState
 import argparse
 
+
 def collect_data(duration_sec: float,
-                 map_name: str = "Town?",
+                 map_name: str = "Town07",
                  output_dir: str = "../output/partitions",
                  output_prefix: str = "data") -> None:
-    """
-    Collects camera images, steering angles, and turn signals from a CARLA simulation.
-
-    Args:
-        duration_sec (float): Total duration to run the simulation (seconds).
-        map_name (str): Name of the CARLA map to load (e.g., "Town07").
-        output_dir (str): Directory where output .npy files will be saved.
-        output_prefix (str): Filename prefix for saved .npy arrays.
-    """
-    # Prepare output directory
     Path(output_dir).mkdir(parents=True, exist_ok=True)
 
-    # Connect to CARLA and load the specified map
     client = carla.Client('localhost', 2000)
     client.set_timeout(25.0)
     client.load_world(map_name)
     world = client.get_world()
     blueprint_library = world.get_blueprint_library()
 
-    # Enable synchronous mode for consistent frame timing
+    # === Sync mode ===
     settings = world.get_settings()
     settings.synchronous_mode = True
-    settings.fixed_delta_seconds = 0.1  # 10 FPS
+    settings.fixed_delta_seconds = 0.1
     world.apply_settings(settings)
 
-    # Spawn ego vehicle
+    # === Traffic Manager ===
+    tm = client.get_trafficmanager()
+    tm_port = tm.get_port()
+    tm.set_synchronous_mode(True)
+
+    # === Spawn ego vehicle ===
     vehicle_bp = blueprint_library.find('vehicle.tesla.model3')
     vehicle_bp.set_attribute('color', '255,0,255')
-    # spawn_points = world.get_map().get_spawn_points()
-    # vehicle = None
-    # for sp in spawn_points:
-    #     vehicle = world.try_spawn_actor(vehicle_bp, sp)
-    #     if vehicle:
-    #         break
-    # if vehicle is None:
-    #     raise RuntimeError("Failed to spawn vehicle on any spawn point.")
-
     spawn_point = random.choice(world.get_map().get_spawn_points())
     vehicle = world.spawn_actor(vehicle_bp, spawn_point)
 
-    # Configure traffic manager to ignore lights
-    tm = client.get_trafficmanager()
-    tm_port = tm.get_port()
+    # === Autopilot & Traffic Manager config ===
     vehicle.set_autopilot(True, tm_port)
-    tm.set_synchronous_mode(True)
+    tm.vehicle_percentage_speed_difference(vehicle, 0)  # no slowdown
+    tm.auto_lane_change(vehicle, True)
     tm.ignore_lights_percentage(vehicle, 100)
+    tm.distance_to_leading_vehicle(vehicle, 1.0)
+    tm.update_vehicle_lights(vehicle, True)
 
-    # Set up camera sensor attached to vehicle
+    print(f"Vehicle spawned at: {spawn_point.location}")
+
+    # === Optional: spawn background traffic ===
+    background_vehicles = []
+    for _ in range(10):
+        npc_bp = random.choice(blueprint_library.filter('vehicle.*'))
+        npc_spawn = random.choice(world.get_map().get_spawn_points())
+        npc = world.try_spawn_actor(npc_bp, npc_spawn)
+        if npc:
+            npc.set_autopilot(True, tm_port)
+            tm.vehicle_percentage_speed_difference(npc, random.randint(0, 30))
+            background_vehicles.append(npc)
+
+    # === Setup camera ===
     camera_bp = blueprint_library.find('sensor.camera.rgb')
     camera_bp.set_attribute('image_size_x', '448')
     camera_bp.set_attribute('image_size_y', '252')
@@ -68,141 +68,75 @@ def collect_data(duration_sec: float,
     cam_transform = carla.Transform(carla.Location(x=1.5, z=2.4))
     camera = world.spawn_actor(camera_bp, cam_transform, attach_to=vehicle)
 
-    # Buffers for asynchronously received images
+    # === Camera capture ===
     latest_image = [None]
-    def image_callback(img):
-        latest_image[0] = img
+    def image_callback(img): latest_image[0] = img
     camera.listen(image_callback)
 
-    # Spawn a spectator to follow the vehicle
+    # === Spectator follow ===
     spectator = world.get_spectator()
-    def follow_vehicle():
+    def follow():
         while True:
             tf = vehicle.get_transform()
-            spectator.set_transform(
-                carla.Transform(
-                    tf.location + carla.Location(x=-6, z=3),
-                    tf.rotation
-                )
-            )
+            spectator.set_transform(carla.Transform(
+                tf.location + carla.Location(x=-6, z=3),
+                tf.rotation))
             time.sleep(0.03)
 
-    threading.Thread(target=follow_vehicle, daemon=True).start()
+    threading.Thread(target=follow, daemon=True).start()
 
-    # Prepare data lists
+    # === Data Buffers ===
     images, angles, signals = [], [], []
 
-    # Run simulation loop
     frame_count = int(duration_sec / settings.fixed_delta_seconds)
     for _ in range(frame_count):
         world.tick()
         img = latest_image[0]
         if img is None:
-            continue  # skip until first image arrives
+            continue
 
-        # Extract steering angle
+        # === Extract controls ===
         steer = np.clip(vehicle.get_control().steer, -1.0, 1.0)
-        # Determine turn signal state
-        ls = vehicle.get_light_state()
-        if ls & VehicleLightState.LeftBlinker:
-            sig = -1
-        elif ls & VehicleLightState.RightBlinker:
-            sig = 1
-        else:
-            sig = 0
+        light_state = vehicle.get_light_state()
+        signal = -1 if light_state & VehicleLightState.LeftBlinker else 1 if light_state & VehicleLightState.RightBlinker else 0
 
-        # Convert raw image to RGB, resize, and transpose
-        arr = np.frombuffer(img.raw_data, dtype=np.uint8)
-        arr = arr.reshape((img.height, img.width, 4))
+        # === Image conversion ===
+        arr = np.frombuffer(img.raw_data, dtype=np.uint8).reshape((img.height, img.width, 4))
         rgb = cv2.cvtColor(arr, cv2.COLOR_BGRA2RGB)
         resized = cv2.resize(rgb, (244, 244))
+
         images.append(resized)
         angles.append(steer)
-        signals.append(sig)
+        signals.append(signal)
 
-    # Save collected data
+    # === Save data ===
     np.save(Path(output_dir) / f"{output_prefix}_images.npy", np.array(images))
     np.save(Path(output_dir) / f"{output_prefix}_angles.npy", np.array(angles))
-    np.save(Path(output_dir) / f"{output_prefix}_signals.npy", np.array(signals))
+    np.save(Path(output_dir) / f"{output_prefix}_turn_signals.npy", np.array(signals))
     print(f"Saved {len(images)} frames to '{output_dir}' with prefix '{output_prefix}'.")
 
-    # Cleanup
+    # === Cleanup ===
     camera.stop()
     camera.destroy()
     vehicle.destroy()
+    for npc in background_vehicles:
+        try:
+            npc.destroy()
+        except:
+            pass
     world.apply_settings(carla.WorldSettings(synchronous_mode=False))
     tm.set_synchronous_mode(False)
 
+
 def main():
-    parser = argparse.ArgumentParser(
-        description="Collect CARLA data for a single map run"
-    )
-    parser.add_argument(
-        "--duration", "-d",
-        type=int,
-        required=True,
-        help="Duration of the run in seconds"
-    )
-    parser.add_argument(
-        "--map", "-m",
-        dest="map_name",
-        type=str,
-        required=True,
-        help="CARLA town name (e.g. Town07)"
-    )
-    parser.add_argument(
-        "--prefix", "-o",
-        dest="output_prefix",
-        type=str,
-        required=True,
-        help="Output file prefix"
-    )
+    parser = argparse.ArgumentParser(description="Collect CARLA data")
+    parser.add_argument("--duration", "-d", type=int, required=True, help="Run duration (seconds)")
+    parser.add_argument("--map", "-m", dest="map_name", type=str, required=True, help="Map name (e.g. Town07)")
+    parser.add_argument("--prefix", "-o", dest="output_prefix", type=str, required=True, help="Output file prefix")
     args = parser.parse_args()
 
-    collect_data(
-        duration_sec=args.duration,
-        map_name=args.map_name,
-        output_prefix=args.output_prefix
-    )
+    collect_data(duration_sec=args.duration, map_name=args.map_name, output_prefix=args.output_prefix)
+
 
 if __name__ == "__main__":
     main()
-
-
-# if __name__ == "__main__":
-
-#     # Part 1
-#     collect_data(duration_sec=80, map_name="Town07", output_prefix="Town07_80s")
-#     collect_data(duration_sec=80, map_name="Town06", output_prefix="Town06_80s")
-#     collect_data(duration_sec=80, map_name="Town05", output_prefix="Town05_80s")
-#     collect_data(duration_sec=80, map_name="Town04", output_prefix="Town04_80s")
-#     collect_data(duration_sec=80, map_name="Town03", output_prefix="Town03_80s")
-#     collect_data(duration_sec=80, map_name="Town02", output_prefix="Town02_80s")
-#     collect_data(duration_sec=80, map_name="Town01", output_prefix="Town01_80s")
-
-#     # Part 2
-#     collect_data(duration_sec=80, map_name="Town07", output_prefix="Town07_80s-2")
-#     collect_data(duration_sec=80, map_name="Town06", output_prefix="Town06_80s-2")
-#     collect_data(duration_sec=80, map_name="Town05", output_prefix="Town05_80s-2")
-#     collect_data(duration_sec=80, map_name="Town04", output_prefix="Town04_80s-2")
-#     collect_data(duration_sec=80, map_name="Town03", output_prefix="Town03_80s-2")
-#     collect_data(duration_sec=80, map_name="Town02", output_prefix="Town02_80s-2")
-#     collect_data(duration_sec=80, map_name="Town01", output_prefix="Town01_80s-2")
-
-#     # Part 3
-#     collect_data(duration_sec=80, map_name="Town07", output_prefix="Town07_80s-3")
-#     collect_data(duration_sec=80, map_name="Town06", output_prefix="Town06_80s-3")
-#     collect_data(duration_sec=80, map_name="Town05", output_prefix="Town05_80s-3")
-#     collect_data(duration_sec=80, map_name="Town04", output_prefix="Town04_80s-3")
-#     collect_data(duration_sec=80, map_name="Town03", output_prefix="Town03_80s-3")
-#     collect_data(duration_sec=80, map_name="Town02", output_prefix="Town02_80s-3")
-#     collect_data(duration_sec=80, map_name="Town01", output_prefix="Town01_80s-3")
-
-#     # Part 4
-#     collect_data(duration_sec=80, map_name="Town07", output_prefix="Town07_80s-4")
-#     collect_data(duration_sec=80, map_name="Town06", output_prefix="Town06_80s-4")
-#     collect_data(duration_sec=80, map_name="Town05", output_prefix="Town05_80s-4")
-#     collect_data(duration_sec=80, map_name="Town04", output_prefix="Town04_80s-4")
-#     collect_data(duration_sec=80, map_name="Town03", output_prefix="Town03_80s-4")
-#     collect_data(duration_sec=80, map_name="Town02", output_prefix="Town02_80s-4")
-#     collect_data(duration_sec=80, map_name="Town01", output_prefix="Town01_80s-4")
