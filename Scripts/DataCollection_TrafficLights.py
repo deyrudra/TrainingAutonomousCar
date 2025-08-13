@@ -15,7 +15,7 @@ pygame.display.set_caption("CARLA Manual Control + TL Capture")
 # === Connect to CARLA ===
 client = carla.Client("localhost", 2000)
 client.set_timeout(10.0)
-client.load_world("Town06")
+client.load_world("Town05")
 world = client.get_world()
 blueprint_library = world.get_blueprint_library()
 map_ = world.get_map()
@@ -65,7 +65,7 @@ camera_image_surface = None
 camera_frame_rgb_native = None
 
 # === Capture state ===
-CAPTURE_FRAMES = 5
+CAPTURE_FRAMES = 7
 capture_active = False
 capture_remaining = 0
 capture_label_value = None
@@ -139,11 +139,30 @@ def traffic_light_crop(img: np.ndarray) -> np.ndarray:
     if cropped.size > 0:
         out = cv2.resize(cropped, (w, h))
 
-    # ---- Blackout bottom third ----
-    out = out.copy()
-    out[(2*h)//3:, :, :] = 0
+    # --- Blackout bottom third ---
+    out[h * 2 // 3 :, ...] = 0
 
-    return out
+    # --- Prepare for color manipulation ---
+    is_gray = (out.ndim == 2) or (out.shape[2] == 1)
+    if is_gray:
+        out_rgb = cv2.cvtColor(out, cv2.COLOR_GRAY2BGR)
+    else:
+        out_rgb = out
+
+    quarter_w = max(1, w // 4)
+
+    def blur_and_desaturate(region: np.ndarray) -> np.ndarray:
+        blurred = cv2.GaussianBlur(region, (21, 21), 0)
+        # hsv = cv2.cvtColor(blurred, cv2.COLOR_BGR2HSV)
+        # hsv[:, :, 1] = 0
+        # desat = cv2.cvtColor(hsv, cv2.COLOR_HSV2BGR)
+        return blurred
+
+    out_rgb[:, :quarter_w, :] = blur_and_desaturate(out_rgb[:, :quarter_w, :])
+    out_rgb[:, -quarter_w:, :] = blur_and_desaturate(out_rgb[:, -quarter_w:, :])
+
+
+    return out  # keep color (we want color for UI), not out_final
 
 def process_image(image):
     global camera_image_surface, camera_frame_rgb_native, capture_active, capture_remaining
@@ -233,6 +252,107 @@ def unforce_all_lights():
                 pass
     except Exception:
         pass
+
+# === NEW: Helpers to set perpendicular RED, parallel GREEN on L1/LB ===
+def _normalize180(deg: float) -> float:
+    while deg > 180.0:
+        deg -= 360.0
+    while deg <= -180.0:
+        deg += 360.0
+    return deg
+
+def _angle_diff_abs(a: float, b: float) -> float:
+    return abs(_normalize180(a - b))
+
+def _normalize180(deg: float) -> float:
+    while deg > 180.0:
+        deg -= 360.0
+    while deg <= -180.0:
+        deg += 360.0
+    return deg
+
+def _angdiff(a: float, b: float) -> float:
+    return abs(_normalize180(a - b))
+
+def _min_diff_to_set(angle: float, refs):
+    return min(_angdiff(angle, r) for r in refs)
+
+def set_perp_red_parallel_green(threshold_deg: float = 35.0, invert: bool = False):
+    """
+    Make the two approaches parallel to the vehicle heading GREEN
+    and the two perpendicular approaches RED (frozen). Uses axis grouping so all
+    4 sides are affected. If your map's light meshes are rotated 90°, set invert=True.
+    """
+    TLS = carla.TrafficLightState
+    veh_yaw = vehicle.get_transform().rotation.yaw
+
+    # Axis sets (cover both directions on an axis)
+    parallel_axes = [veh_yaw, veh_yaw + 180.0]
+    perp_axes     = [veh_yaw + 90.0, veh_yaw - 90.0]
+
+    parallel, perpendicular, unsure = [], [], []
+    lights = world.get_actors().filter('traffic.traffic_light')
+
+    for tl in lights:
+        try:
+            lyaw = tl.get_transform().rotation.yaw
+
+            d_par = _min_diff_to_set(lyaw, parallel_axes)
+            d_per = _min_diff_to_set(lyaw, perp_axes)
+
+            # Assign to the closest axis if within threshold; otherwise mark unsure
+            if d_par <= threshold_deg or d_per <= threshold_deg:
+                if d_par <= d_per:
+                    parallel.append(tl)
+                else:
+                    perpendicular.append(tl)
+            else:
+                unsure.append(tl)  # rare, oddly oriented lights
+        except Exception:
+            pass
+
+    # Optional flip if your map's light orientation seems 90° off
+    if invert:
+        parallel, perpendicular = perpendicular, parallel
+
+    # Apply states + freeze
+    # Parallel -> GREEN, Perp -> RED
+    for tl in parallel:
+        try:
+            tl.set_state(TLS.Green)
+            if _HAS_FREEZE:
+                tl.set_time_is_frozen(True)
+            else:
+                tl.set_green_time(1e6); tl.set_yellow_time(0.001); tl.set_red_time(0.001)
+        except Exception:
+            pass
+
+    for tl in perpendicular:
+        try:
+            tl.set_state(TLS.Red)
+            if _HAS_FREEZE:
+                tl.set_time_is_frozen(True)
+            else:
+                tl.set_red_time(1e6); tl.set_yellow_time(0.001); tl.set_green_time(0.001)
+        except Exception:
+            pass
+
+    # Nudge "unsure" to the dominant group so they don’t stay out of sync
+    if unsure:
+        target_state = TLS.Green if len(parallel) >= len(perpendicular) else TLS.Red
+        for tl in unsure:
+            try:
+                tl.set_state(target_state)
+                if _HAS_FREEZE:
+                    tl.set_time_is_frozen(True)
+            except Exception:
+                pass
+
+    print(
+        f"Parallel GREEN: {len(parallel)}, "
+        f"Perpendicular RED: {len(perpendicular)}, "
+        f"Unsure adjusted: {len(unsure)}"
+    )
 
 # === Teleport helper ===
 def teleport_to_intersection():
@@ -354,6 +474,9 @@ def read_gamepad_controls():
         events.append("FLIP_180")
     if pressed(BTN_BACK):
         events.append("TELEPORT")
+    # NEW: L1 / LB edge -> perpendicular RED, parallel GREEN
+    if pressed(BTN_LB):
+        events.append("PERP_RED_PAR_GREEN")
 
     # Hat (D-pad) not used here but we track to keep prev state synced
     if _joystick.get_numhats() > 0:
@@ -376,8 +499,9 @@ clock = pygame.time.Clock()
 print("Controls:")
 print("Keyboard — W: throttle, S: brake/reverse, A/D: steer, Q/E: turn signals")
 print("Keyboard — T: teleport, V: OFF + capture, R: RED + capture, G: GREEN + capture, F: flip 180°, ESC: quit")
-print("Gamepad (Xbox One) — Left Stick X: steer, RT: throttle, LT: brake, LB/RB: turn signals")
+print("Gamepad (Xbox One) — Left Stick X: steer, RT: throttle, LT: brake, LB/RB: turn signals (hold)")
 print("Gamepad — A: GREEN + capture, B: RED + capture, X: OFF/NO LIGHT + capture, Y: flip 180°, Back: teleport")
+print("Gamepad — LB (tap): PERP RED / PAR GREEN (freeze)")
 
 # === Main loop ===
 try:
@@ -484,18 +608,23 @@ try:
         # Handle edge-triggered gamepad events AFTER apply_control so they don't block driving
         for evt in gp["events"]:
             if evt == "GREEN_CAPTURE":
-                force_all_lights(TLS.Green)
+                # force_all_lights(TLS.Green)
+                set_perp_red_parallel_green(invert=True)
                 start_capture(label_value=1)
             elif evt == "RED_CAPTURE":
-                force_all_lights(TLS.Red)
+                # force_all_lights(TLS.Red)
+                set_perp_red_parallel_green()
                 start_capture(label_value=0)
             elif evt == "NO_LIGHT_CAPTURE":
-                force_all_lights_off()
+                # force_all_lights_off()
                 start_capture(label_value=-1)
             elif evt == "TELEPORT":
                 teleport_to_intersection()
             elif evt == "FLIP_180":
                 flip_car_180()
+            elif evt == "PERP_RED_PAR_GREEN":
+                pass
+                # set_perp_red_parallel_green()
 
 except KeyboardInterrupt:
     print("Exiting and cleaning up...")

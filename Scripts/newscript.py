@@ -122,28 +122,57 @@ state_dict = state.get("model_state_dict", state)
 model.load_state_dict(state_dict, strict=True)
 model.eval()
 
+IMAGENET_MEAN = (0.485, 0.456, 0.406)
+IMAGENET_STD  = (0.229, 0.224, 0.225)
+
 @torch.inference_mode()
 def predict_one(np_chw_image: np.ndarray):
-    """np_chw_image: (C,H,W) float32 in [0,1] -> (pred_label -1/0/1, conf_float, probs[3])"""
-    x = np_chw_image
-    if x.ndim != 3:
-        raise ValueError("Expected CHW image")
-    if x.shape[0] != in_channels:
-        # Simple channel alignment just in case
-        if in_channels == 1 and x.shape[0] == 3:
-            x = x.mean(axis=0, keepdims=True)
-        elif in_channels == 3 and x.shape[0] == 1:
-            x = np.repeat(x, 3, axis=0)
-        else:
-            raise ValueError(f"Channel mismatch: expected {in_channels}, got {x.shape[0]}")
+    x = np_chw_image.astype(np.float32)
+    if x.max() > 1.5:  # guard if uint8 slipped in
+        x = x / 255.0
+    if x.shape[0] == 1:
+        x = np.repeat(x, 3, axis=0)
+    # resize to 224x224 if needed (your model will upsample, but do it here for correctness)
+    C, H, W = x.shape
+    if H != 224 or W != 224:
+        x_hw = np.transpose(x, (1,2,0))  # HWC
+        x_hw = cv2.resize(x_hw, (224,224), interpolation=cv2.INTER_LINEAR)
+        x = np.transpose(x_hw, (2,0,1))
+    # normalize
+    x[0] = (x[0] - IMAGENET_MEAN[0]) / IMAGENET_STD[0]
+    x[1] = (x[1] - IMAGENET_MEAN[1]) / IMAGENET_STD[1]
+    x[2] = (x[2] - IMAGENET_MEAN[2]) / IMAGENET_STD[2]
 
     xt = torch.from_numpy(x).unsqueeze(0).to(device)
     logits = model(xt)
-    probs = torch.softmax(logits, dim=1).squeeze(0).detach().cpu().numpy()
+    probs = torch.softmax(logits, dim=1).squeeze(0).cpu().numpy()
     pred_idx = int(np.argmax(probs))
     conf = float(probs[pred_idx])
     pred_label = int(index_to_label[pred_idx])
     return pred_label, conf, probs
+
+# @torch.inference_mode()
+# def predict_one(np_chw_image: np.ndarray):
+#     """np_chw_image: (C,H,W) float32 in [0,1] -> (pred_label -1/0/1, conf_float, probs[3])"""
+#     x = np_chw_image
+#     if x.ndim != 3:
+#         raise ValueError("Expected CHW image")
+#     if x.shape[0] != in_channels:
+#         # Simple channel alignment just in case
+#         if in_channels == 1 and x.shape[0] == 3:
+#             x = x.mean(axis=0, keepdims=True)
+#         elif in_channels == 3 and x.shape[0] == 1:
+#             x = np.repeat(x, 3, axis=0)
+#         else:
+#             raise ValueError(f"Channel mismatch: expected {in_channels}, got {x.shape[0]}")
+
+#     xt = torch.from_numpy(x).unsqueeze(0).to(device)
+#     logits = model(xt)
+#     probs = torch.softmax(logits, dim=1).squeeze(0).detach().cpu().numpy()
+#     pred_idx = int(np.argmax(probs))
+#     conf = float(probs[pred_idx])
+#     pred_label = int(index_to_label[pred_idx])
+#     return pred_label, conf, probs
 
 # =============================
 # ==== IMAGE PREPROCESSING ====
@@ -200,8 +229,8 @@ except Exception:
 # ==== CARLA SETUP  ====
 # ======================
 client = carla.Client("localhost", 2000)
-client.set_timeout(10.0)
-client.load_world("Town06")
+client.set_timeout(15.0)
+client.load_world("Town03")
 world = client.get_world()
 blueprint_library = world.get_blueprint_library()
 map_ = world.get_map()
@@ -251,7 +280,7 @@ camera_image_surface = None
 camera_frame_rgb_native = None  # HxWx3 RGB uint8
 
 # === Dataset capture state ===
-CAPTURE_FRAMES = 5
+CAPTURE_FRAMES = 7
 capture_active = False
 capture_remaining = 0
 capture_label_value = None
