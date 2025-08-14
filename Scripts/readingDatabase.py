@@ -2,8 +2,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.widgets import Button, TextBox
 
-# Load files
-images = np.load("../output/all_images.npy")  # shape (N, 3, 224, 224) or (N, H, W, 3)
+# load all data files
+images = np.load("../output/all_images.npy")
 angles = np.load("../output/all_angles.npy")
 turn_signals = np.load("../output/all_turn_signals.npy")
 
@@ -11,18 +11,20 @@ turn_signals = np.load("../output/all_turn_signals.npy")
 if images.ndim == 4 and images.shape[1] == 3:
     images = np.transpose(images, (0, 2, 3, 1))
 
-# Normalize images for display (uint8)
+# normalize the images
 if images.max() <= 1.0:
     images = (images * 255).astype(np.uint8)
 else:
     images = images.astype(np.uint8)
 
-index = [0]  # mutable index holder
+# settings for index navigation
+index = [0]
 skip_step = 10
 
 fig, ax = plt.subplots(figsize=(6, 4))
-plt.subplots_adjust(bottom=0.3)  # space for buttons and TextBox
+plt.subplots_adjust(bottom=0.3)
 
+# displaying image along with corresponding data
 def show_image(idx):
     ax.clear()
     img = images[idx]
@@ -56,10 +58,9 @@ def goto_index(text):
         index[0] = i % len(images)
         show_image(index[0])
     except ValueError:
-        # ignore bad input
         pass
 
-# Navigation buttons
+# Navigation buttons for the GUI
 axprev = plt.axes([0.05, 0.15, 0.1, 0.075])
 axnext = plt.axes([0.17, 0.15, 0.1, 0.075])
 axskipb = plt.axes([0.29, 0.15, 0.1, 0.075])

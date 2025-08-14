@@ -1,5 +1,7 @@
+#powershell script to automoate the datacollection across various maps
+#here we contorl the duration, along with which maps data is collected on
 param (
-  [int]$Duration = 1500,
+  [int]$Duration = 1500, # time change between large and small datasets
   [string[]]$Maps = @('Town06','Town05','Town04','Town03','Town02'),
   [string[]]$Parts = @('-1','-2','-3')
 )
@@ -13,7 +15,7 @@ foreach ($suffix in $Parts) {
     }
 
     Write-Host "=== Waiting before run for $town $suffix ==="
-    Start-Sleep -Seconds 5  # <-- Add desired delay here
+    Start-Sleep -Seconds 5
 
     Write-Host "=== Running on $town (output: $prefix) ==="
     python DataCollection.py --duration $Duration --map $town --prefix $prefix
