@@ -20,6 +20,21 @@ world = client.get_world()
 blueprint_library = world.get_blueprint_library()
 map_ = world.get_map()
 
+#code to add traffic into the simulation, but turned off right now
+tm = client.get_trafficmanager()
+tm_port = tm.get_port()
+tm.set_synchronous_mode(True)
+
+background_vehicles = []
+for _ in range(50):
+    npc_bp = random.choice(blueprint_library.filter('vehicle.*'))
+    npc_spawn = random.choice(world.get_map().get_spawn_points())
+    npc = world.try_spawn_actor(npc_bp, npc_spawn)
+    if npc:
+        npc.set_autopilot(True, tm_port)
+        tm.vehicle_percentage_speed_difference(npc, random.randint(0, 30))
+        background_vehicles.append(npc)
+
 # === Spawn a vehicle ===
 def _spawn_vehicle(world, max_tries=25):
     bp_lib = world.get_blueprint_library()
