@@ -1,8 +1,8 @@
 #powershell script to automoate the datacollection across various maps
 #here we contorl the duration, along with which maps data is collected on
 param (
-  [int]$Duration = 1500, # time change between large and small datasets
-  [string[]]$Maps = @('Town06','Town05','Town04','Town03','Town02'),
+  [int]$Duration = 400, # time change between large and small datasets
+  [string[]]$Maps = @('Town10HD','Town07','Town06','Town05','Town04','Town03','Town02','Town01'),
   [string[]]$Parts = @('-1','-2','-3')
 )
 
