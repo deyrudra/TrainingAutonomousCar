@@ -19,7 +19,7 @@ def collect_data(duration_sec, image_filename, velocity_filename):
 
     settings = world.get_settings()
     settings.synchronous_mode = True
-    settings.fixed_delta_seconds = 0.1  # 10 FPS
+    settings.fixed_delta_seconds = 0.1  # run at 10 FPS
     world.apply_settings(settings)
 
     #spawn the vec
@@ -46,7 +46,7 @@ def collect_data(duration_sec, image_filename, velocity_filename):
 
     print(f"Spawned vehicle: {vehicle.type_id}")
 
-    # Spawn background NPC vehicles
+    #spawn a handful of NPC vehicles with varied speeds
     background_vehicles = []
     for _ in range(10):
         npc_bp = random.choice(blueprint_library.filter('vehicle.*'))
@@ -58,7 +58,7 @@ def collect_data(duration_sec, image_filename, velocity_filename):
             background_vehicles.append(npc)
     print(f"Spawned {len(background_vehicles)} background vehicles.")
 
-    # Setup camera sensor
+    #camera mounted on the ego vehicle
     camera_bp = blueprint_library.find('sensor.camera.rgb')
     camera_bp.set_attribute('image_size_x', '448')
     camera_bp.set_attribute('image_size_y', '252')
@@ -72,11 +72,12 @@ def collect_data(duration_sec, image_filename, velocity_filename):
     latest_image = [None]
 
     def save_image(image):
+        #keep the most recent frame for processing
         latest_image[0] = image
 
     camera.listen(save_image)
 
-    # Spectator follow camera
+    #spectator camera follows behind the car
     spectator = world.get_spectator()
     def follow():
         while True:
@@ -88,20 +89,20 @@ def collect_data(duration_sec, image_filename, velocity_filename):
 
     threading.Thread(target=follow, daemon=True).start()
 
-    # Main data collection loop
+    #collect frames and velocities for the requested duration
     frame_count = int(duration_sec / settings.fixed_delta_seconds)
     for i in range(frame_count):
         world.tick()
 
         image = latest_image[0]
         if image is None:
-            continue  # Wait for first image
+            continue  # wait until the first image arrives
 
-        # Get velocity magnitude (in m/s)
+        #velocity magnitude in m/s
         velocity_vector = vehicle.get_velocity()
         velocity = (velocity_vector.x**2 + velocity_vector.y**2 + velocity_vector.z**2)**0.5
 
-        # Convert and store image
+        #convert CARLA BGRA to RGB, then resize to 244x244
         array = np.frombuffer(image.raw_data, dtype=np.uint8).reshape((image.height, image.width, 4))
         rgb = cv2.cvtColor(array, cv2.COLOR_BGRA2RGB)
         resized = cv2.resize(rgb, (244, 244))
@@ -109,12 +110,12 @@ def collect_data(duration_sec, image_filename, velocity_filename):
         image_list.append(resized)
         velocity_list.append(velocity)
 
-    # Save to .npy files
+    #write arrays to disk
     np.save(f"output/{image_filename}.npy", np.array(image_list))
     np.save(f"output/{velocity_filename}.npy", np.array(velocity_list))
     print(f"Saved {len(image_list)} images and velocities.")
 
-    # Cleanup
+    #tear down actors and restore world settings
     camera.stop()
     camera.destroy()
     vehicle.destroy()
