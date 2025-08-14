@@ -1,5 +1,5 @@
 # traffic_light_viewer.py
-# Interactive viewer for traffic light classification results (aligned to training)
+# Interactive viewer for traffic light classification results (aligned with training)
 
 import os
 import json
@@ -10,31 +10,31 @@ import torch.nn.functional as F
 import matplotlib.pyplot as plt
 from matplotlib.widgets import Button, TextBox
 
-# ==== Paths (align with your training script) ====
+# Paths (match the ones used during training)
 IMAGES_PATH = "output/traffic_lights_images.npy"
 LABELS_PATH = "output/traffic_lights_label.npy"  # note: singular 'label' in training
 SAVE_DIR    = "Models"
 WEIGHTS_PTH = os.path.join(SAVE_DIR, "traffic_classifier_state.pth")
 CLASS_MAP_JSON = os.path.join(SAVE_DIR, "class_mapping.json")
 
-# ==== Label semantics ====
-# Default fallback mapping (will be overwritten by class_mapping.json if found)
+# Label semantics
+# Default mapping; will be replaced if class_mapping.json is found
 label_to_index = {-1: 0, 0: 1, 1: 2}
 index_to_label = {v: k for k, v in label_to_index.items()}
 
 CLASS_NAMES = {-1: "No Light", 0: "Red", 1: "Green"}
 CLASS_EMOJI = {-1: "⚫️",       0: "🔴",  1: "🟢"}
 
-# Try to load class mapping from training artifacts
+# Load class mapping produced by training (if present)
 if os.path.exists(CLASS_MAP_JSON):
     with open(CLASS_MAP_JSON, "r") as f:
         m = json.load(f)
     if "label_to_index" in m and "index_to_label" in m:
-        # keys were dumped as strings; convert back
+        # keys were saved as strings; convert back to ints
         label_to_index = {int(k): int(v) for k, v in m["label_to_index"].items()}
         index_to_label = {int(k): int(v) for k, v in m["index_to_label"].items()}
 
-# ==== Load numpy data ====
+# Load numpy arrays
 if not (os.path.exists(IMAGES_PATH) and os.path.exists(LABELS_PATH)):
     raise FileNotFoundError("Check IMAGES_PATH and LABELS_PATH")
 
@@ -43,40 +43,40 @@ y_raw = np.load(LABELS_PATH)  # (N,) with values in {-1,0,1}
 if X.ndim not in (3, 4):
     raise ValueError(f"Expected images with 3 or 4 dims (N,H,W[,C]); got {X.shape}")
 
-# Ensure channel dimension and channel-first format (same as training)
+# Ensure channel dimension exists and switch to channel-first to match training
 if X.ndim == 3:
     X = np.expand_dims(X, axis=1)            # (N,1,H,W)
 else:
     X = np.transpose(X, (0, 3, 1, 2))        # (N,C,H,W)
 
-# Normalize to [0,1] (same as training)
+# Normalize to [0,1] like training did
 X = X.astype("float32")
 if X.max() > 1.5:
     X /= 255.0
 
-# Map GT labels {-1,0,1} -> {0,1,2} for compatibility checks (we'll still *display* -1/0/1)
+# Map ground-truth labels {-1,0,1} → {0,1,2} for internal checks (display stays -1/0/1)
 y = np.vectorize(label_to_index.__getitem__)(y_raw)
 
 N, C, H, W = X.shape
 if N == 0:
     raise RuntimeError("No samples found.")
 
-# For display (convert to HWC uint8)
+# For display in matplotlib (HWC uint8)
 def chw_float_to_hwc_uint8(x_chw):
     x = x_chw
     if x.shape[0] == 1:
-        x = np.repeat(x, 3, axis=0)  # grayscale -> 3ch
-    x = np.transpose(x, (1, 2, 0))   # CHW -> HWC
+        x = np.repeat(x, 3, axis=0)  # grayscale → 3 channels
+    x = np.transpose(x, (1, 2, 0))   # CHW → HWC
     x = (x * 255.0).clip(0, 255).astype(np.uint8)
     return x
 
 images_display = np.stack([chw_float_to_hwc_uint8(X[i]) for i in range(N)], axis=0)
 
-# ==== Build model exactly like training ====
+# Build the model exactly like in training
 def build_resnet_classifier(in_channels: int, num_classes: int):
     try:
         from torchvision.models import resnet18
-        backbone = resnet18(weights=None)  # new API path
+        backbone = resnet18(weights=None)  # newer API
     except Exception:
         from torchvision.models import resnet18
         backbone = resnet18(pretrained=False)
@@ -96,7 +96,7 @@ def build_resnet_classifier(in_channels: int, num_classes: int):
             super().__init__()
             self.net = net
         def forward(self, x):
-            # Upscale to 224 if needed (same as training)
+            # Upscale to 224 if needed (same as training preprocessing)
             if x.dim() == 4:
                 _, _, H, W = x.shape
                 if H < 224 or W < 224:
@@ -105,14 +105,14 @@ def build_resnet_classifier(in_channels: int, num_classes: int):
 
     return ResNetClassifier(backbone)
 
-num_classes = 3  # fixed by your training
+num_classes = 3
 in_channels = C
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 model = build_resnet_classifier(in_channels=in_channels, num_classes=num_classes).to(device)
 model.eval()
 
-# ==== Load weights (handles both raw state_dict or 'best_state' dict) ====
+# Load weights (supports raw state_dict or dict with 'model_state_dict')
 if not os.path.exists(WEIGHTS_PTH):
     raise FileNotFoundError(f"Weights not found: {WEIGHTS_PTH}")
 state = torch.load(WEIGHTS_PTH, map_location=device)
@@ -123,7 +123,7 @@ else:
 model.load_state_dict(state_dict, strict=True)
 model.eval()
 
-# ==== Single-image prediction (numpy -> model -> label -1/0/1) ====
+# Single-image prediction utility: numpy CHW → model → label in {-1,0,1}
 def predict_one(model, np_chw_image, device):
     """
     np_chw_image: (C,H,W) float32 in [0,1]
@@ -132,27 +132,26 @@ def predict_one(model, np_chw_image, device):
     x = np_chw_image
     if x.ndim != 3:
         raise ValueError("Expected CHW image")
-    # Channel alignment to training channels
+    # Align channels with training setup
     if x.shape[0] != in_channels:
         if in_channels == 1 and x.shape[0] == 3:
-            x = x.mean(axis=0, keepdims=True)  # RGB -> gray
+            x = x.mean(axis=0, keepdims=True)  # RGB → gray
         elif in_channels == 3 and x.shape[0] == 1:
-            x = np.repeat(x, 3, axis=0)        # gray -> RGB
+            x = np.repeat(x, 3, axis=0)        # gray → RGB
         else:
             raise ValueError(f"Channel mismatch: expected {in_channels}, got {x.shape[0]}")
-    # To tensor
     xt = torch.from_numpy(x).unsqueeze(0).to(device)  # (1,C,H,W)
     with torch.no_grad():
         _, _, Ht, Wt = xt.shape
         if Ht < 224 or Wt < 224:
             xt = F.interpolate(xt, size=(224, 224), mode="bilinear", align_corners=False)
         logits = model(xt)
-        probs = torch.softmax(logits, dim=1).squeeze(0)  # over indices {0,1,2}
+        probs = torch.softmax(logits, dim=1).squeeze(0)  # indices {0,1,2}
         conf, pred_idx = torch.max(probs, dim=0)
-        pred_label = index_to_label[int(pred_idx.item())]  # map back to {-1,0,1}
+        pred_label = index_to_label[int(pred_idx.item())]  # back to {-1,0,1}
     return int(pred_label), float(conf.item()), probs.cpu()
 
-# ==== UI ====
+# Interactive UI state and layout
 index = [0]
 skip_step = 10
 
@@ -201,7 +200,7 @@ def goto_index(text):
     except ValueError:
         pass
 
-# Buttons
+# Buttons and index box wiring
 axprev  = plt.axes([0.05, 0.15, 0.1, 0.075])
 axnext  = plt.axes([0.17, 0.15, 0.1, 0.075])
 axskipb = plt.axes([0.29, 0.15, 0.1, 0.075])
