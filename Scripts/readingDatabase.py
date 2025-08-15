@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 from matplotlib.widgets import Button, TextBox
 
 # load all data files
-images = np.load("output/all_images.npy")
+images = np.load("output/traffic_lights_images_last20.npy")
 angles = np.load("output/all_angles.npy")
 turn_signals = np.load("output/all_turn_signals.npy")
 
