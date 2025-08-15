@@ -1,3 +1,7 @@
+# this script collects paired frames and labels from carla. we log images, steering angles, and turn signals.
+# we run autopilot so data is steady. we keep timing in sync. we also spawn a few npcs for scene variety.
+# the goal is a quick dataset writer that we can point at any town and let it run for a set duration.
+
 import carla
 import numpy as np
 import cv2
@@ -13,42 +17,45 @@ def collect_data(duration_sec: float,
                  map_name: str = "Town07",
                  output_dir: str = "../output/partitions",
                  output_prefix: str = "data") -> None:
+    # we make sure the output folder exists. simple and safe.
     Path(output_dir).mkdir(parents=True, exist_ok=True)
 
+    # we connect to the server and load the requested map. a bit of patience on big towns.
     client = carla.Client('localhost', 2000)
     client.set_timeout(25.0)
     client.load_world(map_name)
     world = client.get_world()
     blueprint_library = world.get_blueprint_library()
 
-    # === Sync mode ===
+    # we switch to sync mode so sim time advances one tick per call. this keeps data aligned with control.
     settings = world.get_settings()
     settings.synchronous_mode = True
     settings.fixed_delta_seconds = 0.1
     world.apply_settings(settings)
 
-    # === Traffic Manager ===
+    # we bring up the traffic manager in sync mode as well. this keeps autopilot deterministic-ish.
     tm = client.get_trafficmanager()
     tm_port = tm.get_port()
     tm.set_synchronous_mode(True)
 
-    # === Spawn ego vehicle ===
+    # we spawn our ego car. a tesla is fine. we add a bright color so it is easy to spot in the spectator cam.
     vehicle_bp = blueprint_library.find('vehicle.tesla.model3')
     vehicle_bp.set_attribute('color', '255,0,255')
     spawn_point = random.choice(world.get_map().get_spawn_points())
     vehicle = world.spawn_actor(vehicle_bp, spawn_point)
 
-    # === Autopilot & Traffic Manager config ===
+    # we enable autopilot and set a few tm knobs. short gap. no slowdown. allow lane changes.
+    # we also let it ignore lights to keep it moving for data. tune as needed for our task.
     vehicle.set_autopilot(True, tm_port)
-    tm.vehicle_percentage_speed_difference(vehicle, 0)  # no slowdown
+    tm.vehicle_percentage_speed_difference(vehicle, 0)
     tm.auto_lane_change(vehicle, True)
     tm.ignore_lights_percentage(vehicle, 100)
     tm.distance_to_leading_vehicle(vehicle, 1.0)
     tm.update_vehicle_lights(vehicle, True)
 
-    print(f"Vehicle spawned at: {spawn_point.location}")
+    print(f"vehicle spawned at: {spawn_point.location}")
 
-    # === Optional: spawn background traffic ===
+    # we add some background traffic for diversity. small number to avoid gridlock.
     background_vehicles = []
     for _ in range(10):
         npc_bp = random.choice(blueprint_library.filter('vehicle.*'))
@@ -59,7 +66,7 @@ def collect_data(duration_sec: float,
             tm.vehicle_percentage_speed_difference(npc, random.randint(0, 30))
             background_vehicles.append(npc)
 
-    # === Setup camera ===
+    # we attach a narrow fov camera on the hood. light and fast. ticks at 10 hz to match our step.
     camera_bp = blueprint_library.find('sensor.camera.rgb')
     camera_bp.set_attribute('image_size_x', '448')
     camera_bp.set_attribute('image_size_y', '252')
@@ -68,12 +75,12 @@ def collect_data(duration_sec: float,
     cam_transform = carla.Transform(carla.Location(x=1.5, z=2.4))
     camera = world.spawn_actor(camera_bp, cam_transform, attach_to=vehicle)
 
-    # === Camera capture ===
+    # we keep the latest frame in a tiny shared list. simple pattern. thread safe enough for this.
     latest_image = [None]
     def image_callback(img): latest_image[0] = img
     camera.listen(image_callback)
 
-    # === Spectator follow ===
+    # we set the spectator to follow a few meters back. this helps us watch behavior while logging.
     spectator = world.get_spectator()
     def follow():
         while True:
@@ -85,7 +92,7 @@ def collect_data(duration_sec: float,
 
     threading.Thread(target=follow, daemon=True).start()
 
-    # === Data Buffers ===
+    # we collect three aligned streams: images, steering angle, and turn signal. all tick synced.
     images, angles, signals = [], [], []
 
     frame_count = int(duration_sec / settings.fixed_delta_seconds)
@@ -95,12 +102,12 @@ def collect_data(duration_sec: float,
         if img is None:
             continue
 
-        # === Extract controls ===
+        # we read the live control from the ego. angle is already in [-1, 1]. we clamp just in case.
         steer = np.clip(vehicle.get_control().steer, -1.0, 1.0)
         light_state = vehicle.get_light_state()
         signal = -1 if light_state & VehicleLightState.LeftBlinker else 1 if light_state & VehicleLightState.RightBlinker else 0
 
-        # === Image conversion ===
+        # we convert the raw bgra to rgb, then resize to 244x244. this size is enough for fast training.
         arr = np.frombuffer(img.raw_data, dtype=np.uint8).reshape((img.height, img.width, 4))
         rgb = cv2.cvtColor(arr, cv2.COLOR_BGRA2RGB)
         resized = cv2.resize(rgb, (244, 244))
@@ -109,13 +116,13 @@ def collect_data(duration_sec: float,
         angles.append(steer)
         signals.append(signal)
 
-    # === Save data ===
+    # we save each stream as a .npy. names are prefixed so we can shard runs. plz ensure disk has space.
     np.save(Path(output_dir) / f"{output_prefix}_images.npy", np.array(images))
     np.save(Path(output_dir) / f"{output_prefix}_angles.npy", np.array(angles))
     np.save(Path(output_dir) / f"{output_prefix}_turn_signals.npy", np.array(signals))
-    print(f"Saved {len(images)} frames to '{output_dir}' with prefix '{output_prefix}'.")
+    print(f"saved {len(images)} frames to '{output_dir}' with prefix '{output_prefix}'.")
 
-    # === Cleanup ===
+    # we tear everything down cleanly. vehicles first, then sensors. finally restore async mode.
     camera.stop()
     camera.destroy()
     vehicle.destroy()
@@ -129,13 +136,19 @@ def collect_data(duration_sec: float,
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Collect CARLA data")
-    parser.add_argument("--duration", "-d", type=int, required=True, help="Run duration (seconds)")
-    parser.add_argument("--map", "-m", dest="map_name", type=str, required=True, help="Map name (e.g. Town07)")
-    parser.add_argument("--prefix", "-o", dest="output_prefix", type=str, required=True, help="Output file prefix")
+    # we parse a few flags to keep usage simple. duration is in seconds. map is like town07. prefix tags the files.
+    parser = argparse.ArgumentParser(description="collect carla data (images, steering angles, turn signals)")
+    parser.add_argument("--duration", "-d", type=int, required=True, help="run duration in seconds")
+    parser.add_argument("--map", "-m", dest="map_name", type=str, required=True, help="map name, e.g. Town07")
+    parser.add_argument("--prefix", "-o", dest="output_prefix", type=str, required=True, help="output file prefix")
+    parser.add_argument("--outdir", "-O", dest="output_dir", type=str, default="../output/partitions",
+                        help="output directory (default: ../output/partitions)")
     args = parser.parse_args()
 
-    collect_data(duration_sec=args.duration, map_name=args.map_name, output_prefix=args.output_prefix)
+    collect_data(duration_sec=args.duration,
+                 map_name=args.map_name,
+                 output_dir=args.output_dir,
+                 output_prefix=args.output_prefix)
 
 
 if __name__ == "__main__":

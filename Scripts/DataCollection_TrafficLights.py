@@ -1,18 +1,22 @@
+# this script lets us drive a carla vehicle by keyboard or xbox gamepad. we mirror a spectator camera behind the car.
+# we also capture cropped frames around traffic lights into a numpy dataset for later training.
+# the capture can be triggered for red, green, or no-light classes. we try to keep the flow simple and responsive.
+
 import carla
 import pygame
 import time
 import random
 import numpy as np
 import os
-import cv2  # for resizing to 224x224
+import cv2  # used to resize frames to 224x224 for the dataset
 
-# === Pygame setup ===
+# pygame window. simple 1024x768 view. we draw the rgb camera to this surface.
 pygame.init()
 width, height = 1024, 768
 screen = pygame.display.set_mode((width, height))
-pygame.display.set_caption("CARLA Manual Control + TL Capture")
+pygame.display.set_caption("carla manual control + tl capture")
 
-# === Connect to CARLA ===
+# connect to carla on localhost. we load town05 and pull the world, blueprints, and map.
 client = carla.Client("localhost", 2000)
 client.set_timeout(10.0)
 client.load_world("Town05")
@@ -20,11 +24,14 @@ world = client.get_world()
 blueprint_library = world.get_blueprint_library()
 map_ = world.get_map()
 
-#code to add traffic into the simulation, but turned off right now
+# here we wire up the traffic manager so that background npcs can drive around us.
+# we keep it synchronous to reduce odd timing glitches during data capture.
 tm = client.get_trafficmanager()
 tm_port = tm.get_port()
 tm.set_synchronous_mode(True)
 
+# we spawn a bunch of background vehicles with random speed modifiers.
+# this adds variety to scenes. toggle the loop size or comment out if we want a quiet map.
 background_vehicles = []
 for _ in range(50):
     npc_bp = random.choice(blueprint_library.filter('vehicle.*'))
@@ -35,7 +42,7 @@ for _ in range(50):
         tm.vehicle_percentage_speed_difference(npc, random.randint(0, 30))
         background_vehicles.append(npc)
 
-# === Spawn a vehicle ===
+# this spawns our controllable vehicle. it tries several spawn points to avoid collisions.
 def _spawn_vehicle(world, max_tries=25):
     bp_lib = world.get_blueprint_library()
     vehicle_bp = bp_lib.filter("vehicle.*model3*")[0]
@@ -58,28 +65,29 @@ def _spawn_vehicle(world, max_tries=25):
 
 vehicle = _spawn_vehicle(world)
 
-# === Spectator camera setup ===
+# we keep a spectator camera following behind the car so it is easier to see context.
 spectator = world.get_spectator()
 
-# === Attach Camera Sensor (your settings) ===
+# attach a single rgb camera to the hood. settings match the window so blits are fast.
 def _attach_camera(world, vehicle):
     bp_lib = world.get_blueprint_library()
     camera_bp = bp_lib.find('sensor.camera.rgb')
     camera_bp.set_attribute('image_size_x', '1024')
     camera_bp.set_attribute('image_size_y', '768')
     camera_bp.set_attribute('fov', '110')
-    camera_bp.set_attribute('sensor_tick', '0.1')  # 10 FPS
+    camera_bp.set_attribute('sensor_tick', '0.1')  # roughly 10 fps, good for manual driving + capture
     cam_transform = carla.Transform(carla.Location(x=1.5, z=2.4))
     cam = world.spawn_actor(camera_bp, cam_transform, attach_to=vehicle)
     return cam
 
 camera = _attach_camera(world, vehicle)
 
-# === Camera feed state ===
+# camera frame state. we hold the latest rgb frame as both numpy and pygame surface.
 camera_image_surface = None
 camera_frame_rgb_native = None
 
-# === Capture state ===
+# capture state. we snapshot a short burst of frames each time we trigger.
+# labels are -1 (no light), 0 (red), 1 (green). bursts reduce label jitter and give us mini sequences.
 CAPTURE_FRAMES = 7
 capture_active = False
 capture_remaining = 0
@@ -87,7 +95,7 @@ capture_label_value = None
 capture_buffer_images = []
 capture_buffer_labels = []
 
-# === Output files ===
+# output paths. we append to these .npy files if they already exist. each save call stacks the new chunk.
 IMAGES_FILE = "output/traffic_lights_images.npy"
 LABELS_FILE = "output/traffic_lights_label.npy"
 
@@ -114,37 +122,34 @@ def save_dataset(images_list, labels_list):
     np.save(IMAGES_FILE, imgs)
     np.save(LABELS_FILE, lbls)
 
-    # Counts for each label
     counts = {label: int(np.sum(lbls == label)) for label in [-1, 0, 1]}
-
-    print(f"Saved {len(new_lbls)} frames.")
-    print(f"Totals -> images: {imgs.shape[0]}, labels: {lbls.shape[0]}")
-    print(f"Label counts: NO LIGHT (-1): {counts[-1]}, RED (0): {counts[0]}, GREEN (1): {counts[1]}")
+    print(f"saved {len(new_lbls)} frames.")
+    print(f"totals -> images: {imgs.shape[0]}, labels: {lbls.shape[0]}")
+    print(f"label counts: no light (-1): {counts[-1]}, red (0): {counts[0]}, green (1): {counts[1]}")
 
 def start_capture(label_value):
+    # this arms the capture for the next few frames. we keep it short to avoid too many near-duplicates.
     global capture_active, capture_remaining, capture_label_value
     if capture_active:
-        print("Capture already in progress—wait for it to finish.")
+        print("capture in progress. pls wait.")
         return
     capture_active = True
     capture_remaining = CAPTURE_FRAMES
     capture_label_value = label_value
     capture_buffer_images.clear()
     capture_buffer_labels.clear()
-    print(f"Capture started for label {label_value} (next {CAPTURE_FRAMES} frames).")
+    print(f"capture started for label {label_value} (next {CAPTURE_FRAMES} frames).")
 
+# this crop brings attention to the tl area: center zoom, blackout lower third, and blur side strips.
+# it helps models ignore road texture and car hood clutter. we keep color so red/green hue is intact.
 def traffic_light_crop(img: np.ndarray) -> np.ndarray:
-    """
-    Applies a center zoom (by zoom_percent) and optionally blacks out the bottom third.
-    Returns a new image with the same HxW as input.
-    """
     if img is None or img.ndim != 3:
         return img
 
     h, w = img.shape[:2]
     out = img
 
-    # ---- Center zoom ----
+    # center zoom
     z = 1.0 + (50.0 / 100.0)
     new_w = max(1, int(w / z))
     new_h = max(1, int(h / z))
@@ -154,35 +159,26 @@ def traffic_light_crop(img: np.ndarray) -> np.ndarray:
     if cropped.size > 0:
         out = cv2.resize(cropped, (w, h))
 
-    # --- Blackout bottom third ---
+    # blackout bottom third
     out[h * 2 // 3 :, ...] = 0
 
-    # --- Prepare for color manipulation ---
-    is_gray = (out.ndim == 2) or (out.shape[2] == 1)
-    if is_gray:
-        out_rgb = cv2.cvtColor(out, cv2.COLOR_GRAY2BGR)
-    else:
-        out_rgb = out
-
+    # soft blur on left/right quarters
     quarter_w = max(1, w // 4)
 
-    def blur_and_desaturate(region: np.ndarray) -> np.ndarray:
-        blurred = cv2.GaussianBlur(region, (21, 21), 0)
-        # hsv = cv2.cvtColor(blurred, cv2.COLOR_BGR2HSV)
-        # hsv[:, :, 1] = 0
-        # desat = cv2.cvtColor(hsv, cv2.COLOR_HSV2BGR)
-        return blurred
+    def blur_edge(region: np.ndarray) -> np.ndarray:
+        return cv2.GaussianBlur(region, (21, 21), 0)
 
-    out_rgb[:, :quarter_w, :] = blur_and_desaturate(out_rgb[:, :quarter_w, :])
-    out_rgb[:, -quarter_w:, :] = blur_and_desaturate(out_rgb[:, -quarter_w:, :])
+    out[:, :quarter_w, :] = blur_edge(out[:, :quarter_w, :])
+    out[:, -quarter_w:, :] = blur_edge(out[:, -quarter_w:, :])
 
+    return out
 
-    return out  # keep color (we want color for UI), not out_final
-
+# this converts raw sensor bytes to an rgb numpy frame and pygame surface.
+# when armed, it also downsamples to 224x224 and buffers into the current capture chunk.
 def process_image(image):
     global camera_image_surface, camera_frame_rgb_native, capture_active, capture_remaining
     array = np.frombuffer(image.raw_data, dtype=np.uint8)
-    array = array.reshape((image.height, image.width, 4))[:, :, :3][:, :, ::-1]  # BGRA->BGR->RGB
+    array = array.reshape((image.height, image.width, 4))[:, :, :3][:, :, ::-1]  # bgra->bgr->rgb
 
     array = traffic_light_crop(array)
 
@@ -191,23 +187,22 @@ def process_image(image):
     camera_image_surface = pygame.transform.scale(surface, (width, height))
 
     if capture_active and capture_remaining > 0:
-        # Resize to 224x224 BEFORE saving
         resized_img = cv2.resize(camera_frame_rgb_native, (224, 224))
         capture_buffer_images.append(resized_img.copy())
         capture_buffer_labels.append(capture_label_value)
         capture_remaining -= 1
-        print(f"Captured frame {CAPTURE_FRAMES - capture_remaining}/{CAPTURE_FRAMES} (label={capture_label_value})")
+        print(f"captured frame {CAPTURE_FRAMES - capture_remaining}/{CAPTURE_FRAMES} (label={capture_label_value})")
         if capture_remaining == 0:
             save_dataset(capture_buffer_images, capture_buffer_labels)
-            print("Capture finished.")
+            print("capture finished.")
             capture_active = False
 
 camera.listen(process_image)
 
-# === Traffic light helpers ===
+# helpers to steer traffic lights for fast labeling. we try to freeze states when the api supports it.
 TLS = carla.TrafficLightState
 _HAS_FREEZE = hasattr(carla.TrafficLight, "set_time_is_frozen")
-_HAS_OFF = hasattr(TLS, "Off")  # some CARLA versions provide an "Off" state
+_HAS_OFF = hasattr(TLS, "Off")
 
 def force_all_lights(state: carla.TrafficLightState):
     lights = world.get_actors().filter('traffic.traffic_light')
@@ -218,7 +213,6 @@ def force_all_lights(state: carla.TrafficLightState):
             if _HAS_FREEZE:
                 tl.set_time_is_frozen(True)
             else:
-                # If we can't freeze the state, bias timings to effectively hold it
                 if state == TLS.Red:
                     tl.set_red_time(1e6); tl.set_yellow_time(0.001); tl.set_green_time(0.001)
                 elif state == TLS.Green:
@@ -228,10 +222,10 @@ def force_all_lights(state: carla.TrafficLightState):
         except Exception:
             pass
         count += 1
-    print(f"Forced {count} traffic lights to {state.name}.")
+    print(f"forced {count} traffic lights to {state.name.lower()}.")
 
 def force_all_lights_off():
-    """Try to turn lights fully OFF; if not supported, just unforce & set normal cycle."""
+    # some builds support a true off state. if not, we unfreeze and reset timings to normal cycling.
     lights = world.get_actors().filter('traffic.traffic_light')
     turned_off = 0
     fallback = 0
@@ -243,7 +237,6 @@ def force_all_lights_off():
                     tl.set_time_is_frozen(True)
                 turned_off += 1
             else:
-                # Fallback: unfreeze and reset timings to default-ish behavior
                 if _HAS_FREEZE:
                     tl.set_time_is_frozen(False)
                 tl.set_green_time(10.0); tl.set_yellow_time(3.0); tl.set_red_time(10.0)
@@ -251,9 +244,9 @@ def force_all_lights_off():
         except Exception:
             pass
     if turned_off:
-        print(f"Set {turned_off} traffic lights to OFF.")
+        print(f"set {turned_off} traffic lights to off.")
     if fallback:
-        print(f"OFF state not supported on this CARLA build; reverted {fallback} lights to normal timing.")
+        print(f"off not supported here. reverted {fallback} to normal timing.")
 
 def unforce_all_lights():
     try:
@@ -268,17 +261,8 @@ def unforce_all_lights():
     except Exception:
         pass
 
-# === NEW: Helpers to set perpendicular RED, parallel GREEN on L1/LB ===
-def _normalize180(deg: float) -> float:
-    while deg > 180.0:
-        deg -= 360.0
-    while deg <= -180.0:
-        deg += 360.0
-    return deg
-
-def _angle_diff_abs(a: float, b: float) -> float:
-    return abs(_normalize180(a - b))
-
+# these helpers align lights relative to our vehicle yaw and set parallel vs perpendicular axes.
+# this speeds up labeling intersections without hunting for a specific signal asset.
 def _normalize180(deg: float) -> float:
     while deg > 180.0:
         deg -= 360.0
@@ -294,14 +278,12 @@ def _min_diff_to_set(angle: float, refs):
 
 def set_perp_red_parallel_green(threshold_deg: float = 35.0, invert: bool = False):
     """
-    Make the two approaches parallel to the vehicle heading GREEN
-    and the two perpendicular approaches RED (frozen). Uses axis grouping so all
-    4 sides are affected. If your map's light meshes are rotated 90°, set invert=True.
+    make approaches parallel to the vehicle heading green. make perpendicular approaches red.
+    we freeze states. if the map meshes are rotated 90°, set invert=True.
     """
     TLS = carla.TrafficLightState
     veh_yaw = vehicle.get_transform().rotation.yaw
 
-    # Axis sets (cover both directions on an axis)
     parallel_axes = [veh_yaw, veh_yaw + 180.0]
     perp_axes     = [veh_yaw + 90.0, veh_yaw - 90.0]
 
@@ -311,27 +293,21 @@ def set_perp_red_parallel_green(threshold_deg: float = 35.0, invert: bool = Fals
     for tl in lights:
         try:
             lyaw = tl.get_transform().rotation.yaw
-
             d_par = _min_diff_to_set(lyaw, parallel_axes)
             d_per = _min_diff_to_set(lyaw, perp_axes)
-
-            # Assign to the closest axis if within threshold; otherwise mark unsure
             if d_par <= threshold_deg or d_per <= threshold_deg:
                 if d_par <= d_per:
                     parallel.append(tl)
                 else:
                     perpendicular.append(tl)
             else:
-                unsure.append(tl)  # rare, oddly oriented lights
+                unsure.append(tl)
         except Exception:
             pass
 
-    # Optional flip if your map's light orientation seems 90° off
     if invert:
         parallel, perpendicular = perpendicular, parallel
 
-    # Apply states + freeze
-    # Parallel -> GREEN, Perp -> RED
     for tl in parallel:
         try:
             tl.set_state(TLS.Green)
@@ -352,7 +328,6 @@ def set_perp_red_parallel_green(threshold_deg: float = 35.0, invert: bool = Fals
         except Exception:
             pass
 
-    # Nudge "unsure" to the dominant group so they don’t stay out of sync
     if unsure:
         target_state = TLS.Green if len(parallel) >= len(perpendicular) else TLS.Red
         for tl in unsure:
@@ -364,16 +339,16 @@ def set_perp_red_parallel_green(threshold_deg: float = 35.0, invert: bool = Fals
                 pass
 
     print(
-        f"Parallel GREEN: {len(parallel)}, "
-        f"Perpendicular RED: {len(perpendicular)}, "
-        f"Unsure adjusted: {len(unsure)}"
+        f"parallel green: {len(parallel)}, "
+        f"perpendicular red: {len(perpendicular)}, "
+        f"unsure adjusted: {len(unsure)}"
     )
 
-# === Teleport helper ===
+# teleport helps us hop to a random intersection. handy for quick dataset variety.
 def teleport_to_intersection():
     waypoints = [wp for wp in map_.generate_waypoints(2.0) if wp.is_junction]
     if not waypoints:
-        print("No intersections found!")
+        print("no intersections found.")
         return
     wp = random.choice(waypoints)
     tf = wp.transform
@@ -381,43 +356,40 @@ def teleport_to_intersection():
     vehicle.set_transform(tf)
     vehicle.set_target_velocity(carla.Vector3D(0, 0, 0))
     vehicle.set_target_angular_velocity(carla.Vector3D(0, 0, 0))
-    print(f"Teleported to intersection at {tf.location}")
+    print(f"teleported near junction at {tf.location}")
 
-# === Flip car helper ===
+# sometimes we need to flip around fast to face the opposite axis. this does a 180 on yaw.
 def flip_car_180():
     tf = vehicle.get_transform()
     tf.rotation.yaw = (tf.rotation.yaw + 180.0) % 360.0
     vehicle.set_transform(tf)
-    print("Vehicle flipped 180 degrees.")
+    print("vehicle flipped 180 degrees.")
 
-# ======================================================================
-# =============== GAMEPAD (Xbox One) SUPPORT SECTION ====================
-# ======================================================================
+# gamepad support. we try to be robust to sdl mappings. keyboard still works fine in parallel.
 pygame.joystick.init()
 _joystick = None
 if pygame.joystick.get_count() > 0:
     _joystick = pygame.joystick.Joystick(0)
     _joystick.init()
-    print(f"Gamepad connected: {_joystick.get_name()} | axes={_joystick.get_numaxes()} buttons={_joystick.get_numbuttons()} hats={_joystick.get_numhats()}")
+    print(f"gamepad: {_joystick.get_name()} | axes={_joystick.get_numaxes()} buttons={_joystick.get_numbuttons()} hats={_joystick.get_numhats()}")
 else:
-    print("No gamepad detected. Keyboard controls still available.")
+    print("no gamepad detected. keyboard controls still work.")
 
-# Keep previous button states for edge-detection
 _prev_buttons = {}
 _prev_hat = (0, 0)
 
-# Heuristics for Xbox mapping (works across common SDL variants)
-AXIS_LX = 0              # Left stick X
-AXIS_LY = 1              # Unused here
-AXIS_TRIGGERS_COMBINED = 2  # Some drivers map both triggers to one axis (-1..+1)
-AXIS_RY = 3              # Unused here
-AXIS_LT_MAYBE = 4        # Separate LT on some drivers (0..1 scaled from -1..+1)
-AXIS_RT_MAYBE = 5        # Separate RT on some drivers
+# typical xbox layout on many drivers. some variance exists. our code is defensive.
+AXIS_LX = 0
+AXIS_LY = 1
+AXIS_TRIGGERS_COMBINED = 2
+AXIS_RY = 3
+AXIS_LT_MAYBE = 4
+AXIS_RT_MAYBE = 5
 
 BTN_A, BTN_B, BTN_X, BTN_Y = 0, 1, 2, 3
 BTN_LB, BTN_RB = 4, 5
 BTN_BACK, BTN_START = 6, 7
-BTN_LS, BTN_RS = 8, 9  # not used
+BTN_LS, BTN_RS = 8, 9
 
 def _deadzone(value: float, dz: float = 0.08) -> float:
     return 0.0 if abs(value) < dz else value
@@ -428,41 +400,29 @@ def _axis_or_zero(js, idx):
     except Exception:
         return 0.0
 
+# read the current gamepad state. we return continuous controls plus a list of edge events.
 def read_gamepad_controls():
-    """
-    Returns a dict with continuous controls and edge-triggered button presses.
-    Continuous: steer [-1..1], throttle [0..1], brake [0..1], left_blinker(bool), right_blinker(bool)
-    Edges: events list of strings describing actions to trigger once on button press.
-    """
     global _prev_buttons, _prev_hat
 
     if _joystick is None:
         return dict(steer=0.0, throttle=0.0, brake=0.0,
                     left_blinker=False, right_blinker=False, events=[])
 
-    # --- Steering from left stick X ---
     steer = _deadzone(_axis_or_zero(_joystick, AXIS_LX))
 
-    # --- Triggers (various driver mappings) ---
-    # Preferred: separate LT/RT at indices 4/5 (reported -1..+1; convert to 0..1)
     lt = rt = 0.0
     axes = _joystick.get_numaxes()
     if axes >= 6:
         lt = max(0.0, (_axis_or_zero(_joystick, AXIS_LT_MAYBE) + 1.0) * 0.5)
         rt = max(0.0, (_axis_or_zero(_joystick, AXIS_RT_MAYBE) + 1.0) * 0.5)
     else:
-        # Fallback: combined triggers axis at index 2
         comb = _axis_or_zero(_joystick, AXIS_TRIGGERS_COMBINED)
-        # Many drivers: rest ~ -1; LT pushes towards 0..+1, RT pushes towards 0..+1 but cannot be read separately.
-        # Heuristic split: treat positive as RT, negative magnitude as LT.
-        rt = max(0.0, comb)  # 0..+1
-        lt = max(0.0, -comb) # 0..+1
+        rt = max(0.0, comb)
+        lt = max(0.0, -comb)
 
-    # Deadzone/smoothing
     lt = 0.0 if lt < 0.02 else lt
     rt = 0.0 if rt < 0.02 else rt
 
-    # Indicators from LB/RB (hold = on)
     left_blinker = False
     right_blinker = False
     try:
@@ -471,7 +431,6 @@ def read_gamepad_controls():
     except Exception:
         pass
 
-    # --- Edge-triggered button presses (A/B/X/Y/Back) ---
     events = []
     def pressed(btn_idx):
         prev = _prev_buttons.get(btn_idx, 0)
@@ -489,11 +448,9 @@ def read_gamepad_controls():
         events.append("FLIP_180")
     if pressed(BTN_BACK):
         events.append("TELEPORT")
-    # NEW: L1 / LB edge -> perpendicular RED, parallel GREEN
     if pressed(BTN_LB):
         events.append("PERP_RED_PAR_GREEN")
 
-    # Hat (D-pad) not used here but we track to keep prev state synced
     if _joystick.get_numhats() > 0:
         _prev_hat = _joystick.get_hat(0)
 
@@ -506,24 +463,20 @@ def read_gamepad_controls():
         events=events
     )
 
-# ======================================================================
-
-# === Clock ===
+# steady clock. 30 fps feels right for human input without being too heavy.
 clock = pygame.time.Clock()
 
-print("Controls:")
-print("Keyboard — W: throttle, S: brake/reverse, A/D: steer, Q/E: turn signals")
-print("Keyboard — T: teleport, V: OFF + capture, R: RED + capture, G: GREEN + capture, F: flip 180°, ESC: quit")
-print("Gamepad (Xbox One) — Left Stick X: steer, RT: throttle, LT: brake, LB/RB: turn signals (hold)")
-print("Gamepad — A: GREEN + capture, B: RED + capture, X: OFF/NO LIGHT + capture, Y: flip 180°, Back: teleport")
-print("Gamepad — LB (tap): PERP RED / PAR GREEN (freeze)")
+print("controls:")
+print("keyboard — w throttle, s brake/reverse, a/d steer, q/e turn signals")
+print("keyboard — t teleport, v off+capture, r red+capture, g green+capture, f flip 180°, esc quit")
+print("gamepad — left x steer, rt throttle, lt brake, lb/rb signals (hold)")
+print("gamepad — a green+cap, b red+cap, x off/no-light+cap, y flip, back teleport, lb tap align tls")
 
-# === Main loop ===
+# main loop. we read input, apply control, update spectator, draw the hud, and process label events.
 try:
     while True:
         clock.tick(30)
 
-        # Must pump events to keep joystick state fresh
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 raise KeyboardInterrupt
@@ -534,33 +487,27 @@ try:
                     teleport_to_intersection()
                 elif event.key == pygame.K_r:
                     force_all_lights(TLS.Red)
-                    start_capture(label_value=0)      # 0 = red
+                    start_capture(label_value=0)      # red
                 elif event.key == pygame.K_g:
                     force_all_lights(TLS.Green)
-                    start_capture(label_value=1)      # 1 = green
+                    start_capture(label_value=1)      # green
                 elif event.key == pygame.K_v:
                     force_all_lights_off()
-                    start_capture(label_value=-1)     # -1 = no light
+                    start_capture(label_value=-1)     # no light
                 elif event.key == pygame.K_f:
                     flip_car_180()
 
-        # Read keyboard state (continuous)
         keys = pygame.key.get_pressed()
-
-        # Read controller state (continuous + edge events)
         gp = read_gamepad_controls()
 
         control = carla.VehicleControl()
 
-        # Current speed to decide reverse behavior on keyboard 'S'
         vel = vehicle.get_velocity()
         speed = (vel.x**2 + vel.y**2 + vel.z**2) ** 0.5
 
-        # --- Throttle / Brake merge (keyboard vs gamepad) ---
-        # Keyboard
+        # merge keyboard and gamepad throttle/brake. choose the stronger input in each category.
         kb_throttle = 0.6 if keys[pygame.K_w] else 0.0
         if keys[pygame.K_s]:
-            # Keyboard S: brake strongly if moving, else reverse hard
             if speed > 0.5:
                 kb_brake = 1.0
                 kb_reverse = False
@@ -574,64 +521,57 @@ try:
             kb_reverse = False
             kb_rev_throttle = 0.0
 
-        # Gamepad
-        gp_throttle = float(gp["throttle"])  # 0..1
-        gp_brake = float(gp["brake"])        # 0..1
+        gp_throttle = float(gp["throttle"])
+        gp_brake = float(gp["brake"])
 
-        # Merge strategy: choose the stronger input in each category
         throttle = max(kb_throttle, gp_throttle)
         brake = max(kb_brake, gp_brake)
 
-        # Steering merge
+        # merge steering. keyboard has priority if pressed; else use gamepad with light damping.
         steer = 0.0
         if keys[pygame.K_a]:
             steer -= 0.5
         if keys[pygame.K_d]:
             steer += 0.5
-        # Gamepad steering (scaled to similar range, with light damping)
         steer_gp = gp["steer"] * 0.7
-        # Prefer explicit keyboard steer if pressed; otherwise use gamepad
         if not (keys[pygame.K_a] or keys[pygame.K_d]):
             steer = steer_gp
 
-        # Indicators
+        # indicator lights reflect keyboard q/e or gamepad lb/rb
         control.left_indicator_light = keys[pygame.K_q] or gp["left_blinker"]
         control.right_indicator_light = keys[pygame.K_e] or gp["right_blinker"]
 
-        # Apply reverse logic (keyboard only, as requested)
+        # apply reverse if we are holding s at standstill. this keeps behavior intuitive.
         control.throttle = throttle
         control.brake = brake
         control.steer = np.clip(steer, -1.0, 1.0)
         control.reverse = kb_reverse
         if kb_reverse:
-            control.throttle = kb_rev_throttle  # override when reversing via keyboard
+            control.throttle = kb_rev_throttle
 
         vehicle.apply_control(control)
 
-        # Spectator follow-cam
+        # keep spectator a few meters back and slightly above. gentle chase cam.
         transform = vehicle.get_transform()
         forward_vector = transform.get_forward_vector()
         cam_location = transform.location - forward_vector * 8 + carla.Location(z=3)
         cam_rotation = carla.Rotation(pitch=-10, yaw=transform.rotation.yaw)
         spectator.set_transform(carla.Transform(cam_location, cam_rotation))
 
-        # Draw camera
+        # draw the latest camera frame
         if camera_image_surface:
             screen.blit(camera_image_surface, (0, 0))
             pygame.display.flip()
 
-        # Handle edge-triggered gamepad events AFTER apply_control so they don't block driving
+        # handle one-shot gamepad events after control so we do not block the driving loop
         for evt in gp["events"]:
             if evt == "GREEN_CAPTURE":
-                # force_all_lights(TLS.Green)
                 set_perp_red_parallel_green(invert=True)
                 start_capture(label_value=1)
             elif evt == "RED_CAPTURE":
-                # force_all_lights(TLS.Red)
                 set_perp_red_parallel_green()
                 start_capture(label_value=0)
             elif evt == "NO_LIGHT_CAPTURE":
-                # force_all_lights_off()
                 start_capture(label_value=-1)
             elif evt == "TELEPORT":
                 teleport_to_intersection()
@@ -642,7 +582,7 @@ try:
                 # set_perp_red_parallel_green()
 
 except KeyboardInterrupt:
-    print("Exiting and cleaning up...")
+    print("exiting and cleaning up...")
 
 finally:
     unforce_all_lights()
@@ -661,4 +601,4 @@ finally:
     except Exception:
         pass
     pygame.quit()
-    print("Vehicle and camera destroyed. Traffic lights restored. Goodbye!")
+    print("vehicle and camera destroyed. traffic lights restored. goodbye.")

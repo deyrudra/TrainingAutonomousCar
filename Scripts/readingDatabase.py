@@ -3,9 +3,9 @@ import matplotlib.pyplot as plt
 from matplotlib.widgets import Button, TextBox
 
 # load all data files
-images = np.load("../output/all_images.npy")
-angles = np.load("../output/all_angles.npy")
-turn_signals = np.load("../output/all_turn_signals.npy")
+images = np.load("output/all_images.npy")
+angles = np.load("output/all_angles.npy")
+turn_signals = np.load("output/all_turn_signals.npy")
 
 # Convert shape if needed (C,H,W) → (H,W,C)
 if images.ndim == 4 and images.shape[1] == 3:
