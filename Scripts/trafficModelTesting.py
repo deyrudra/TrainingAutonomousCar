@@ -223,3 +223,4 @@ text_box.on_submit(goto_index)
 # Initial draw
 show_image(index[0])
 plt.show()
+ 
