@@ -1,9 +1,21 @@
-\begin{thebibliography}{2}
+\begin{thebibliography}{7}
 \providecommand{\natexlab}[1]{#1}
 \providecommand{\url}[1]{\texttt{#1}}
 \expandafter\ifx\csname urlstyle\endcsname\relax
   \providecommand{\doi}[1]{doi: #1}\else
   \providecommand{\doi}{doi: \begingroup \urlstyle{rm}\Url}\fi
+
+\bibitem[Bojarski et~al.(2020)Bojarski, Chen, Daw, Degirmenci, Deri, Firner,
+  Flepp, Gogri, Hong, Jackel, Jia, Lee, Liu, Liu, Muller, Payne, Prasad,
+  Provodin, Roach, Rvachov, Tadimeti, van Engelen, Wen, Yang, and Yang]{3.2Ref}
+Mariusz Bojarski, Chenyi Chen, Joyjit Daw, Alperen Degirmenci, Joya Deri,
+  Bernhard Firner, Beat Flepp, Sachin Gogri, Jesse Hong, Lawrence~D. Jackel,
+  Zhenhua Jia, B.~J. Lee, Bo~Liu, Fei Liu, Urs Muller, Samuel Payne, Nischal
+  Kota~Nagendra Prasad, Artem Provodin, John Roach, Timur Rvachov, Neha
+  Tadimeti, Jesper~E. van Engelen, Haiguang Wen, Eric Yang, and Zongyi Yang.
+\newblock The {NVIDIA} pilotnet experiments.
+\newblock \emph{CoRR}, abs/2010.08776, 2020.
+\newblock URL \url{https://arxiv.org/abs/2010.08776}.
 
 \bibitem[{BrokerLink Communications}(2025)]{brokerlink2025ontario}
 {BrokerLink Communications}.
@@ -13,10 +25,43 @@
   \url{https://www.brokerlink.ca/blog/top-10-most-dangerous-and-safest-cities-to-drive-in-ontario-in-2024}.
 \newblock Accessed: 2025-08-13.
 
+\bibitem[Chen et~al.(2015)Chen, Seff, Kornhauser, and Xiao]{3.5Ref}
+Chenyi Chen, Ari Seff, Alain Kornhauser, and Jianxiong Xiao.
+\newblock Deepdriving: Learning affordance for direct perception in autonomous
+  driving.
+\newblock In \emph{2015 IEEE International Conference on Computer Vision
+  (ICCV)}, pp.\  2722--2730, 2015.
+\newblock \doi{10.1109/ICCV.2015.312}.
+\newblock URL \url{https://ieeexplore.ieee.org/document/7410669}.
+
+\bibitem[Codevilla et~al.(2017)Codevilla, M{\"{u}}ller, Dosovitskiy,
+  L{\'{o}}pez, and Koltun]{3.3Ref}
+Felipe Codevilla, Matthias M{\"{u}}ller, Alexey Dosovitskiy, Antonio~M.
+  L{\'{o}}pez, and Vladlen Koltun.
+\newblock End-to-end driving via conditional imitation learning.
+\newblock \emph{CoRR}, abs/1710.02410, 2017.
+\newblock URL \url{http://arxiv.org/abs/1710.02410}.
+
+\bibitem[Pavlitska et~al.(2023)Pavlitska, Lambing, Bangaru, and
+  Zöllner]{3.4Ref}
+Svetlana Pavlitska, Nico Lambing, Ashok~Kumar Bangaru, and J.~Marius Zöllner.
+\newblock Traffic light recognition using convolutional neural networks: A
+  survey, 2023.
+\newblock URL \url{https://arxiv.org/abs/2309.02158}.
+
 \bibitem[{Toronto Police Service}(2023)]{toronto-ksi}
 {Toronto Police Service}.
 \newblock Total ksi, 2023.
 \newblock URL \url{https://data.torontopolice.on.ca/pages/total-ksi}.
 \newblock Accessed: 2025-08-13.
+
+\bibitem[Wang et~al.(2025)Wang, Li, and Dong]{3.1Ref}
+Hai Wang, Jiayi Li, and Haoran Dong.
+\newblock A review of vision-based multi-task perception research methods for
+  autonomous vehicles.
+\newblock \emph{Sensors}, 25\penalty0 (8), 2025.
+\newblock ISSN 1424-8220.
+\newblock \doi{10.3390/s25082611}.
+\newblock URL \url{https://www.mdpi.com/1424-8220/25/8/2611}.
 
 \end{thebibliography}

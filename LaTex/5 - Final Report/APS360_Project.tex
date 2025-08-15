@@ -64,9 +64,7 @@ Total Pages: \pageref{last_page}
 
 In 2023, the Toronto Police Service reported 298 vehicle collisions which led to death (or serious injury) within that year \citep{toronto-ksi}. This data seems illogical when 
 you find out that Toronto’s rated safety score is 4.4 out of 5 compared to other cities in Ontario \citep{brokerlink2025ontario}. 
-This depressing reality of what a safe city is considered was our motivation to make this project 
-about the creation of autonomous self-driving cars. To have self-driving cars be deployed and widely 
-adopted in any urban city would significantly reduce traffic accidents. 
+This depressing reality of what a safe city is considered was our motivation to make this project about the creation of autonomous self-driving cars. To have self-driving cars be deployed and widely adopted in any urban city would significantly reduce traffic accidents.  
 
 In the short term, it is impossible to replace all human-driven cars with self-driven cars, instead a city needs to adopt the idea and slowly 
 create infrastructure which supports these self-driving cars. Machine learning is a well-suited approach for this task because having a mix of 
@@ -80,12 +78,44 @@ sensors and indicator signal state, and then predict appropriate driving behavio
 
 \begin{figure}[H] % h = here, t = top, b = bottom, p = page of floats
     \centering
-    \includegraphics[width=1.0\textwidth]{illustration.png} % Adjust path and size
+    \includegraphics[width=1.0\textwidth]{newPic.png} % Adjust path and size
     \caption{Overall illustration of the autonomous driving system.}
     \label{fig:illustrationExample}
 \end{figure}
 
 \section{Background \& Related Work}
+Our autonomous self-driving car is a multimodal system, which predicts three outputs: steering angle, speed, and traffic light colour. 
+This formulation puts our work in between two research fields in autonomous driving: raw-sensory input driving and control-oriented signalled driving. 
+The following is an overview of five works related to these fields.
+
+\subsection{Vision-Based Multi-task Perception \citep{3.1Ref}}
+Recent studies have shown that multi-task learning can improve efficiency in autonomous driving by allowing a shared backbone to 
+handle several perception and control tasks simultaneously. For example, models such as MultiNet and YOLOP perform object detection and 
+lane segmentation, showing that the feature sharing reduces redundancy while maintaining real-time performance. Inspired by this approach, 
+our project adopts a multi-head architecture that predicts steering, speed, and traffic-light state from a single camera input.
+
+\subsection{NVIDIA PilotNet Experiments \citep{3.2Ref}}
+NVIDIA’s PilotNet by Bojarski et al. demonstrated that a CNN could map front-facing camera images 
+directly to steering commands for lane detection and following. 
+This showed that deep networks could replace hand-engineered pipelines for this task.
+
+\subsection{Conditional Imitation Learning \citep{3.3Ref}}
+Codevilla introduced Conditional Imitation Learning (CIL), which extended autonomous driving by conditioning the policy 
+on higher-level navigation commands. The work showed that multi-task learning and structured outputs could be generalized 
+in simulated urban driving. In our approach, we trained primarily via imitation learning, producing three outputs that were 
+fed into a higher-level navigation module. This module applies conditional statements, which then control the car.
+
+\subsection{Traffic Light Detection \citep{3.4Ref}}
+The team uses deep CNNs to classify signal states from camera crops. The problem of detecting and classifying traffic lights is a 
+well-studied problem, and hard-engineered pipelines require specialized detectors and regional proposals. This showed that using a 
+CNN a lightweight traffic-light classifier can be created, and that is what we did with high accuracy.  
+
+\subsection{DeepDriving: Learning Affordance in Autonomous Driving \citep{3.5Ref}}
+DeepDriving is an approach for autonomous driving which predicts intermediate affordances, such as the distance to 
+lane markings or the state of traffic lights, rather than controlling the car directly. We extended this idea and used 
+models to predict steering angles, traffic-light states, and speed, which is then passed through a higher-level navigation 
+command module, which then controls the car after conditions are met.
+
 
 \section{Data Processing}
 
@@ -117,7 +147,7 @@ This was done to ensure that the images can be used with the ResNet18 backbone, 
 \begin{figure}[H] % h = here, t = top, b = bottom, p = page of floats
     \centering
     \includegraphics[width=1.0\textwidth]{example of images in dataset.png} % Adjust path and size
-    \caption{Preprocessed images examples on the left Steering/Velocity dataset image, and on the right Intersection Light image.}
+    \caption{Preprocessed images: Steering/Velocity image (left), Intersection Light image (right).}
     \label{fig:datasetExample}
 \end{figure}
 
@@ -134,7 +164,7 @@ This data was collected on an unused map (not seen in training or validation), a
 \vspace{0.5em}
 \begin{tabular}{|l|p{2.5cm}|p{2.5cm}|r|r|}
 \hline
-\textbf{Dataset Type} & \centering\textbf{Training Samples} \newline \textbf{(80\%)} & \centering\textbf{Validation Samples} \newline \textbf{(20\%)} & \textbf{Test Samples} & \textbf{Total Samples} \\ \hline
+\textbf{Dataset Type} & \centering\textbf{Training   Samples} \newline \textbf{(80\%)} & \centering\textbf{Validation    Samples} \newline \textbf{(20\%)} & \textbf{Test Samples} & \textbf{Total Samples} \\ \hline
 Steering Dataset & \centering 17,898 & \centering 4,474 & 6,386 & 28,758 \\ \hline
 Velocity Dataset & \centering 56,000 & \centering 14,000 & 8,000 & 78,000 \\ \hline
 Intersection Light Dataset & \centering 1,966 & \centering 491 & 492 & 2,949 \\ \hline
@@ -191,7 +221,7 @@ Cross-Entropy loss drives this classification task.
 
 \subsection{Parameter Breakdown}
 
-Table ~\ref{fig:LayerTable} summarizes the custom fully connected layers in each prediction head, excluding the ResNet-18 backbone parameters (~11M).
+\autoref{fig:LayerTable} summarizes the custom fully connected layers in each prediction head, excluding the ResNet-18 backbone parameters (~11M).
 
 \begin{table}[H] % h = here, t = top, b = bottom, p = page of floats
     \centering
@@ -214,7 +244,7 @@ called CARLA, to obtain camera images, turn signal inputs, and our ground truth 
 
 \subsection{Ridge Regression with Image Features}
 
-In the model outlined in Figure~\ref{fig:diagram}, the grayscale images (of shape 160x120) were flattened into 1D feature vectors and normalized. The features themselves
+In the model outlined in \autoref{fig:diagram}, the grayscale images (of shape 160x120) were flattened into 1D feature vectors and normalized. The features themselves
 represent the visual input of the car's front-facing camera. Additionally, left and right turning signals were captured as an
 additional feature; combining this with our flattened grayscale images we were left with a numpy array of shape $N \times 19201$,
 where $N$ represents the number of images, and 19201 are the number of feature column vectors. The Ridge Regression algorithm was
@@ -245,7 +275,7 @@ driving. By obtaining the average MSE and the average $R^2$ score, our fourth mo
 \end{figure}
 
 \subsection{Overfitting and Model Quality}
-As shown in Figure~\ref{fig:model4learningcurve}, the results suggest some overfitting due to the model's tendency
+As shown in \autoref{fig:model4learningcurve}, the results suggest some overfitting due to the model's tendency
 to perform much better on training data than unseen data. This is reasonable since the training data frames, 
 are all consecutive in nature, and the dataset used isn't extremely large either. In addition, as the training size
 increases the gap between Test and Train MSEs narrows, suggesting that with more data the model will generalize better. 
@@ -255,7 +285,7 @@ The final test MSE is (~0.0025) which is quite low, meaning the model performs w
 \subsection{Qualitative Observations}
 When running the steering angle prediction model in the CARLA simulator, the model exhibited promising behaviour in terms of
 autonomous driving capabilities, however with large limitations. The car was able to drive freely, using the model's predictions
-from the front-facing grayscale camera images and turn signals provided by the user. In Figure~\ref{fig:model4demo} we can see 
+from the front-facing grayscale camera images and turn signals provided by the user. In \autoref{fig:model4demo} we can see
 the model taking a left turn in an intersection.
 
 \begin{itemize}
@@ -277,7 +307,7 @@ the model taking a left turn in an intersection.
 \end{figure}
 
 
-\section{Evaluate Model on New Data}
+\section{Evaluation on Test Data}
 
 \section{Discussion of Results}
 
