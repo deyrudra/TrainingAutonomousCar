@@ -62,15 +62,15 @@ Total Pages: \pageref{last_page}
 
 \section{Introduction}
 
-In 2023, the Toronto Police Service reported 298 vehicle collisions which led to death (or serious injury) within that year \citep{toronto-ksi}. This data seems illogical when 
-you find out that Toronto’s rated safety score is 4.4 out of 5 compared to other cities in Ontario \citep{brokerlink2025ontario}. 
-This depressing reality of what a safe city is considered was our motivation to make this project about the creation of autonomous self-driving cars. To have self-driving cars be deployed and widely adopted in any urban city would significantly reduce traffic accidents.  
+In 2023, the Toronto Police Service reported 298 vehicle collisions which led to death (or serious injury) within that year \citep{toronto-ksi}. This data seems illogical when
+you find out that Toronto’s rated safety score is 4.4 out of 5 compared to other cities in Ontario \citep{brokerlink2025ontario}.
+This depressing reality of what a safe city is considered was our motivation to make this project about the creation of autonomous self-driving cars. To have self-driving cars be deployed and widely adopted in any urban city would significantly reduce traffic accidents.
 
-In the short term, it is impossible to replace all human-driven cars with self-driven cars, instead a city needs to adopt the idea and slowly 
-create infrastructure which supports these self-driving cars. Machine learning is a well-suited approach for this task because having a mix of 
-self-driven cars and human-driven cars ultimately still involves human error, and thus requires on the spot judgement. A traditional rule based 
-system will struggle to handle the wide variety of edge cases that occur on the road. Deep learning on the other hand enables the car to learn 
-complex patterns from data and make rapid decisions. By using CNNs we can create a system which interprets multimodal inputs such as RGB camera 
+In the short term, it is impossible to replace all human-driven cars with self-driven cars, instead a city needs to adopt the idea and slowly
+create infrastructure which supports these self-driving cars. Machine learning is a well-suited approach for this task because having a mix of
+self-driven cars and human-driven cars ultimately still involves human error, and thus requires on the spot judgement. A traditional rule based
+system will struggle to handle the wide variety of edge cases that occur on the road. Deep learning on the other hand enables the car to learn
+complex patterns from data and make rapid decisions. By using CNNs we can create a system which interprets multimodal inputs such as RGB camera
 sensors and indicator signal state, and then predict appropriate driving behaviour.
 
 \section{Illustration}
@@ -84,59 +84,59 @@ sensors and indicator signal state, and then predict appropriate driving behavio
 \end{figure}
 
 \section{Background \& Related Work}
-Our autonomous self-driving car is a multimodal system, which predicts three outputs: steering angle, speed, and traffic light colour. 
-This formulation puts our work in between two research fields in autonomous driving: raw-sensory input driving and control-oriented signalled driving. 
+Our autonomous self-driving car is a multimodal system, which predicts three outputs: steering angle, speed, and traffic light colour.
+This formulation puts our work in between two research fields in autonomous driving: raw-sensory input driving and control-oriented signalled driving.
 The following is an overview of five works related to these fields.
 
 \subsection{Vision-Based Multi-task Perception \citep{3.1Ref}}
-Recent studies have shown that multi-task learning can improve efficiency in autonomous driving by allowing a shared backbone to 
-handle several perception and control tasks simultaneously. For example, models such as MultiNet and YOLOP perform object detection and 
-lane segmentation, showing that the feature sharing reduces redundancy while maintaining real-time performance. Inspired by this approach, 
+Recent studies have shown that multi-task learning can improve efficiency in autonomous driving by allowing a shared backbone to
+handle several perception and control tasks simultaneously. For example, models such as MultiNet and YOLOP perform object detection and
+lane segmentation, showing that the feature sharing reduces redundancy while maintaining real-time performance. Inspired by this approach,
 our project adopts a multi-head architecture that predicts steering, speed, and traffic-light state from a single camera input.
 
 \subsection{NVIDIA PilotNet Experiments \citep{3.2Ref}}
-NVIDIA’s PilotNet by Bojarski et al. demonstrated that a CNN could map front-facing camera images 
-directly to steering commands for lane detection and following. 
+NVIDIA’s PilotNet by Bojarski et al. demonstrated that a CNN could map front-facing camera images
+directly to steering commands for lane detection and following.
 This showed that deep networks could replace hand-engineered pipelines for this task.
 
 \subsection{Conditional Imitation Learning \citep{3.3Ref}}
-Codevilla introduced Conditional Imitation Learning (CIL), which extended autonomous driving by conditioning the policy 
-on higher-level navigation commands. The work showed that multi-task learning and structured outputs could be generalized 
-in simulated urban driving. In our approach, we trained primarily via imitation learning, producing three outputs that were 
+Codevilla introduced Conditional Imitation Learning (CIL), which extended autonomous driving by conditioning the policy
+on higher-level navigation commands. The work showed that multi-task learning and structured outputs could be generalized
+in simulated urban driving. In our approach, we trained primarily via imitation learning, producing three outputs that were
 fed into a higher-level navigation module. This module applies conditional statements, which then control the car.
 
 \subsection{Traffic Light Detection \citep{3.4Ref}}
-The team uses deep CNNs to classify signal states from camera crops. The problem of detecting and classifying traffic lights is a 
-well-studied problem, and hard-engineered pipelines require specialized detectors and regional proposals. This showed that using a 
-CNN a lightweight traffic-light classifier can be created, and that is what we did with high accuracy.  
+The team uses deep CNNs to classify signal states from camera crops. The problem of detecting and classifying traffic lights is a
+well-studied problem, and hard-engineered pipelines require specialized detectors and regional proposals. This showed that using a
+CNN a lightweight traffic-light classifier can be created, and that is what we did with high accuracy.
 
 \subsection{DeepDriving: Learning Affordance in Autonomous Driving \citep{3.5Ref}}
-DeepDriving is an approach for autonomous driving which predicts intermediate affordances, such as the distance to 
-lane markings or the state of traffic lights, rather than controlling the car directly. We extended this idea and used 
-models to predict steering angles, traffic-light states, and speed, which is then passed through a higher-level navigation 
+DeepDriving is an approach for autonomous driving which predicts intermediate affordances, such as the distance to
+lane markings or the state of traffic lights, rather than controlling the car directly. We extended this idea and used
+models to predict steering angles, traffic-light states, and speed, which is then passed through a higher-level navigation
 command module, which then controls the car after conditions are met.
 
 
 \section{Data Processing}
 
-Data was collected from the CARLA simulator through the use of cameras and sensors, which makes up three different dataset types. We then normalized and resized the image as part of the preprocessing setup to implement the data into our network. Data augmentation techniques were then applied to force the traffic light model to learn deeper patterns. 
+Data was collected from the CARLA simulator through the use of cameras and sensors, which makes up three different dataset types. We then normalized and resized the image as part of the preprocessing setup to implement the data into our network. Data augmentation techniques were then applied to force the traffic light model to learn deeper patterns.
 
 \subsection{Data Collection and Cleaning}
-This project required the team to gather five total datasets through the CARLA simulator: steering, velocity, manual driving, traffic light and finally a test dataset which included data from all four types of datasets. Four Python scripts were written to enable the process by which the data was collected. We attached RGB camera sensors to the car to record at 10 frames per second (FPS) as the car travels around designated maps, either through the built-in autopilot functionality or manual driving (for the manual driving dataset). In addition to the camera, sensors on the car collect necessary data for said dataset, such as velocity at that frame. The data collected from the sensors was used for ground truth labels, allowing the model to be trained. A single dataset is made up of various maps, which is done by saving an individual map’s data as numpy files, then concatenating all the maps sequentially, creating one large dataset. 
+This project required the team to gather five total datasets through the CARLA simulator: steering, velocity, manual driving, traffic light and finally a test dataset which included data from all four types of datasets. Four Python scripts were written to enable the process by which the data was collected. We attached RGB camera sensors to the car to record at 10 frames per second (FPS) as the car travels around designated maps, either through the built-in autopilot functionality or manual driving (for the manual driving dataset). In addition to the camera, sensors on the car collect necessary data for said dataset, such as velocity at that frame. The data collected from the sensors was used for ground truth labels, allowing the model to be trained. A single dataset is made up of various maps, which is done by saving an individual map’s data as numpy files, then concatenating all the maps sequentially, creating one large dataset.
 
 To ensure the data was not corrupted, scripts were created to visualize the images along with the associated ground truth labels. A numpy file viewer was also used to ensure the ground truth labels varied, meaning that the dataset was diverse.
 
 \begin{table}[h]
-\centering
-\caption{Datasets and their associated data types}
-\vspace{0.5em}
-\begin{tabular}{|p{5cm}|p{7cm}|}
-\hline
-\textbf{Type of Dataset} & \textbf{Data Collected in a Frame} \\ \hline
-Steering Dataset (Autopilot and Manual Driving) & Images, Angles, Turn Signals \\ \hline
-Velocity Dataset & Images, Velocities \\ \hline
-Intersection Light Dataset & Images, State Labels \\ \hline
-\end{tabular}
+    \centering
+    \caption{Datasets and their associated data types}
+    \vspace{0.5em}
+    \begin{tabular}{|p{5cm}|p{7cm}|}
+        \hline
+        \textbf{Type of Dataset}                        & \textbf{Data Collected in a Frame} \\ \hline
+        Steering Dataset (Autopilot and Manual Driving) & Images, Angles, Turn Signals       \\ \hline
+        Velocity Dataset                                & Images, Velocities                 \\ \hline
+        Intersection Light Dataset                      & Images, State Labels               \\ \hline
+    \end{tabular}
 \end{table}
 
 \subsection{Data Preprocessing}
@@ -154,31 +154,31 @@ This was done to ensure that the images can be used with the ResNet18 backbone, 
 
 \subsection{Data Distribution}
 
-The datasets were split 80/20 for the training and validation sets, respectively, which ensured we have a large set of data to train the model, while having enough data for validating its performance. In addition, a separate test dataset was collected, containing a number of samples of the various types of data. 
-This data was collected on an unused map (not seen in training or validation), allowing the team to test the performance of the model on unseen data. All datasets were uploaded to a shared OneDrive so all members can access them as needed. Below, \autoref{tab:dataset_distribution} shows the distribution of the data. 
+The datasets were split 80/20 for the training and validation sets, respectively, which ensured we have a large set of data to train the model, while having enough data for validating its performance. In addition, a separate test dataset was collected, containing a number of samples of the various types of data.
+This data was collected on an unused map (not seen in training or validation), allowing the team to test the performance of the model on unseen data. All datasets were uploaded to a shared OneDrive so all members can access them as needed. Below, \autoref{tab:dataset_distribution} shows the distribution of the data.
 
 \begin{table}[H]
-\centering
-\caption{Dataset Distribution}
-\label{tab:dataset_distribution}
-\vspace{0.5em}
-\begin{tabular}{|l|p{2.5cm}|p{2.5cm}|r|r|}
-\hline
-\textbf{Dataset Type} & \centering\textbf{Training   Samples} \newline \textbf{(80\%)} & \centering\textbf{Validation    Samples} \newline \textbf{(20\%)} & \textbf{Test Samples} & \textbf{Total Samples} \\ \hline
-Steering Dataset & \centering 17,898 & \centering 4,474 & 6,386 & 28,758 \\ \hline
-Velocity Dataset & \centering 56,000 & \centering 14,000 & 8,000 & 78,000 \\ \hline
-Intersection Light Dataset & \centering 1,966 & \centering 491 & 492 & 2,949 \\ \hline
-\textbf{Total} & \centering\textbf{75,864} & \centering\textbf{18,965} & \textbf{14,878} & \textbf{109,707} \\ \hline
-\end{tabular}
+    \centering
+    \caption{Dataset Distribution}
+    \label{tab:dataset_distribution}
+    \vspace{0.5em}
+    \begin{tabular}{|l|p{2.5cm}|p{2.5cm}|r|r|}
+        \hline
+        \textbf{Dataset Type}      & \centering\textbf{Training   Samples} \newline \textbf{(80\%)} & \centering\textbf{Validation    Samples} \newline \textbf{(20\%)} & \textbf{Test Samples} & \textbf{Total Samples} \\ \hline
+        Steering Dataset           & \centering 17,898                                              & \centering 4,474                                                  & 6,386                 & 28,758                 \\ \hline
+        Velocity Dataset           & \centering 56,000                                              & \centering 14,000                                                 & 8,000                 & 78,000                 \\ \hline
+        Intersection Light Dataset & \centering 1,966                                               & \centering 491                                                    & 492                   & 2,949                  \\ \hline
+        \textbf{Total}             & \centering\textbf{75,864}                                      & \centering\textbf{18,965}                                         & \textbf{14,878}       & \textbf{109,707}       \\ \hline
+    \end{tabular}
 \end{table}
 
 \subsection{Data Augmentation}
 
 The team iterated through different data augmentation techniques when training the models, and in the end decided to only augment the intersection light dataset for training.
 
-For the steering and velocity models, the environmental context and surrounding structures are critical for how the model learns driving behaviours. If augmentations were applied to the images in the associated datasets, it would cause the model to pick up on the wrong patterns and learn bad driving behaviours, such as driving on the opposite side of the road if the augmentation was a horizontal flip. 
+For the steering and velocity models, the environmental context and surrounding structures are critical for how the model learns driving behaviours. If augmentations were applied to the images in the associated datasets, it would cause the model to pick up on the wrong patterns and learn bad driving behaviours, such as driving on the opposite side of the road if the augmentation was a horizontal flip.
 
-In contrast, the intersection light dataset benefits from augmentations.  A mix of augmentations was applied to ensure that the model learns the correct signal patterns. These augmentation techniques include brightness and contrast adjustment, horizontal flips, random rotation and cutouts. These augmentations, shown in \autoref{fig:dataaugmentation}, allowed the model to learn deeper traffic light features,  significantly improving its effectiveness. 
+In contrast, the intersection light dataset benefits from augmentations.  A mix of augmentations was applied to ensure that the model learns the correct signal patterns. These augmentation techniques include brightness and contrast adjustment, horizontal flips, random rotation and cutouts. These augmentations, shown in \autoref{fig:dataaugmentation}, allowed the model to learn deeper traffic light features,  significantly improving its effectiveness.
 
 \begin{figure}[H] % h = here, t = top, b = bottom, p = page of floats
     \centering
@@ -189,8 +189,8 @@ In contrast, the intersection light dataset benefits from augmentations.  A mix 
 
 \section{Architecture}
 
-As shown in \autoref{fig:GoogleDrawingPrimaryArchyDiagram} , our project uses three separate deep learning models, velocity prediction, traffic light classification, and steering angle prediction. 
-All models are built on a shared convolutional backbone of ResNet-18 which is pretrained on ImageNet. ResNet was selected for its strong low-level and mid-level feature extraction ability, particularly in structured domains such as road images. 
+As shown in \autoref{fig:GoogleDrawingPrimaryArchyDiagram} , our project uses three separate deep learning models, velocity prediction, traffic light classification, and steering angle prediction.
+All models are built on a shared convolutional backbone of ResNet-18 which is pretrained on ImageNet. ResNet was selected for its strong low-level and mid-level feature extraction ability, particularly in structured domains such as road images.
 
 \begin{figure}[H] % h = here, t = top, b = bottom, p = page of floats
     \centering
@@ -201,22 +201,22 @@ All models are built on a shared convolutional backbone of ResNet-18 which is pr
 
 \subsection{Transfer Learning with ResNet-18}
 
-The ResNet-18 backbone processes each 224x224 dimensioned RGB frame to produce a 512- dimensional feature vector. 
+The ResNet-18 backbone processes each 224x224 dimensioned RGB frame to produce a 512- dimensional feature vector.
 For our application, only the convolutional layers of ResNet-18 are retained. In the early stages of training, these layers are frozen to preserve pretrained weights, with selective unfreezing applied during fine-tuning to adapt to the driving domain.
 
 \subsection{Velocity Regressor}
-The velocity regressor receives the 512-dimensional feature vector and processes it through a two-layer fully connected network with a ReLU activation between layers. 
-The first layer reduces dimensionality from 512 to 256 units, and the second produces a single scalar velocity value. Mean Squared Error (MSE) 
+The velocity regressor receives the 512-dimensional feature vector and processes it through a two-layer fully connected network with a ReLU activation between layers.
+The first layer reduces dimensionality from 512 to 256 units, and the second produces a single scalar velocity value. Mean Squared Error (MSE)
 loss is applied during training to encourage accurate continuous speed prediction.
 
 \subsection{Steering Classifier}
-For steering control, the 512-dimensional backbone output is concatenated with a 16-dimensional learned turn-signal embedding, producing a 528-dimensional input vector. 
-This vector passes through a fully connected layer reducing it to 256 units, followed by a ReLU activation, and finally a fully connected layer outputting logits for 15 discrete steering angle bins. 
+For steering control, the 512-dimensional backbone output is concatenated with a 16-dimensional learned turn-signal embedding, producing a 528-dimensional input vector.
+This vector passes through a fully connected layer reducing it to 256 units, followed by a ReLU activation, and finally a fully connected layer outputting logits for 15 discrete steering angle bins.
 Cross-Entropy loss is used for classification
 
 \subsection{Traffic Light Classifier}
 
-The traffic light classifier head reduces the 512-dimensional input to 256 via a fully connected layer with ReLU activation, followed by a final fully connected layer outputting probabilities for three traffic light states (Red, Green and No-Light). 
+The traffic light classifier head reduces the 512-dimensional input to 256 via a fully connected layer with ReLU activation, followed by a final fully connected layer outputting probabilities for three traffic light states (Red, Green and No-Light).
 Cross-Entropy loss drives this classification task.
 
 \subsection{Parameter Breakdown}
@@ -236,7 +236,7 @@ Cross-Entropy loss drives this classification task.
 
 \section{Baseline Model}
 
-Using a Ridge Regression Algorithm we created a baseline model that predicts steering angles for a self-driving car 
+Using a Ridge Regression Algorithm we created a baseline model that predicts steering angles for a self-driving car
 from grayscale camera images and turn signal inputs. This baseline model serves as a simple, interpretable baseline
 such that we can compare our more complex primary neural network model later. To collect data, we used a simulator
 called CARLA, to obtain camera images, turn signal inputs, and our ground truth label for the steering angles.
@@ -250,7 +250,7 @@ additional feature; combining this with our flattened grayscale images we were l
 where $N$ represents the number of images, and 19201 are the number of feature column vectors. The Ridge Regression algorithm was
 selected because it penalized large coefficients ($L_2$ norm), allowing for a generalized model. A series of models were trained
 with different regularization strengths ($\alpha$), and the performance was evaluated using Mean Squared Error (MSE) and $R^2$ Score
-on a held-out 20\% test set. 
+on a held-out 20\% test set.
 
 \begin{figure}[H] % h = here, t = top, b = bottom, p = page of floats
     \centering
@@ -262,9 +262,9 @@ on a held-out 20\% test set.
 
 \subsection{Minimal Tuning of $\alpha$}
 The only hyperparameter needing to be tuned was the regularization strength for the Ridge Regression Algorithm. This was manually tuned,
-and thus no validation set was used. A small set of candidate values for $\alpha$ was chosen: $\alpha \text{ } \epsilon \text{ } 
-\{ 1, 10, 100, 250, 1000, 8000\}$ With each value of $\alpha$, the model was trained and tested with a dataset of 15 minutes of simulated
-driving. By obtaining the average MSE and the average $R^2$ score, our fourth model of $\alpha = 100$ came out to be the best. 
+and thus no validation set was used. A small set of candidate values for $\alpha$ was chosen: $\alpha \text{ } \epsilon \text{ }
+    \{ 1, 10, 100, 250, 1000, 8000\}$ With each value of $\alpha$, the model was trained and tested with a dataset of 15 minutes of simulated
+driving. By obtaining the average MSE and the average $R^2$ score, our fourth model of $\alpha = 100$ came out to be the best.
 
 
 \begin{figure}[H] % h = here, t = top, b = bottom, p = page of floats
@@ -276,9 +276,9 @@ driving. By obtaining the average MSE and the average $R^2$ score, our fourth mo
 
 \subsection{Overfitting and Model Quality}
 As shown in \autoref{fig:model4learningcurve}, the results suggest some overfitting due to the model's tendency
-to perform much better on training data than unseen data. This is reasonable since the training data frames, 
+to perform much better on training data than unseen data. This is reasonable since the training data frames,
 are all consecutive in nature, and the dataset used isn't extremely large either. In addition, as the training size
-increases the gap between Test and Train MSEs narrows, suggesting that with more data the model will generalize better. 
+increases the gap between Test and Train MSEs narrows, suggesting that with more data the model will generalize better.
 The final test MSE is (~0.0025) which is quite low, meaning the model performs well overall after training on the data.
 
 
@@ -289,13 +289,13 @@ from the front-facing grayscale camera images and turn signals provided by the u
 the model taking a left turn in an intersection.
 
 \begin{itemize}
-  \item \textbf{Turn Signal Response:} The car consistently turned in the correct direction when prompted, showing that the model incorporated turn signal input effectively.
+    \item \textbf{Turn Signal Response:} The car consistently turned in the correct direction when prompted, showing that the model incorporated turn signal input effectively.
 
-  \item \textbf{Obstacle Avoidance:} The vehicle generally avoided obstacles but occasionally clipped walls, suggesting basic spatial awareness but limited precision.
+    \item \textbf{Obstacle Avoidance:} The vehicle generally avoided obstacles but occasionally clipped walls, suggesting basic spatial awareness but limited precision.
 
-  \item \textbf{Lane-Keeping:} The car had trouble staying within lane boundaries, often drifting, especially during turns or on complex roads.
+    \item \textbf{Lane-Keeping:} The car had trouble staying within lane boundaries, often drifting, especially during turns or on complex roads.
 
-  \item \textbf{Map Generalization:} Despite limitations, the car performed reasonably well across different map layouts, showing decent control over turns.
+    \item \textbf{Map Generalization:} Despite limitations, the car performed reasonably well across different map layouts, showing decent control over turns.
 \end{itemize}
 
 
@@ -311,9 +311,52 @@ the model taking a left turn in an intersection.
 
 \section{Discussion of Results}
 
+The results that the team collected show that our models performed well given the specific tasks that
+they had to complete. The steering classifier achieved an accuracy of 53.10\%, the intersection light
+classifier achieved 99.80\%, and the velocity regressor had a R\textsuperscript{2} of 0.8524. The steering
+classifier accuracy is still impressive because of how difficult it is to predict steering angles and
+the different driving conditions. These results show that our system works well together and has
+achieved great results.
+
+We implemented multimodal data by combining visual and sensor data. This was interesting because of how
+the models improved significantly. The system was able to capture crucial information in certain driving
+situations because of the multimodal data. This improved the system’s accuracy because it helped provide
+more context for the models.
+
+An important lesson that the team learned was to balance regression and classification loss. If this
+were done incorrectly, then one model would have overpowered the other ones. By tuning the weights,
+we improved the model's learning and achieved better overall results.
+
+Overall, the team believes this system performs well and is able to accomplish its main goal, which is
+autonomous driving. The lessons learned from this project not only improved the system but also taught
+us about multimodal design, optimization, and data handling.
+
+
 \section{Ethical Considerations}
 
+If humans are over reliant on this system, they could be unprepared in scenarios where the system fails.
+Autonomous driving is considered an imperfect system. It will make mistakes, but a human driver should
+know how to step in and correct them. Furthermore, someone could decide to modify the system to follow
+unsafe driving habits. This would be a misuse of the system and raises safety concerns.Lastly, there are limitations to our model because it was tested more on urban maps. So, it adapts to the
+roads and driving style of an urban area. This affects how the model works in rural areas because the roads
+do not follow the same pattern. Also, this limitation raises concerns for safety because it was not tested
+properly in different settings.
+
+
 \section{Project Difficulty / Quality}
+
+Our project was difficult because it required us to integrate 3 models to handle completely different
+tasks. The team used a steering classifier, an intersection light classifier, and a velocity regression
+model. Each model collected its own data which was used to optimize the system. The steering classifier
+relies on various conditions, such as the angle of the road when turning, unpredictable behaviour from
+generated traffic, and the environment. Even with all these conditions, our model achieved an accuracy
+of 53.10\%. This is impressive considering how the input is always changing. Collecting images of the traffic light was difficult because it is a small object in the simulator.
+Furthermore, the team was able to implement a multimodal architecture. This makes the project
+significantly more difficult because now you have to make sure the 3 models work together. Visual and
+sensor data were combined to improve the performance of our system. Also, the team tested data
+preprocessing and augmentation to handle various driving environments. Overall, the team learned a lot from developing a multimodal architecture. The models perform well given
+the difficulty of the project.
+
 
 
 \label{last_page}
