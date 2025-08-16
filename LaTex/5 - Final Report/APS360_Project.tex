@@ -248,8 +248,7 @@ Cross-Entropy loss drives this classification task.
 
 Using a Ridge Regression Algorithm we created a baseline model that predicts steering angles for a self-driving car
 from grayscale camera images and turn signal inputs. This baseline model serves as a simple, interpretable baseline
-such that we can compare our more complex primary neural network model later. To collect data, we used a simulator
-called CARLA, to obtain camera images, turn signal inputs, and our ground truth label for the steering angles.
+such that we can compare our more complex primary neural network model later. 
 
 
 \subsection{Ridge Regression with Image Features}
@@ -257,10 +256,8 @@ called CARLA, to obtain camera images, turn signal inputs, and our ground truth 
 In the model outlined in \autoref{fig:diagram}, the grayscale images (of shape 160x120) were flattened into 1D feature vectors and normalized. The features themselves
 represent the visual input of the car's front-facing camera. Additionally, left and right turning signals were captured as an
 additional feature; combining this with our flattened grayscale images we were left with a numpy array of shape $N \times 19201$,
-where $N$ represents the number of images, and 19201 are the number of feature column vectors. The Ridge Regression algorithm was
-selected because it penalized large coefficients ($L_2$ norm), allowing for a generalized model. A series of models were trained
-with different regularization strengths ($\alpha$), and the performance was evaluated using Mean Squared Error (MSE) and $R^2$ Score
-on a held-out 20\% test set.
+where $N$ represents the number of images, and 19201 are the number of feature column vectors.  The performance was evaluated using Mean Squared 
+Error (MSE) and $R^2$ Score on a held-out 20\% test set.
 
 \begin{figure}[H] % h = here, t = top, b = bottom, p = page of floats
     \centering
@@ -286,27 +283,15 @@ driving. By obtaining the average MSE and the average $R^2$ score, our fourth mo
 
 \subsection{Overfitting and Model Quality}
 As shown in \autoref{fig:model4learningcurve}, the results suggest some overfitting due to the model's tendency
-to perform much better on training data than unseen data. This is reasonable since the training data frames,
-are all consecutive in nature, and the dataset used isn't extremely large either. In addition, as the training size
+to perform much better on training data than unseen data. In addition, as the training size
 increases the gap between Test and Train MSEs narrows, suggesting that with more data the model will generalize better.
-The final test MSE is (~0.0025) which is quite low, meaning the model performs well overall after training on the data.
 
 
 \subsection{Qualitative Observations}
 When running the steering angle prediction model in the CARLA simulator, the model exhibited promising behaviour in terms of
-autonomous driving capabilities, however with large limitations. The car was able to drive freely, using the model's predictions
-from the front-facing grayscale camera images and turn signals provided by the user. In \autoref{fig:model4demo} we can see
-the model taking a left turn in an intersection.
-
-\begin{itemize}
-    \item \textbf{Turn Signal Response:} The car consistently turned in the correct direction when prompted, showing that the model incorporated turn signal input effectively.
-
-    \item \textbf{Obstacle Avoidance:} The vehicle generally avoided obstacles but occasionally clipped walls, suggesting basic spatial awareness but limited precision.
-
-    \item \textbf{Lane-Keeping:} The car had trouble staying within lane boundaries, often drifting, especially during turns or on complex roads.
-
-    \item \textbf{Map Generalization:} Despite limitations, the car performed reasonably well across different map layouts, showing decent control over turns.
-\end{itemize}
+autonomous driving capabilities, however with large limitations. The car consistently turned in the correct direction when prompted,
+it generally avoided obstacles but occasionally clipped walls. This suggests basic spatial awareness but limited precision. The car had trouble staying within lane boundaries,
+often drifting, especially during turns or on complex roads. Overall, despite limitations, the car performed reasonably well across different map layouts, showing decent control over turns.
 
 
 \begin{figure}[H] % h = here, t = top, b = bottom, p = page of floats
