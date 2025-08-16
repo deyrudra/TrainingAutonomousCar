@@ -122,22 +122,31 @@ command module, which then controls the car after conditions are met.
 Data was collected from the CARLA simulator through the use of cameras and sensors, which makes up three different dataset types. We then normalized and resized the image as part of the preprocessing setup to implement the data into our network. Data augmentation techniques were then applied to force the traffic light model to learn deeper patterns.
 
 \subsection{Data Collection and Cleaning}
-This project required the team to gather five total datasets through the CARLA simulator: steering, velocity, manual driving, traffic light and finally a test dataset which included data from all four types of datasets. Four Python scripts were written to enable the process by which the data was collected. We attached RGB camera sensors to the car to record at 10 frames per second (FPS) as the car travels around designated maps, either through the built-in autopilot functionality or manual driving (for the manual driving dataset). In addition to the camera, sensors on the car collect necessary data for said dataset, such as velocity at that frame. The data collected from the sensors was used for ground truth labels, allowing the model to be trained. A single dataset is made up of various maps, which is done by saving an individual map’s data as numpy files, then concatenating all the maps sequentially, creating one large dataset.
+This project required the team to gather five total datasets through the CARLA simulator: steering, velocity, traffic light, manual driving
+and finally a test dataset which included data from all four types of datasets. Four Python scripts were written to enable the process by 
+which the data was collected. We attached RGB camera sensors to the car to record at 10 frames per second (FPS) as the car travels around 
+designated maps, either through the built-in autopilot functionality or manual driving (for the manual driving dataset). In addition to the camera, 
+sensors on the car collect necessary data for said dataset, such as velocity at that frame. The data collected from the sensors was used for ground 
+truth labels, allowing the model to be trained. A single dataset is made up of various maps, which is done by saving an individual map’s data as numpy 
+files, then concatenating all the maps sequentially, creating one large dataset. Along with this data, our model needs live data collection for the steering signals.
+These turn signals are collected through a keyboard input, and sent to the model to bias the turning angle.
 
 To ensure the data was not corrupted, scripts were created to visualize the images along with the associated ground truth labels. A numpy file viewer was also used to ensure the ground truth labels varied, meaning that the dataset was diverse.
 
 \begin{table}[h]
-    \centering
-    \caption{Datasets and their associated data types}
-    \vspace{0.5em}
-    \begin{tabular}{|p{5cm}|p{7cm}|}
-        \hline
-        \textbf{Type of Dataset}                        & \textbf{Data Collected in a Frame} \\ \hline
-        Steering Dataset (Autopilot and Manual Driving) & Images, Angles, Turn Signals       \\ \hline
-        Velocity Dataset                                & Images, Velocities                 \\ \hline
-        Intersection Light Dataset                      & Images, State Labels               \\ \hline
-    \end{tabular}
+\centering
+\caption{Datasets and their associated data types}
+\vspace{0.5em}
+\begin{tabular}{|p{5cm}|p{7cm}|}
+\hline
+\textbf{Type of Dataset} & \textbf{Data Collected in a Frame} \\ \hline
+Steering Dataset & Images, Angles, Turn Signals \\ \hline
+Velocity Dataset & Images, Velocities \\ \hline
+Intersection Light Dataset & Images, State Labels \\ \hline
+Manual Driving Dataset & Images, Angles, Turn Signals, Velocities \\ \hline
+\end{tabular}
 \end{table}
+
 
 \subsection{Data Preprocessing}
 
@@ -154,8 +163,9 @@ This was done to ensure that the images can be used with the ResNet18 backbone, 
 
 \subsection{Data Distribution}
 
-The datasets were split 80/20 for the training and validation sets, respectively, which ensured we have a large set of data to train the model, while having enough data for validating its performance. In addition, a separate test dataset was collected, containing a number of samples of the various types of data.
-This data was collected on an unused map (not seen in training or validation), allowing the team to test the performance of the model on unseen data. All datasets were uploaded to a shared OneDrive so all members can access them as needed. Below, \autoref{tab:dataset_distribution} shows the distribution of the data.
+The datasets were split 80/20 for the training and validation sets, respectively, which ensured we have a large set of data to train the model, while having enough data for validating its performance. In addition, a separate test dataset was collected, containing a number of samples of the various types of data. 
+This data was collected on an unused map (not seen in training or validation), allowing the team to test the performance of the model on unseen data. The test dataset also includes data from the manual dataset, which was split into its respective data types (steering, and velocity).
+All datasets were uploaded to a shared OneDrive so all members can access them as needed. Below, \autoref{tab:dataset_distribution} shows the distribution of the data. 
 
 \begin{table}[H]
     \centering
@@ -308,6 +318,50 @@ the model taking a left turn in an intersection.
 
 
 \section{Evaluation on Test Data}
+A test dataset was collected, made up of all the different dataset types (steering, velocity and traffic lights). 
+This dataset contains data from an unused map, ensuring that it is unseen data.
+The images were then normalized and resized to 224x244x3in the same preprocessing as the training and validation data.
+
+\subsection{Test Results}
+Individual tests were run on the models to determine their performance, and the results are shown below:
+
+\begin{itemize}
+    \item \textbf{Steering Classifier:}
+    \begin{itemize}
+        \item Test Accuracy: 53.10\%
+        \item Cross Entropy (CE) Loss: 1.792
+    \end{itemize}
+
+    \item \textbf{Intersection Light Classifier}
+    \begin{itemize}
+        \item Test Accuracy: 99.80\%
+        \item CE Loss: 0.0457
+    \end{itemize}
+
+    \item \textbf{Velocity Regressor:}
+    \begin{itemize}
+        \item Mean Absolute Error (MAE) = 0.9614
+        \item Mean Square Error (MSE) = 1.7538
+        \item R\textsuperscript{2} = 85.24\%
+    \end{itemize}
+\end{itemize}
+
+\subsection{Results Evaluation}
+For the Steering Classifier, the test resulted in an accuracy of 53.10\%, 
+which is lower than our expectations, but is reasonable given the complexity of the problem. As we output 15 classes, 
+slight deviations in steering values can cause the predictions to fall into adjacent bins, lowering accuracy. 
+Additionally, the model is designed to take in human input for steering values through turn signals. 
+These signals bias the turning, making the model turn more, and as we are unable to apply these signals during testing, 
+it might lead to a lower test accuracy. With a CE of 1.792 across the 15 classes, it is clear that the model learned some meaningful patterns, 
+though it is not perfect.
+
+The Intersection Light Classifier ended up with excellent results with a near-perfect test accuracy along with a CE loss of 0.0457. 
+This shows that the classifier has learned deep features and is reliable at detecting the state of traffic lights. 
+
+The results of the Velocity Regressor meet expectations, with an MAE of 0.9614, meaning that the predictions were on average 0.96 m/s 
+off the actual value, which is within our expectations. With a low MSE of 1.7538, it shows that the errors are not large discrepancies. 
+Additionally, the $R^2$ of 85.24\% shows the model captures the majority of the variation in velocity, demonstrating strong performance. 
+
 
 \section{Discussion of Results}
 
