@@ -33,7 +33,7 @@ The car’s decision pipeline is composed of three main modules:
 - **Velocity Regressor** – predicts vehicle speed  
 - **Traffic Light Classifier** – detects and classifies intersection lights  
 
-*Insert Figure 1 from report here* – Overall illustration of the system pipeline.
+![Figure 1 - System Overview](LaTex/5%20-%20Final%20Report/newPic.png) Figure 1: Overall illustration of the system pipeline.
 
 ---
 
@@ -48,7 +48,8 @@ We used the **CARLA simulator** to generate five datasets:
 All images were resized to **224×224×3** for use with **ResNet-18**.  
 Augmentation (brightness, contrast, flips, cutouts) was applied to traffic light data to improve generalization.
 
-*Insert sample preprocessed images (Figure 2, Figure 3 from report)*
+![Figure 2 - Preprocessed Images](LaTex/5%20-%20Final%20Report/example%20of%20images%20in%20dataset.png)  
+![Figure 3 - Data Augmentation](LaTex/5%20-%20Final%20Report/Data%20Augmentation.png)
 
 ---
 
@@ -59,7 +60,7 @@ We use a **shared ResNet-18 backbone** with three task-specific heads:
 - **Velocity:** two fully connected layers → continuous regression output  
 - **Traffic Light:** fully connected layers → classifies Red, Green, or No-Light  
 
-📌 *Insert Figure 4 (Final Architecture Low Level Diagram)*  
+![Figure 4 - Final Architecture](LaTex/5%20-%20Final%20Report/GoogleDrawingPrimaryArchyDiagram.jpg)
 
 | Module              | Accuracy / Error |
 |---------------------|------------------|
@@ -75,8 +76,8 @@ We first built a **Ridge Regression baseline** using grayscale images + turn sig
 - Regularization parameter α tuned manually  
 - Achieved reasonable steering predictions but struggled with generalization  
 
-📌 *Insert Figure 7 (Learning Curve) and Figure 8 (Demo in CARLA)*
-
+![Figure 7 - Ridge Regression Learning Curve](LaTex/5%20-%20Final%20Report/model4learningcurve.png)  
+![Figure 8 - CARLA Demo](LaTex/5%20-%20Final%20Report/model4demo.png)
 ---
 
 ## Results
@@ -90,8 +91,8 @@ We first built a **Ridge Regression baseline** using grayscale images + turn sig
 - Struggled with sharp turns and highway overfitting  
 - Strong multimodal fusion helped capture context  
 
-📌 *Insert result tables and CARLA driving demo screenshots (Figures 5 & 8)*
-
+![Figure 5 - Steering](LaTex/5%20-%20Final%20Report/qualittative.png)
+![Figure 8 - CARLA Demo](LaTex/5%20-%20Final%20Report/model4demo.png)
 ---
 
 ## Discussion
