@@ -9,31 +9,27 @@
 %\newcommand{\apsname}{Final Report}
 
 %######## APS360: Put your Group Number here
-\newcommand{\gpnumber}{4}
+\newcommand{\gpnumber}{}
 \usepackage{float}
 \usepackage{hyperref}
 \usepackage{url}
 \usepackage{graphicx}
 
 %######## APS360: Put your project Title here
-\title{Autonomous Car Using Deep Learning - \\Final Report}
+\title{Autonomous Car Using Multimodal ResNet-18 Architecture and Demo}
 
 
 %######## APS360: Put your names, student IDs and Emails here
 \author{Rudra Dey  \\
-Student\# 1010124866\\
 \texttt{rudra.dey@mail.utoronto.ca } \\
 \And
 Pravin Kalaivannan  \\
-Student\# 1010141295 \\
 \texttt{pravin.kalaivannan@mail.utoronto.ca} \\
 \AND
 Aadavan Vasudevan  \\
-Student\# 1010101514 \\
 \texttt{aadavan.vasudevan@mail.utoronto.ca} \\
 \And
 Abishan Baheerathan \\
-Student\# 1010218756 \\
 \texttt{abishan.baheerathan@mail.utoronto.ca} \\
 \AND
 }
@@ -257,7 +253,20 @@ Steering\_fc2 & Fully \newline Connected & 256 & 15 & 3,855 \newline ($256 \time
 
 \subsection{Quantitative Results}
 
+On held-out test data, the Steering Classifier reached 83.9\% accuracy with a cross-entropy loss of 0.39, showing reliable action prediction but occasional errors in ambiguous scenes. The Traffic Light Classifier performed almost perfectly (overall accuracy 99.9\%; no-light = 1.00, red = 0.995, green = 1.00), confirming robust detection across conditions. The Velocity Regressor achieved a mean absolute error of 0.21 m/s and an R$^2$ of 0.996, closely matching true speeds though partly influenced by the controller. Overall, these results highlight strong perception and stable multi-task performance.
+
 \subsection{Qualitative Results}
+
+We tested across five CARLA maps. In Town01, light detection \autoref{fig:qualitative} was highly reliable (\~90\% confidence), but steering failed on wide right turns. Town02 showed similar steering issues, confusing gray textures with roads. Town03 generalized well in lights and velocity, producing realistic residential speeds. Town04 revealed overfitting, with inflated highway speeds and weak steering. In Town05, steering and velocity were stable, but traffic lights were sometimes misclassified due to greenery or red signage.
+
+
+\begin{figure}[H] % h = here, t = top, b = bottom, p = page of floats
+    \centering
+    \includegraphics[width=1.0\textwidth]{qualittative.png} % Adjust path and size
+    \caption{Basic Architecture of Steering Angle  Ridge Regrsession Model}
+    \label{fig:qualitative}
+\end{figure}
+
 
 \section{Baseline Model}
 

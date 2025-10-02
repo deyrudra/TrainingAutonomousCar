@@ -1,0 +1,50 @@
+INTRO
+So for our quantitative results we will be speeding through 5 different maps on CARLA Simulator, starting with Town01. please mind that the model was trained on only some of these maps, but validated on all of them.
+
+MAP1
+Our car was able to stop at this red light, and go at the green, we are going to put a signal for a right turn here, but completely fail and turn into the trash can! Let's try this again. 
+
+Okay here we are trying to make the same turn, and have as expected a similar result, but the steering model was able to save the run. 
+
+Making left turns seems pretty flawless for this map. And with a final successful turn on the curve we are going to switch maps. 
+
+ANALYSIS TIME:
+Not the best first impressions for our steering model, but our traffic light model almost flawless, and by the end the steering model proved to have some merit on it's left turns. The velocity model seems to be fine as well. 
+
+
+MAP4
+MAP4 itself is on a highway, and thus we can see that it is missing turns because of the velocity model which with high probability has overfit to the maps environment and thus relating the high speed to the map.
+- If we were making a location guesser, we could use our velocity model as a backbone since it can identify maps.
+
+
+TO ADD TO VIDEO:
+- MAP NAME 
+
+
+
+ANALYSIS
+MAP1
+Our Traffic Light Classifier with high confidence (above 95%) was able to detect the traffic light state.
+Our Steering Angle Classifier seems to predict high level of abnormalities, this is probably due to the right turns in the map being wider than the other map. Additionally, this map was never trained on and never validated for. 
+
+
+MAP2
+MAP2 is a mess. Traffic lights work, but steering not so much, I believe it's because there are buildings that are as gray as the road, and thus instead of making a turn the steering classifier wished to proceed.
+
+MAP3 
+On MAP3 we can see the opposite of this, traffic lights work, velocity seems to be at a nice speed for residential roads, and unconventional and untrained for roads seem to be handled. 
+
+MAP4
+For MAP4 is it is highway, it overfit for the data. 
+
+MAP5
+For MAP5 we can see that Steering is almost there, car velocity is handled great, traffic lights seem to have a problem. Unlike the other maps, there is quite a bit of greenery in the back behind the traffic lights, which seemingly made the model think the red light was a green light, similarly with the coke sign indicating a red light which was handled a lot better and mitigated due to low confidence.
+
+Now that we have demo'd our model and discovered it's issues, let's see how the numbers add up.
+
+For the steering results the model achieved a 53% accuracy and an entropy loss of 1.79. From the demo, we see
+this number is not so far off in particular areas of the maps, however some of the accuracy was lost due to the there being 15 classes of what degree of steering should be applied, and with so many it is easy to be off by a few classes causing poor performance.
+
+For the Velocity results, we see that there is a Mean Abs Error of 0.96 m/s and a R^2 score of 0.85. That means our predictions match 85% of the true speed, which is great! However, we saw that our velocity model picks up on the location (based off the camera) and overfits to the general speed of the map.
+
+For the Traffic Light Results, we see that there is a 99.8% accuracy. If this accuracy is so high, how did our car pass by that last traffic light, well that is because the accuracy based off prediction and not confidence of the prediction. We handle confidence separately in a module which all three models go into before the car ever moves. 
