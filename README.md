@@ -4,6 +4,8 @@ This repository contains the work for our APS360 project at the **University of 
 
 Our system predicts **steering angle**, **vehicle velocity**, and **traffic light state** from visual and sensor inputs, integrating them into a controller for safe navigation in simulated urban environments.
 
+**Youtube Playlist (Demos & Results)**: [Self-Driving Car From Scratch via Deep Learning Playlist](https://www.youtube.com/playlist?list=PLWa51KwS8CLPrlXvMp4ajFXH5BXsZTA4P)
+
 ---
 
 ## Table of Contents
