@@ -1,6 +1,6 @@
 # Training Autonomous Car Using Deep Learning
 
-This repository contains the work for our APS360 project at the **University of Toronto**, where we designed, implemented, and tested a multimodal deep learning system for autonomous driving using the CARLA simulator.  
+This repository contains a four-man project where we designed, implemented, and tested a multimodal deep learning system for autonomous driving using the CARLA simulator.  
 
 Our system predicts **steering angle**, **vehicle velocity**, and **traffic light state** from visual and sensor inputs, integrating them into a controller for safe navigation in simulated urban environments.
 
